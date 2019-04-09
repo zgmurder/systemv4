@@ -1,0 +1,38 @@
+{
+  "roles": [{
+    "roleName": "Administrator",
+    "displayName": "系统管理员",
+    "buildIn": true,
+    "permissions": [{
+      "schemaName": "*",
+      "actions": ["Read", "Create", "Update", "Delete"]
+    }]
+  }, {
+    "roleName": "Manager",
+    "displayName": "业务管理员",
+    "buildIn": true,
+    "permissions": [{
+      "schemaName": "*",
+      "actions": ["Read", "Create", "Update", "Delete"]
+    }]
+  }, {
+    "roleName": "Operator",
+    "displayName": "操作员",
+    "buildIn": true,
+    "permissions": [{
+      "schemaName": "user",
+      "actions": ["Read", "Create", "Update", "Delete"]
+    }, {
+      "schemaName": "*",
+      "actions": ["Read"]
+    }]
+  }, {
+    "roleName": "Reader",
+    "displayName": "只读用户",
+    "buildIn": true,
+    "permissions": [{
+      "schemaName": "*",
+      "actions": ["Read"]
+    }]
+  }]
+}

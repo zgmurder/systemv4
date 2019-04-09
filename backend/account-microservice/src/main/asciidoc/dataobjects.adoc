@@ -1,0 +1,69 @@
+= Cheatsheets
+
+[[Permission]]
+== Permission
+
+++++
+ Permission data object
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[actions]]`actions`|`Array of link:enums.html#Action[Action]`|-
+|[[schemaName]]`schemaName`|`String`|-
+|===
+
+[[Role]]
+== Role
+
+++++
+ Role data object
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[buildIn]]`buildIn`|`Boolean`|-
+|[[createdTime]]`createdTime`|`Number (Long)`|-
+|[[description]]`description`|`String`|-
+|[[displayName]]`displayName`|`String`|-
+|[[id]]`id`|`String`|-
+|[[permissions]]`permissions`|`Array of link:dataobjects.html#Permission[Permission]`|-
+|[[roleName]]`roleName`|`String`|-
+|[[updatedTime]]`updatedTime`|`Number (Long)`|-
+|===
+
+[[User]]
+== User
+
+++++
+ User data object
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[buildIn]]`buildIn`|`Boolean`|-
+|[[createdTime]]`createdTime`|`Number (Long)`|-
+|[[description]]`description`|`String`|-
+|[[email]]`email`|`String`|-
+|[[firstName]]`firstName`|`String`|-
+|[[fullName]]`fullName`|`String`|-
+|[[id]]`id`|`String`|-
+|[[lastName]]`lastName`|`String`|-
+|[[organizationId]]`organizationId`|`String`|-
+|[[parentOrgIds]]`parentOrgIds`|`Array of String`|-
+|[[password]]`password`|`String`|-
+|[[phone]]`phone`|`String`|-
+|[[roleName]]`roleName`|`String`|-
+|[[updatedTime]]`updatedTime`|`Number (Long)`|-
+|[[username]]`username`|`String`|-
+|===
+
