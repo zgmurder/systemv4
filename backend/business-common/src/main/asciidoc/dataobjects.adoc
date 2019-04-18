@@ -1,0 +1,39 @@
+= Cheatsheets
+
+[[TrainStep]]
+== TrainStep
+
+++++
+ 武警军事训练步骤
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|[[orgType]]`orgType`|`String`|-
+|[[priority]]`priority`|`Number (int)`|-
+|[[trainUnits]]`trainUnits`|`Array of Number (Integer)`|-
+|===
+
+[[WeatherType]]
+== WeatherType
+
+++++
+ 天气类型
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|===
+

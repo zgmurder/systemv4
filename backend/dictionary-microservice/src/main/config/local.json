@@ -1,0 +1,13 @@
+{
+  "account.http.address": "0.0.0.0",
+  "account.http.port": 8092,
+  "api.name": "dictionary",
+  "connection_string": "mongodb://armysystem:topzen123@localhost:27017/armysystemv2",
+  "db_name" : "armysystemv2",
+
+  "keyStore": {
+    "type": "jceks",  // default
+    "path": "keystore.jceks",
+    "password": "secret"
+  }
+}

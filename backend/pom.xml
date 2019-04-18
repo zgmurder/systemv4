@@ -30,6 +30,8 @@
         <module>api-gateway</module>
         <module>account-microservice</module>
         <module>business-common</module>
+        <module>dictionary-microservice</module>
+        <module>standard-microservice</module>
     </modules>
 
     <dependencyManagement>
