@@ -1,0 +1,4 @@
+moduleName = io.vertx.armysystem.business.common.CRUDService-module
+moduleVersion = 1.0
+extensionClasses = io.vertx.armysystem.business.common.groovy.CRUDService_GroovyExtension
+staticExtensionClasses = 

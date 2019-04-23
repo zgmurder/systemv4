@@ -33,6 +33,9 @@ public class MotorTypeConverter {
     if (json.getValue("name") instanceof String) {
       obj.setName((String)json.getValue("name"));
     }
+    if (json.getValue("order") instanceof Number) {
+      obj.setOrder(((Number)json.getValue("order")).intValue());
+    }
     if (json.getValue("unit") instanceof String) {
       obj.setUnit((String)json.getValue("unit"));
     }
@@ -45,6 +48,7 @@ public class MotorTypeConverter {
     if (obj.getName() != null) {
       json.put("name", obj.getName());
     }
+    json.put("order", obj.getOrder());
     if (obj.getUnit() != null) {
       json.put("unit", obj.getUnit());
     }

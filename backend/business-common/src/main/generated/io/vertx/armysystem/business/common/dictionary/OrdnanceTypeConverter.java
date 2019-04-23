@@ -39,6 +39,9 @@ public class OrdnanceTypeConverter {
     if (json.getValue("name") instanceof String) {
       obj.setName((String)json.getValue("name"));
     }
+    if (json.getValue("order") instanceof Number) {
+      obj.setOrder(((Number)json.getValue("order")).intValue());
+    }
     if (json.getValue("weaponUnit") instanceof String) {
       obj.setWeaponUnit((String)json.getValue("weaponUnit"));
     }
@@ -57,6 +60,7 @@ public class OrdnanceTypeConverter {
     if (obj.getName() != null) {
       json.put("name", obj.getName());
     }
+    json.put("order", obj.getOrder());
     if (obj.getWeaponUnit() != null) {
       json.put("weaponUnit", obj.getWeaponUnit());
     }

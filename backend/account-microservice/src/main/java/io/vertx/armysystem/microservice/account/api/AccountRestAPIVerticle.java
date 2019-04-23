@@ -1,5 +1,6 @@
 package io.vertx.armysystem.microservice.account.api;
 
+import io.vertx.armysystem.business.common.Action;
 import io.vertx.armysystem.microservice.account.*;
 import io.vertx.core.Future;
 import io.vertx.core.json.Json;
@@ -22,9 +23,6 @@ public class AccountRestAPIVerticle extends RestAPIVerticle {
 
   private final UserService userService;
   private final RoleService roleService;
-
-  private static final String USER_SCHEMA = "users";
-  private static final String ROLE_SCHEMA = "roles";
 
   private static final String API_USER_ADD = "/user";
   private static final String API_USER_FETCH = "/user/:id";
@@ -79,8 +77,8 @@ public class AccountRestAPIVerticle extends RestAPIVerticle {
     router.patch(API_ROLE_UPDATE).handler(context -> requireAuth(context, RoleService.PERMISSION_NAME, Action.Update.toString(), this::apiUpdateRole));
     router.delete(API_ROLE_DELETE).handler(context -> requireAuth(context, RoleService.PERMISSION_NAME, Action.Delete.toString(), this::apiDeleteRole));
 
-    String host = config().getString("account.http.address", "0.0.0.0");
-    int port = config().getInteger("account.http.port", 8082);
+    String host = config().getString("http.address", "0.0.0.0");
+    int port = config().getInteger("http.port", 8082);
 
     System.out.println("port = " + port);
 

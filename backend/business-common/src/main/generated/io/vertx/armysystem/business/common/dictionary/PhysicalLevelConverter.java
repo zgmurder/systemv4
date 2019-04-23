@@ -33,6 +33,9 @@ public class PhysicalLevelConverter {
     if (json.getValue("name") instanceof String) {
       obj.setName((String)json.getValue("name"));
     }
+    if (json.getValue("order") instanceof Number) {
+      obj.setOrder(((Number)json.getValue("order")).intValue());
+    }
   }
 
   public static void toJson(PhysicalLevel obj, JsonObject json) {
@@ -42,5 +45,6 @@ public class PhysicalLevelConverter {
     if (obj.getName() != null) {
       json.put("name", obj.getName());
     }
+    json.put("order", obj.getOrder());
   }
 }

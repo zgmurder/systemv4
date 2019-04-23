@@ -1,4 +1,4 @@
-package io.vertx.armysystem.microservice.account;
+package io.vertx.armysystem.business.common;
 
 /**
  * Action enum object

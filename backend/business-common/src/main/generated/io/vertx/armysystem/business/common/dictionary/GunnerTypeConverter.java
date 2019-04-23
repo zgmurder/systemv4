@@ -41,6 +41,9 @@ public class GunnerTypeConverter {
     if (json.getValue("name") instanceof String) {
       obj.setName((String)json.getValue("name"));
     }
+    if (json.getValue("order") instanceof Number) {
+      obj.setOrder(((Number)json.getValue("order")).intValue());
+    }
   }
 
   public static void toJson(GunnerType obj, JsonObject json) {
@@ -55,5 +58,6 @@ public class GunnerTypeConverter {
     if (obj.getName() != null) {
       json.put("name", obj.getName());
     }
+    json.put("order", obj.getOrder());
   }
 }

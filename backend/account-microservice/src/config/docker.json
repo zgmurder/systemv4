@@ -1,7 +1,7 @@
 {
   "api.name": "account",
-  "account.http.address": "account-microservice",
-  "account.http.port": 8082,
+  "http.address": "account-microservice",
+  "http.port": 8081,
   "connection_string": "mongodb://armysystem:topzen123@localhost:27017/armysystemv2",
   "db_name" : "armysystemv2",
 

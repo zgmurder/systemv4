@@ -41,6 +41,9 @@ public class OrgPropertyConverter {
       });
       obj.setOptionalMajors(list);
     }
+    if (json.getValue("order") instanceof Number) {
+      obj.setOrder(((Number)json.getValue("order")).intValue());
+    }
   }
 
   public static void toJson(OrgProperty obj, JsonObject json) {
@@ -55,5 +58,6 @@ public class OrgPropertyConverter {
       obj.getOptionalMajors().forEach(item -> array.add(item));
       json.put("optionalMajors", array);
     }
+    json.put("order", obj.getOrder());
   }
 }

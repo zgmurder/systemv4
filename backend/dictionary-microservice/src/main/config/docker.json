@@ -1,7 +1,7 @@
 {
   "api.name": "dictionary",
-  "account.http.address": "dictionary-microservice",
-  "account.http.port": 8092,
+  "http.address": "dictionary-microservice",
+  "http.port": 8092,
   "connection_string": "mongodb://armysystem:topzen123@localhost:27017/armysystemv2",
   "db_name" : "armysystemv2",
 

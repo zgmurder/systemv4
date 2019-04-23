@@ -57,6 +57,9 @@ public class OrgCategoryConverter {
       });
       obj.setOptionalTasks(list);
     }
+    if (json.getValue("order") instanceof Number) {
+      obj.setOrder(((Number)json.getValue("order")).intValue());
+    }
     if (json.getValue("orgProperty") instanceof String) {
       obj.setOrgProperty((String)json.getValue("orgProperty"));
     }
@@ -93,6 +96,7 @@ public class OrgCategoryConverter {
       obj.getOptionalTasks().forEach(item -> array.add(item.toJson()));
       json.put("optionalTasks", array);
     }
+    json.put("order", obj.getOrder());
     if (obj.getOrgProperty() != null) {
       json.put("orgProperty", obj.getOrgProperty());
     }

@@ -16,6 +16,7 @@
 
 package io.vertx.armysystem.microservice.account;
 
+import io.vertx.armysystem.business.common.Action;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.JsonArray;
 
@@ -28,10 +29,10 @@ public class PermissionConverter {
 
   public static void fromJson(JsonObject json, Permission obj) {
     if (json.getValue("actions") instanceof JsonArray) {
-      java.util.ArrayList<io.vertx.armysystem.microservice.account.Action> list = new java.util.ArrayList<>();
+      java.util.ArrayList<Action> list = new java.util.ArrayList<>();
       json.getJsonArray("actions").forEach( item -> {
         if (item instanceof String)
-          list.add(io.vertx.armysystem.microservice.account.Action.valueOf((String)item));
+          list.add(Action.valueOf((String)item));
       });
       obj.setActions(list);
     }

@@ -1,6 +1,6 @@
 {
-  "account.http.address": "0.0.0.0",
-  "account.http.port": 8091,
+  "http.address": "0.0.0.0",
+  "http.port": 8081,
   "api.name": "account",
   "connection_string": "mongodb://armysystem:topzen123@localhost:27017/armysystemv2",
   "db_name" : "armysystemv2",
