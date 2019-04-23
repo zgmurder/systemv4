@@ -20,9 +20,9 @@ import java.util.Map;
 import rx.Observable;
 import rx.Single;
 import java.util.List;
-import io.vertx.armysystem.microservice.account.User;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.AsyncResult;
+import io.vertx.armysystem.business.common.rxjava.CRUDService;
 import io.vertx.core.Handler;
 
 /**
@@ -36,7 +36,7 @@ import io.vertx.core.Handler;
  */
 
 @io.vertx.lang.rxjava.RxGen(io.vertx.armysystem.microservice.account.UserService.class)
-public class UserService {
+public class UserService extends CRUDService {
 
   public static final io.vertx.lang.rxjava.TypeArg<UserService> __TYPE_ARG = new io.vertx.lang.rxjava.TypeArg<>(
     obj -> new UserService((io.vertx.armysystem.microservice.account.UserService) obj),
@@ -46,6 +46,7 @@ public class UserService {
   private final io.vertx.armysystem.microservice.account.UserService delegate;
   
   public UserService(io.vertx.armysystem.microservice.account.UserService delegate) {
+    super(delegate);
     this.delegate = delegate;
   }
 
@@ -74,104 +75,80 @@ public class UserService {
   }
 
   /**
-   * Add a account to the persistence.
-   * @param user a account entity that we want to add
+   * Add an item to the persistence.
+   * @param item an entity that we want to add
    * @param principal 
-   * @param resultHandler the result handler will be called as soon as the account has been added. The async result indicates whether the operation was successful or not.
+   * @param resultHandler the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not.
    * @return 
    */
-  public UserService addUser(User user, JsonObject principal, Handler<AsyncResult<User>> resultHandler) { 
-    delegate.addUser(user, principal, resultHandler);
+  public UserService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) { 
+    delegate.addOne(item, principal, resultHandler);
     return this;
   }
 
   /**
-   * Add a account to the persistence.
-   * @param user a account entity that we want to add
+   * Add an item to the persistence.
+   * @param item an entity that we want to add
    * @param principal 
    * @return 
    */
-  public Single<User> rxAddUser(User user, JsonObject principal) { 
+  public Single<JsonObject> rxAddOne(JsonObject item, JsonObject principal) { 
     return Single.create(new io.vertx.rx.java.SingleOnSubscribeAdapter<>(fut -> {
-      addUser(user, principal, fut);
+      addOne(item, principal, fut);
     }));
   }
 
   /**
-   * Retrieve the user account with certain `id`.
-   * @param id user account id
+   * Retrieve the item with certain `id`.
+   * @param id item id
    * @param principal 
-   * @param resultHandler the result handler will be called as soon as the user has been retrieved. The async result indicates whether the operation was successful or not.
+   * @param resultHandler the result handler will be called as soon as the item has been retrieved. The async result indicates whether the operation was successful or not.
    * @return 
    */
-  public UserService retrieveUser(String id, JsonObject principal, Handler<AsyncResult<User>> resultHandler) { 
-    delegate.retrieveUser(id, principal, resultHandler);
+  public UserService retrieveOne(String id, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) { 
+    delegate.retrieveOne(id, principal, resultHandler);
     return this;
   }
 
   /**
-   * Retrieve the user account with certain `id`.
-   * @param id user account id
+   * Retrieve the item with certain `id`.
+   * @param id item id
    * @param principal 
    * @return 
    */
-  public Single<User> rxRetrieveUser(String id, JsonObject principal) { 
+  public Single<JsonObject> rxRetrieveOne(String id, JsonObject principal) { 
     return Single.create(new io.vertx.rx.java.SingleOnSubscribeAdapter<>(fut -> {
-      retrieveUser(id, principal, fut);
+      retrieveOne(id, principal, fut);
     }));
   }
 
   /**
-   * Retrieve the user account with certain `username`.
-   * @param username username
+   * Retrieve all items.
    * @param principal 
-   * @param resultHandler the result handler will be called as soon as the user has been retrieved. The async result indicates whether the operation was successful or not.
+   * @param resultHandler the result handler will be called as soon as the items have been retrieved. The async result indicates whether the operation was successful or not.
    * @return 
    */
-  public UserService retrieveByUsername(String username, JsonObject principal, Handler<AsyncResult<User>> resultHandler) { 
-    delegate.retrieveByUsername(username, principal, resultHandler);
+  public UserService retrieveAll(JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) { 
+    delegate.retrieveAll(principal, resultHandler);
     return this;
   }
 
   /**
-   * Retrieve the user account with certain `username`.
-   * @param username username
+   * Retrieve all items.
    * @param principal 
    * @return 
    */
-  public Single<User> rxRetrieveByUsername(String username, JsonObject principal) { 
+  public Single<List<JsonObject>> rxRetrieveAll(JsonObject principal) { 
     return Single.create(new io.vertx.rx.java.SingleOnSubscribeAdapter<>(fut -> {
-      retrieveByUsername(username, principal, fut);
+      retrieveAll(principal, fut);
     }));
   }
 
   /**
-   * Retrieve all user accounts.
-   * @param principal 
-   * @param resultHandler the result handler will be called as soon as the users have been retrieved. The async result indicates whether the operation was successful or not.
-   * @return 
-   */
-  public UserService retrieveAllUsers(JsonObject principal, Handler<AsyncResult<List<User>>> resultHandler) { 
-    delegate.retrieveAllUsers(principal, resultHandler);
-    return this;
-  }
-
-  /**
-   * Retrieve all user accounts.
-   * @param principal 
-   * @return 
-   */
-  public Single<List<User>> rxRetrieveAllUsers(JsonObject principal) { 
-    return Single.create(new io.vertx.rx.java.SingleOnSubscribeAdapter<>(fut -> {
-      retrieveAllUsers(principal, fut);
-    }));
-  }
-
-  /**
-   * Retrieve user count with query conditions.
+   * Retrieve item count with query conditions.
    * @param condition query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents
    * @param principal 
-   * @param resultHandler the result handler will be called as soon as the user count has been retrieved. The async result indicates whether the operation was successful or not.
+   * @param resultHandler the result handler will be called as soon as the device count has been retrieved. The async result indicates whether the operation was successful or not.
    * @return 
    */
   public UserService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler) { 
@@ -180,7 +157,7 @@ public class UserService {
   }
 
   /**
-   * Retrieve user count with query conditions.
+   * Retrieve item count with query conditions.
    * @param condition query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents
    * @param principal 
    * @return 
@@ -192,74 +169,76 @@ public class UserService {
   }
 
   /**
-   * Retrieve the user accounts by page with query conditions.
+   * Retrieve items by page with query conditions.
    * @param condition query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents
    * @param principal 
-   * @param resultHandler the result handler will be called as soon as the users has been retrieved. The async result indicates whether the operation was successful or not.
+   * @param resultHandler the result handler will be called as soon as the devices has been retrieved. The async result indicates whether the operation was successful or not.
    * @return 
    */
-  public UserService retrieveUsersByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<User>>> resultHandler) { 
-    delegate.retrieveUsersByCondition(condition, principal, resultHandler);
+  public UserService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) { 
+    delegate.retrieveManyByCondition(condition, principal, resultHandler);
     return this;
   }
 
   /**
-   * Retrieve the user accounts by page with query conditions.
+   * Retrieve items by page with query conditions.
    * @param condition query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents
    * @param principal 
    * @return 
    */
-  public Single<List<User>> rxRetrieveUsersByCondition(JsonObject condition, JsonObject principal) { 
+  public Single<List<JsonObject>> rxRetrieveManyByCondition(JsonObject condition, JsonObject principal) { 
     return Single.create(new io.vertx.rx.java.SingleOnSubscribeAdapter<>(fut -> {
-      retrieveUsersByCondition(condition, principal, fut);
+      retrieveManyByCondition(condition, principal, fut);
     }));
   }
 
   /**
-   * Update user account info.
-   * @param user a account entity that we want to update
+   * Update an item info.
+   * @param id the item id
+   * @param item an entity that we want to update
    * @param principal 
-   * @param resultHandler the result handler will be called as soon as the account has been added. The async result indicates whether the operation was successful or not.
+   * @param resultHandler the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not.
    * @return 
    */
-  public UserService updateUser(User user, JsonObject principal, Handler<AsyncResult<User>> resultHandler) { 
-    delegate.updateUser(user, principal, resultHandler);
+  public UserService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) { 
+    delegate.updateOne(id, item, principal, resultHandler);
     return this;
   }
 
   /**
-   * Update user account info.
-   * @param user a account entity that we want to update
+   * Update an item info.
+   * @param id the item id
+   * @param item an entity that we want to update
    * @param principal 
    * @return 
    */
-  public Single<User> rxUpdateUser(User user, JsonObject principal) { 
+  public Single<JsonObject> rxUpdateOne(String id, JsonObject item, JsonObject principal) { 
     return Single.create(new io.vertx.rx.java.SingleOnSubscribeAdapter<>(fut -> {
-      updateUser(user, principal, fut);
+      updateOne(id, item, principal, fut);
     }));
   }
 
   /**
-   * Delete a user account from the persistence
-   * @param id user account id
+   * Delete an item from the persistence
+   * @param id the item id
    * @param principal 
-   * @param resultHandler the result handler will be called as soon as the user has been removed. The async result indicates whether the operation was successful or not.
+   * @param resultHandler the result handler will be called as soon as the item has been removed. The async result indicates whether the operation was successful or not.
    * @return 
    */
-  public UserService deleteUser(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) { 
-    delegate.deleteUser(id, principal, resultHandler);
+  public UserService deleteOne(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) { 
+    delegate.deleteOne(id, principal, resultHandler);
     return this;
   }
 
   /**
-   * Delete a user account from the persistence
-   * @param id user account id
+   * Delete an item from the persistence
+   * @param id the item id
    * @param principal 
    * @return 
    */
-  public Single<Void> rxDeleteUser(String id, JsonObject principal) { 
+  public Single<Void> rxDeleteOne(String id, JsonObject principal) { 
     return Single.create(new io.vertx.rx.java.SingleOnSubscribeAdapter<>(fut -> {
-      deleteUser(id, principal, fut);
+      deleteOne(id, principal, fut);
     }));
   }
 
@@ -295,7 +274,7 @@ public class UserService {
    * @param resultHandler the result handler will be called as soon as the new password is set. The async result indicates whether the operation was successful or not.
    * @return 
    */
-  public UserService updatePassword(String username, String oldPassword, String newPassword, Handler<AsyncResult<User>> resultHandler) { 
+  public UserService updatePassword(String username, String oldPassword, String newPassword, Handler<AsyncResult<JsonObject>> resultHandler) { 
     delegate.updatePassword(username, oldPassword, newPassword, resultHandler);
     return this;
   }
@@ -307,7 +286,7 @@ public class UserService {
    * @param newPassword the new password to be set
    * @return 
    */
-  public Single<User> rxUpdatePassword(String username, String oldPassword, String newPassword) { 
+  public Single<JsonObject> rxUpdatePassword(String username, String oldPassword, String newPassword) { 
     return Single.create(new io.vertx.rx.java.SingleOnSubscribeAdapter<>(fut -> {
       updatePassword(username, oldPassword, newPassword, fut);
     }));

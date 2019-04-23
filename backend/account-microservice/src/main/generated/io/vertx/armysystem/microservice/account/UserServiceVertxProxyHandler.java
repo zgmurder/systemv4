@@ -41,9 +41,9 @@ import io.vertx.serviceproxy.ServiceException;
 import io.vertx.serviceproxy.ServiceExceptionMessageCodec;
 import java.util.List;
 import io.vertx.armysystem.microservice.account.UserService;
-import io.vertx.armysystem.microservice.account.User;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.AsyncResult;
+import io.vertx.armysystem.business.common.CRUDService;
 import io.vertx.core.Handler;
 
 /*
@@ -127,96 +127,32 @@ public class UserServiceVertxProxyHandler extends ProxyHandler {
           service.initializePersistence(createHandler(msg));
           break;
         }
-        case "addUser": {
-          service.addUser(json.getJsonObject("user") == null ? null : new io.vertx.armysystem.microservice.account.User(json.getJsonObject("user")), (io.vertx.core.json.JsonObject)json.getValue("principal"), res -> {
-            if (res.failed()) {
-              if (res.cause() instanceof ServiceException) {
-                msg.reply(res.cause());
-              } else {
-                msg.reply(new ServiceException(-1, res.cause().getMessage()));
-              }
-            } else {
-              msg.reply(res.result() == null ? null : res.result().toJson());
-            }
-         });
+        case "addOne": {
+          service.addOne((io.vertx.core.json.JsonObject)json.getValue("item"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
           break;
         }
-        case "retrieveUser": {
-          service.retrieveUser((java.lang.String)json.getValue("id"), (io.vertx.core.json.JsonObject)json.getValue("principal"), res -> {
-            if (res.failed()) {
-              if (res.cause() instanceof ServiceException) {
-                msg.reply(res.cause());
-              } else {
-                msg.reply(new ServiceException(-1, res.cause().getMessage()));
-              }
-            } else {
-              msg.reply(res.result() == null ? null : res.result().toJson());
-            }
-         });
+        case "retrieveOne": {
+          service.retrieveOne((java.lang.String)json.getValue("id"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
           break;
         }
-        case "retrieveByUsername": {
-          service.retrieveByUsername((java.lang.String)json.getValue("username"), (io.vertx.core.json.JsonObject)json.getValue("principal"), res -> {
-            if (res.failed()) {
-              if (res.cause() instanceof ServiceException) {
-                msg.reply(res.cause());
-              } else {
-                msg.reply(new ServiceException(-1, res.cause().getMessage()));
-              }
-            } else {
-              msg.reply(res.result() == null ? null : res.result().toJson());
-            }
-         });
-          break;
-        }
-        case "retrieveAllUsers": {
-          service.retrieveAllUsers((io.vertx.core.json.JsonObject)json.getValue("principal"), res -> {
-            if (res.failed()) {
-              if (res.cause() instanceof ServiceException) {
-                msg.reply(res.cause());
-              } else {
-                msg.reply(new ServiceException(-1, res.cause().getMessage()));
-              }
-            } else {
-              msg.reply(new JsonArray(res.result().stream().map(User::toJson).collect(Collectors.toList())));
-            }
-         });
+        case "retrieveAll": {
+          service.retrieveAll((io.vertx.core.json.JsonObject)json.getValue("principal"), createListHandler(msg));
           break;
         }
         case "count": {
           service.count((io.vertx.core.json.JsonObject)json.getValue("condition"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
           break;
         }
-        case "retrieveUsersByCondition": {
-          service.retrieveUsersByCondition((io.vertx.core.json.JsonObject)json.getValue("condition"), (io.vertx.core.json.JsonObject)json.getValue("principal"), res -> {
-            if (res.failed()) {
-              if (res.cause() instanceof ServiceException) {
-                msg.reply(res.cause());
-              } else {
-                msg.reply(new ServiceException(-1, res.cause().getMessage()));
-              }
-            } else {
-              msg.reply(new JsonArray(res.result().stream().map(User::toJson).collect(Collectors.toList())));
-            }
-         });
+        case "retrieveManyByCondition": {
+          service.retrieveManyByCondition((io.vertx.core.json.JsonObject)json.getValue("condition"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createListHandler(msg));
           break;
         }
-        case "updateUser": {
-          service.updateUser(json.getJsonObject("user") == null ? null : new io.vertx.armysystem.microservice.account.User(json.getJsonObject("user")), (io.vertx.core.json.JsonObject)json.getValue("principal"), res -> {
-            if (res.failed()) {
-              if (res.cause() instanceof ServiceException) {
-                msg.reply(res.cause());
-              } else {
-                msg.reply(new ServiceException(-1, res.cause().getMessage()));
-              }
-            } else {
-              msg.reply(res.result() == null ? null : res.result().toJson());
-            }
-         });
+        case "updateOne": {
+          service.updateOne((java.lang.String)json.getValue("id"), (io.vertx.core.json.JsonObject)json.getValue("item"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
           break;
         }
-        case "deleteUser": {
-          service.deleteUser((java.lang.String)json.getValue("id"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
+        case "deleteOne": {
+          service.deleteOne((java.lang.String)json.getValue("id"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
           break;
         }
         case "loginUser": {
@@ -224,17 +160,7 @@ public class UserServiceVertxProxyHandler extends ProxyHandler {
           break;
         }
         case "updatePassword": {
-          service.updatePassword((java.lang.String)json.getValue("username"), (java.lang.String)json.getValue("oldPassword"), (java.lang.String)json.getValue("newPassword"), res -> {
-            if (res.failed()) {
-              if (res.cause() instanceof ServiceException) {
-                msg.reply(res.cause());
-              } else {
-                msg.reply(new ServiceException(-1, res.cause().getMessage()));
-              }
-            } else {
-              msg.reply(res.result() == null ? null : res.result().toJson());
-            }
-         });
+          service.updatePassword((java.lang.String)json.getValue("username"), (java.lang.String)json.getValue("oldPassword"), (java.lang.String)json.getValue("newPassword"), createHandler(msg));
           break;
         }
         default: {

@@ -34,9 +34,9 @@ import io.vertx.serviceproxy.ServiceException;
 import io.vertx.serviceproxy.ServiceExceptionMessageCodec;
 import java.util.List;
 import io.vertx.armysystem.microservice.account.UserService;
-import io.vertx.armysystem.microservice.account.User;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.AsyncResult;
+import io.vertx.armysystem.business.common.CRUDService;
 import io.vertx.core.Handler;
 
 /*
@@ -83,27 +83,27 @@ public class UserServiceVertxEBProxy implements UserService {
     return this;
   }
 
-  public UserService addUser(User user, JsonObject principal, Handler<AsyncResult<User>> resultHandler) {
+  public UserService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
     }
     JsonObject _json = new JsonObject();
-    _json.put("user", user == null ? null : user.toJson());
+    _json.put("item", item);
     _json.put("principal", principal);
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
-    _deliveryOptions.addHeader("action", "addUser");
+    _deliveryOptions.addHeader("action", "addOne");
     _vertx.eventBus().<JsonObject>send(_address, _json, _deliveryOptions, res -> {
       if (res.failed()) {
         resultHandler.handle(Future.failedFuture(res.cause()));
       } else {
-        resultHandler.handle(Future.succeededFuture(res.result().body() == null ? null : new User(res.result().body())));
-                      }
+        resultHandler.handle(Future.succeededFuture(res.result().body()));
+      }
     });
     return this;
   }
 
-  public UserService retrieveUser(String id, JsonObject principal, Handler<AsyncResult<User>> resultHandler) {
+  public UserService retrieveOne(String id, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -112,38 +112,18 @@ public class UserServiceVertxEBProxy implements UserService {
     _json.put("id", id);
     _json.put("principal", principal);
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
-    _deliveryOptions.addHeader("action", "retrieveUser");
+    _deliveryOptions.addHeader("action", "retrieveOne");
     _vertx.eventBus().<JsonObject>send(_address, _json, _deliveryOptions, res -> {
       if (res.failed()) {
         resultHandler.handle(Future.failedFuture(res.cause()));
       } else {
-        resultHandler.handle(Future.succeededFuture(res.result().body() == null ? null : new User(res.result().body())));
-                      }
+        resultHandler.handle(Future.succeededFuture(res.result().body()));
+      }
     });
     return this;
   }
 
-  public UserService retrieveByUsername(String username, JsonObject principal, Handler<AsyncResult<User>> resultHandler) {
-    if (closed) {
-      resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
-      return this;
-    }
-    JsonObject _json = new JsonObject();
-    _json.put("username", username);
-    _json.put("principal", principal);
-    DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
-    _deliveryOptions.addHeader("action", "retrieveByUsername");
-    _vertx.eventBus().<JsonObject>send(_address, _json, _deliveryOptions, res -> {
-      if (res.failed()) {
-        resultHandler.handle(Future.failedFuture(res.cause()));
-      } else {
-        resultHandler.handle(Future.succeededFuture(res.result().body() == null ? null : new User(res.result().body())));
-                      }
-    });
-    return this;
-  }
-
-  public UserService retrieveAllUsers(JsonObject principal, Handler<AsyncResult<List<User>>> resultHandler) {
+  public UserService retrieveAll(JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) {
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -151,12 +131,12 @@ public class UserServiceVertxEBProxy implements UserService {
     JsonObject _json = new JsonObject();
     _json.put("principal", principal);
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
-    _deliveryOptions.addHeader("action", "retrieveAllUsers");
+    _deliveryOptions.addHeader("action", "retrieveAll");
     _vertx.eventBus().<JsonArray>send(_address, _json, _deliveryOptions, res -> {
       if (res.failed()) {
         resultHandler.handle(Future.failedFuture(res.cause()));
       } else {
-        resultHandler.handle(Future.succeededFuture(res.result().body().stream().map(o -> o instanceof Map ? new User(new JsonObject((Map) o)) : new User((JsonObject) o)).collect(Collectors.toList())));
+        resultHandler.handle(Future.succeededFuture(convertList(res.result().body().getList())));
       }
     });
     return this;
@@ -182,7 +162,7 @@ public class UserServiceVertxEBProxy implements UserService {
     return this;
   }
 
-  public UserService retrieveUsersByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<User>>> resultHandler) {
+  public UserService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) {
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -191,38 +171,39 @@ public class UserServiceVertxEBProxy implements UserService {
     _json.put("condition", condition);
     _json.put("principal", principal);
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
-    _deliveryOptions.addHeader("action", "retrieveUsersByCondition");
+    _deliveryOptions.addHeader("action", "retrieveManyByCondition");
     _vertx.eventBus().<JsonArray>send(_address, _json, _deliveryOptions, res -> {
       if (res.failed()) {
         resultHandler.handle(Future.failedFuture(res.cause()));
       } else {
-        resultHandler.handle(Future.succeededFuture(res.result().body().stream().map(o -> o instanceof Map ? new User(new JsonObject((Map) o)) : new User((JsonObject) o)).collect(Collectors.toList())));
+        resultHandler.handle(Future.succeededFuture(convertList(res.result().body().getList())));
       }
     });
     return this;
   }
 
-  public UserService updateUser(User user, JsonObject principal, Handler<AsyncResult<User>> resultHandler) {
+  public UserService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
     }
     JsonObject _json = new JsonObject();
-    _json.put("user", user == null ? null : user.toJson());
+    _json.put("id", id);
+    _json.put("item", item);
     _json.put("principal", principal);
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
-    _deliveryOptions.addHeader("action", "updateUser");
+    _deliveryOptions.addHeader("action", "updateOne");
     _vertx.eventBus().<JsonObject>send(_address, _json, _deliveryOptions, res -> {
       if (res.failed()) {
         resultHandler.handle(Future.failedFuture(res.cause()));
       } else {
-        resultHandler.handle(Future.succeededFuture(res.result().body() == null ? null : new User(res.result().body())));
-                      }
+        resultHandler.handle(Future.succeededFuture(res.result().body()));
+      }
     });
     return this;
   }
 
-  public UserService deleteUser(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) {
+  public UserService deleteOne(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) {
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -231,7 +212,7 @@ public class UserServiceVertxEBProxy implements UserService {
     _json.put("id", id);
     _json.put("principal", principal);
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
-    _deliveryOptions.addHeader("action", "deleteUser");
+    _deliveryOptions.addHeader("action", "deleteOne");
     _vertx.eventBus().<Void>send(_address, _json, _deliveryOptions, res -> {
       if (res.failed()) {
         resultHandler.handle(Future.failedFuture(res.cause()));
@@ -262,7 +243,7 @@ public class UserServiceVertxEBProxy implements UserService {
     return this;
   }
 
-  public UserService updatePassword(String username, String oldPassword, String newPassword, Handler<AsyncResult<User>> resultHandler) {
+  public UserService updatePassword(String username, String oldPassword, String newPassword, Handler<AsyncResult<JsonObject>> resultHandler) {
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -277,8 +258,8 @@ public class UserServiceVertxEBProxy implements UserService {
       if (res.failed()) {
         resultHandler.handle(Future.failedFuture(res.cause()));
       } else {
-        resultHandler.handle(Future.succeededFuture(res.result().body() == null ? null : new User(res.result().body())));
-                      }
+        resultHandler.handle(Future.succeededFuture(res.result().body()));
+      }
     });
     return this;
   }

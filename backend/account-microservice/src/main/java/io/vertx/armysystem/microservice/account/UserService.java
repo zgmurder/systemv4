@@ -1,5 +1,6 @@
 package io.vertx.armysystem.microservice.account;
 
+import io.vertx.armysystem.business.common.CRUDService;
 import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.ProxyGen;
 import io.vertx.codegen.annotations.VertxGen;
@@ -19,22 +20,7 @@ import java.util.List;
  */
 @VertxGen
 @ProxyGen
-public interface UserService {
-  /**
-   * The name of the event bus service.
-   */
-  String SERVICE_NAME = "account-user-eb-service";
-
-  /**
-   * The address on which the service is published.
-   */
-  String SERVICE_ADDRESS = "service.account.user";
-
-  /**
-   * The permission name which is checked.
-   */
-  String PERMISSION_NAME = "user";
-
+public interface UserService extends CRUDService {
   /**
    * Initialize the persistence.
    *
@@ -45,83 +31,74 @@ public interface UserService {
   UserService initializePersistence(Handler<AsyncResult<Void>> resultHandler);
 
   /**
-   * Add a account to the persistence.
+   * Add an item to the persistence.
    *
-   * @param user       a account entity that we want to add
-   * @param resultHandler the result handler will be called as soon as the account has been added. The async result indicates
+   * @param item          an entity that we want to add
+   * @param resultHandler the result handler will be called as soon as the item has been added. The async result indicates
    *                      whether the operation was successful or not.
    */
   @Fluent
-  UserService addUser(User user, JsonObject principal, Handler<AsyncResult<User>> resultHandler);
+  UserService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler);
 
   /**
-   * Retrieve the user account with certain `id`.
+   * Retrieve the item with certain `id`.
    *
-   * @param id            user account id
-   * @param resultHandler the result handler will be called as soon as the user has been retrieved. The async result indicates
+   * @param id            item id
+   * @param resultHandler the result handler will be called as soon as the item has been retrieved. The async result indicates
    *                      whether the operation was successful or not.
    */
   @Fluent
-  UserService retrieveUser(String id, JsonObject principal, Handler<AsyncResult<User>> resultHandler);
+  UserService retrieveOne(String id, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler);
 
   /**
-   * Retrieve the user account with certain `username`.
+   * Retrieve all items.
    *
-   * @param username      username
-   * @param resultHandler the result handler will be called as soon as the user has been retrieved. The async result indicates
+   * @param resultHandler the result handler will be called as soon as the items have been retrieved. The async result indicates
    *                      whether the operation was successful or not.
    */
   @Fluent
-  UserService retrieveByUsername(String username, JsonObject principal, Handler<AsyncResult<User>> resultHandler);
+  UserService retrieveAll(JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler);
 
   /**
-   * Retrieve all user accounts.
-   *
-   * @param resultHandler the result handler will be called as soon as the users have been retrieved. The async result indicates
-   *                      whether the operation was successful or not.
-   */
-  @Fluent
-  UserService retrieveAllUsers(JsonObject principal, Handler<AsyncResult<List<User>>> resultHandler);
-
-  /**
-   * Retrieve user count with query conditions.
+   * Retrieve item count with query conditions.
    *
    * @param condition         query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents
-   * @param resultHandler the result handler will be called as soon as the user count has been retrieved. The async result indicates
+   * @param resultHandler the result handler will be called as soon as the device count has been retrieved. The async result indicates
    *                      whether the operation was successful or not.
    */
   @Fluent
   UserService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler);
 
   /**
-   * Retrieve the user accounts by page with query conditions.
+   * Retrieve items by page with query conditions.
    *
    * @param condition         query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents
-   * @param resultHandler the result handler will be called as soon as the users has been retrieved. The async result indicates
+   * @param resultHandler the result handler will be called as soon as the devices has been retrieved. The async result indicates
    *                      whether the operation was successful or not.
    */
   @Fluent
-  UserService retrieveUsersByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<User>>> resultHandler);
+  UserService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler);
 
   /**
-   * Update user account info.
+   * Update an item info.
    *
-   * @param user       a account entity that we want to update
-   * @param resultHandler the result handler will be called as soon as the account has been added. The async result indicates
+   * @param id            the item id
+   * @param item          an entity that we want to update
+   * @param resultHandler the result handler will be called as soon as the item has been added. The async result indicates
    *                      whether the operation was successful or not.
    */
   @Fluent
-  UserService updateUser(User user, JsonObject principal, Handler<AsyncResult<User>> resultHandler);
+  UserService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler);
 
   /**
-   * Delete a user account from the persistence
+   * Delete an item from the persistence
    *
-   * @param id            user account id
-   * @param resultHandler the result handler will be called as soon as the user has been removed. The async result indicates
+   * @param id            the item id
+   * @param resultHandler the result handler will be called as soon as the item has been removed. The async result indicates
    *                      whether the operation was successful or not.
    */
   @Fluent
-  UserService deleteUser(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler);
+  UserService deleteOne(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler);
 
   /**
    * Login user with username and password
@@ -144,5 +121,5 @@ public interface UserService {
    *                      whether the operation was successful or not.
    */
   @Fluent
-  UserService updatePassword(String username, String oldPassword, String newPassword, Handler<AsyncResult<User>> resultHandler);
+  UserService updatePassword(String username, String oldPassword, String newPassword, Handler<AsyncResult<JsonObject>> resultHandler);
 }

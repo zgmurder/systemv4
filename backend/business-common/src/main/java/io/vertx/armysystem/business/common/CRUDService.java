@@ -21,14 +21,6 @@ import java.util.List;
 @ProxyGen
 public interface CRUDService {
 
-//  String getServiceName();
-//
-//  String getServiceAddress();
-//
-//  String getPermission();
-//
-//  String getCollectionName();
-
   /**
    * Initialize the persistence.
    *

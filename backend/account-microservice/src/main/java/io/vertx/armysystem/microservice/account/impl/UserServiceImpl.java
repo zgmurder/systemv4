@@ -1,5 +1,7 @@
 package io.vertx.armysystem.microservice.account.impl;
 
+import io.vertx.armysystem.business.common.CRUDService;
+import io.vertx.armysystem.business.common.ServiceBase;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -7,7 +9,6 @@ import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.armysystem.business.common.ModelUtil;
 import io.vertx.armysystem.business.common.QueryCondition;
-import io.vertx.armysystem.microservice.account.RoleService;
 import io.vertx.armysystem.microservice.account.User;
 import io.vertx.armysystem.microservice.account.UserService;
 import io.vertx.armysystem.microservice.account.common.Functional;
@@ -20,14 +21,13 @@ import java.util.stream.Collectors;
 /**
  * Implementation of {@link UserService}. Use MongoDB as the persistence.
  */
-public class UserServiceImpl extends MongoRepositoryWrapper implements UserService {
-  private static final String COLLECTION = "users";
+public class UserServiceImpl extends MongoRepositoryWrapper implements UserService, ServiceBase {
   private static final String FILTER_COLUMN_NAME = "parentOrgIds";
   private JWTAuth authProvider;
-  private final RoleService roleService;
+  private final CRUDService roleService;
   private final Vertx vertx;
 
-  public UserServiceImpl(Vertx vertx, JsonObject config, RoleService roleService) {
+  public UserServiceImpl(Vertx vertx, JsonObject config, CRUDService roleService) {
     super(vertx, config);
 
     this.vertx = vertx;
@@ -36,12 +36,32 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
   }
 
   @Override
+  public String getServiceName() {
+    return "account-user-eb-service";
+  }
+
+  @Override
+  public String getServiceAddress() {
+    return "service.account.user";
+  }
+
+  @Override
+  public String getPermission() {
+    return "Role";
+  }
+
+  @Override
+  public String getCollectionName() {
+    return "Role";
+  }
+
+  @Override
   public UserService initializePersistence(Handler<AsyncResult<Void>> resultHandler) {
     System.out.println("init user collection...");
 
-    this.createCollection(COLLECTION)
+    this.createCollection(getCollectionName())
         .otherwise(err -> null)
-        .compose(o -> this.createIndexWithOptions(COLLECTION,
+        .compose(o -> this.createIndexWithOptions(getCollectionName(),
             new JsonObject().put("username", 1), new JsonObject().put("unique", true)))
         .otherwise(err -> null)
         .compose(o -> initUserData())
@@ -65,7 +85,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
             if (users != null) {
               CompositeFuture.join(users.stream()
                   .filter(item -> item instanceof JsonObject)
-                  .map(json -> this.insertOne(COLLECTION, (JsonObject)json))
+                  .map(json -> this.insertOne(getCollectionName(), (JsonObject)json))
                   .collect(Collectors.toList()))
                   .setHandler(ar2 -> future.complete());
             } else {
@@ -82,14 +102,15 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
   }
 
   @Override
-  public UserService addUser(User user, JsonObject principal, Handler<AsyncResult<User>> resultHandler) {
+  public UserService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
+    User user = new User(item);
     System.out.println("Entered addUser " + user.getUsername());
     user.setBuildIn(false);
     JsonObject query = new JsonObject().put("username", user.getUsername());
 
     ModelUtil.validateOrganization(principal, user.toJson())
         .compose(r -> validatePermissions(principal, user.getRoleName()))
-        .compose(r -> this.findOne(COLLECTION, query, new JsonObject()))
+        .compose(r -> this.findOne(getCollectionName(), query, new JsonObject()))
         .map(option -> option.map(User::new).orElse(null))
         .setHandler(ar -> {
           if (ar.succeeded()) {
@@ -97,9 +118,8 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
               String failureMessage = "User already exists : " + user.getUsername();
               resultHandler.handle(Future.failedFuture(failureMessage));
             } else {
-              this.insertOne(COLLECTION, user.toJson())
+              this.insertOne(getCollectionName(), user.toJson())
                   .map(json -> json.putNull("password"))
-                  .map(User::new)
                   .setHandler(resultHandler);
             }
           } else {
@@ -111,37 +131,18 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
   }
 
   @Override
-  public UserService retrieveUser(String id, JsonObject principal, Handler<AsyncResult<User>> resultHandler) {
-    JsonObject query = new JsonObject().put("_id", id);
-    QueryCondition condition = new QueryCondition(query, new JsonObject())
-        .filterByUserOrganizationV1(FILTER_COLUMN_NAME, principal);
-
-    this.findOne(COLLECTION, condition.getQuery(), new JsonObject())
+  public UserService retrieveOne(String id, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
+    this.findOne(getCollectionName(), getCondition(id, principal).getQuery(), new JsonObject())
         .map(option -> option.map(json -> json.putNull("password")))
-        .map(option -> option.map(User::new).orElse(null))
+        .map(option -> option.orElse(null))
         .setHandler(resultHandler);
 
     return this;
   }
 
   @Override
-  public UserService retrieveByUsername(String username, JsonObject principal, Handler<AsyncResult<User>> resultHandler) {
-    JsonObject query = new JsonObject().put("username", username);
-    QueryCondition condition = new QueryCondition(query, new JsonObject())
-        .filterByUserOrganizationV1(FILTER_COLUMN_NAME, principal);
-
-    this.findOne(COLLECTION, condition.getQuery(), new JsonObject())
-        .map(option -> option.map(json -> json.putNull("password")))
-        .map(option -> option.map(User::new).orElse(null))
-        .setHandler(resultHandler);
-
-    return this;
-  }
-
-  @Override
-  public UserService retrieveAllUsers(JsonObject principal, Handler<AsyncResult<List<User>>> resultHandler) {
-
-    this.retrieveUsersByCondition(new JsonObject(), principal, resultHandler);
+  public UserService retrieveAll(JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) {
+    this.retrieveManyByCondition(new JsonObject(), principal, resultHandler);
 
     return this;
   }
@@ -150,20 +151,19 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
   public UserService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
     qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
-    this.count(COLLECTION, qCondition.getQuery())
+    this.count(getCollectionName(), qCondition.getQuery())
         .setHandler(resultHandler);
 
     return this;
   }
 
   @Override
-  public UserService retrieveUsersByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<User>>> resultHandler) {
+  public UserService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
     qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
-    this.findWithOptions(COLLECTION, qCondition.getQuery(), qCondition.getOption())
+    this.findWithOptions(getCollectionName(), qCondition.getQuery(), qCondition.getOption())
         .map(list -> list.stream()
             .map(json -> json.putNull("password"))
-            .map(User::new)
             .collect(Collectors.toList()))
         .setHandler(resultHandler);
 
@@ -171,17 +171,13 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
   }
 
   @Override
-  public UserService updateUser(User user, JsonObject principal, Handler<AsyncResult<User>> resultHandler) {
-    JsonObject updateObj = user.toJson();
-    updateObj.remove("id");
-    updateObj.remove("buildIn");
-    updateObj.remove("password");
+  public UserService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
+    item.remove("id");
+    item.remove("buildIn");
+    item.remove("password");
 
-    JsonObject query = new JsonObject().put("_id", user.getId());
-    QueryCondition condition = new QueryCondition(query, new JsonObject())
-        .filterByUserOrganizationV1(FILTER_COLUMN_NAME, principal);
-
-    this.findOne(COLLECTION, condition.getQuery(), new JsonObject())
+    User user = new User(item);
+    this.findOne(getCollectionName(), getCondition(id, principal).getQuery(), new JsonObject())
         .map(option -> option.map(User::new).orElse(null))
         .setHandler(ar -> {
           if (ar.succeeded()) {
@@ -194,10 +190,10 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
               }
 
               io.vertx.armysystem.microservice.common.functional.Functional.allOfFutures(futures)
-                  .compose(r -> this.update(COLLECTION, new JsonObject().put("_id", user.getId()), updateObj))
+                  .compose(r -> this.update(getCollectionName(), new JsonObject().put("_id", user.getId()), user.toJson()))
                   .setHandler(ar2 -> {
                     if (ar2.succeeded()) {
-                      this.retrieveUser(user.getId(), principal, resultHandler);
+                      this.retrieveOne(user.getId(), principal, resultHandler);
                     } else {
                       resultHandler.handle(Future.failedFuture(ar2.cause()));
                     }
@@ -214,12 +210,9 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
   }
 
   @Override
-  public UserService deleteUser(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) {
-    JsonObject query = new JsonObject().put("_id", id);
-    QueryCondition condition = new QueryCondition(query, new JsonObject())
-        .filterByUserOrganizationV1(FILTER_COLUMN_NAME, principal);
-
-    this.findOne(COLLECTION, condition.getQuery(), new JsonObject())
+  public UserService deleteOne(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) {
+    JsonObject query = getCondition(id, principal).getQuery();
+    this.findOne(getCollectionName(), query, new JsonObject())
         .map(option -> option.map(User::new).orElse(null))
         .compose(result -> {
           Future<User> future = Future.future();
@@ -233,7 +226,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
           return future;
         })
         .compose(r -> validatePermissions(principal, r.getRoleName()))
-        .compose(r -> this.removeById(COLLECTION, id))
+        .compose(r -> this.remove(getCollectionName(), query))
         .setHandler(resultHandler);
 
     return this;
@@ -251,7 +244,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
     JsonObject query = new JsonObject()
         .put("username", username)
         .put("password", password);
-    this.findOne(COLLECTION, query, new JsonObject())
+    this.findOne(getCollectionName(), query, new JsonObject())
         .map(option -> option.map(json -> json.putNull("password")))
         .map(option -> option.map(User::new).orElse(null))
         .compose(user -> this.fillPermissionsInUser(user))
@@ -277,21 +270,21 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
   }
 
   @Override
-  public UserService updatePassword(String username, String oldPassword, String newPassword, Handler<AsyncResult<User>> resultHandler) {
+  public UserService updatePassword(String username, String oldPassword, String newPassword, Handler<AsyncResult<JsonObject>> resultHandler) {
     JsonObject query = new JsonObject()
         .put("username", username)
         .put("password", oldPassword);
-    this.findOne(COLLECTION, query, new JsonObject())
+    this.findOne(getCollectionName(), query, new JsonObject())
         .map(option -> option.map(json -> json.putNull("password")))
         .map(option -> option.map(User::new).orElse(null))
         .setHandler(ar -> {
           if (ar.succeeded()) {
             if (ar.result() != null) {
               User user = ar.result();
-              this.update(COLLECTION, new JsonObject().put("_id", user.getId()), new JsonObject().put("password", newPassword))
+              this.update(getCollectionName(), new JsonObject().put("_id", user.getId()), new JsonObject().put("password", newPassword))
                   .setHandler(ar2 -> {
                     if (ar2.succeeded())
-                      resultHandler.handle(Future.succeededFuture(user));
+                      resultHandler.handle(Future.succeededFuture(user.toJson()));
                     else
                       resultHandler.handle(Future.failedFuture(ar2.cause()));
                   });
@@ -371,5 +364,16 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
             return currPermissions.contains(newPerm);
           }
         }).filter(r -> !r).count() == 0;
+  }
+
+  private QueryCondition getCondition(String id, JsonObject principal) {
+    JsonObject query = new JsonObject().put("$or", new JsonArray()
+        .add(new JsonObject().put("_id", id))
+        .add(new JsonObject().put("name", id)));
+
+    QueryCondition condition = new QueryCondition(query, new JsonObject())
+        .filterByUserOrganizationV1(FILTER_COLUMN_NAME, principal);
+
+    return condition;
   }
 }

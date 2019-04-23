@@ -1,4 +1,4 @@
 moduleName = io.vertx.armysystem.microservice.account.UserService-module
 moduleVersion = 1.0
-extensionClasses = io.vertx.armysystem.microservice.account.groovy.RoleService_GroovyExtension, io.vertx.armysystem.microservice.account.groovy.UserService_GroovyExtension
+extensionClasses = io.vertx.armysystem.microservice.account.groovy.UserService_GroovyExtension
 staticExtensionClasses = 

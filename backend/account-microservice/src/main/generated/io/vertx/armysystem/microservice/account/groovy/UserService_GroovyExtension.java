@@ -1,40 +1,30 @@
 package io.vertx.armysystem.microservice.account.groovy;
 public class UserService_GroovyExtension {
-  public static io.vertx.armysystem.microservice.account.UserService addUser(io.vertx.armysystem.microservice.account.UserService j_receiver, java.util.Map<String, Object> user, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.Map<String, Object>>> resultHandler) {
-    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.addUser(user != null ? new io.vertx.armysystem.microservice.account.User(io.vertx.core.impl.ConversionHelper.toJsonObject(user)) : null,
+  public static io.vertx.armysystem.microservice.account.UserService addOne(io.vertx.armysystem.microservice.account.UserService j_receiver, java.util.Map<String, Object> item, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.Map<String, Object>>> resultHandler) {
+    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.addOne(item != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(item) : null,
       principal != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(principal) : null,
-      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<io.vertx.armysystem.microservice.account.User>>() {
-      public void handle(io.vertx.core.AsyncResult<io.vertx.armysystem.microservice.account.User> ar) {
-        resultHandler.handle(ar.map(event -> event != null ? io.vertx.core.impl.ConversionHelper.fromJsonObject(event.toJson()) : null));
+      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<io.vertx.core.json.JsonObject>>() {
+      public void handle(io.vertx.core.AsyncResult<io.vertx.core.json.JsonObject> ar) {
+        resultHandler.handle(ar.map(event -> io.vertx.core.impl.ConversionHelper.fromJsonObject(event)));
       }
     } : null));
     return j_receiver;
   }
-  public static io.vertx.armysystem.microservice.account.UserService retrieveUser(io.vertx.armysystem.microservice.account.UserService j_receiver, java.lang.String id, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.Map<String, Object>>> resultHandler) {
-    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.retrieveUser(id,
+  public static io.vertx.armysystem.microservice.account.UserService retrieveOne(io.vertx.armysystem.microservice.account.UserService j_receiver, java.lang.String id, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.Map<String, Object>>> resultHandler) {
+    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.retrieveOne(id,
       principal != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(principal) : null,
-      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<io.vertx.armysystem.microservice.account.User>>() {
-      public void handle(io.vertx.core.AsyncResult<io.vertx.armysystem.microservice.account.User> ar) {
-        resultHandler.handle(ar.map(event -> event != null ? io.vertx.core.impl.ConversionHelper.fromJsonObject(event.toJson()) : null));
+      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<io.vertx.core.json.JsonObject>>() {
+      public void handle(io.vertx.core.AsyncResult<io.vertx.core.json.JsonObject> ar) {
+        resultHandler.handle(ar.map(event -> io.vertx.core.impl.ConversionHelper.fromJsonObject(event)));
       }
     } : null));
     return j_receiver;
   }
-  public static io.vertx.armysystem.microservice.account.UserService retrieveByUsername(io.vertx.armysystem.microservice.account.UserService j_receiver, java.lang.String username, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.Map<String, Object>>> resultHandler) {
-    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.retrieveByUsername(username,
-      principal != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(principal) : null,
-      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<io.vertx.armysystem.microservice.account.User>>() {
-      public void handle(io.vertx.core.AsyncResult<io.vertx.armysystem.microservice.account.User> ar) {
-        resultHandler.handle(ar.map(event -> event != null ? io.vertx.core.impl.ConversionHelper.fromJsonObject(event.toJson()) : null));
-      }
-    } : null));
-    return j_receiver;
-  }
-  public static io.vertx.armysystem.microservice.account.UserService retrieveAllUsers(io.vertx.armysystem.microservice.account.UserService j_receiver, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.List<java.util.Map<String, Object>>>> resultHandler) {
-    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.retrieveAllUsers(principal != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(principal) : null,
-      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.List<io.vertx.armysystem.microservice.account.User>>>() {
-      public void handle(io.vertx.core.AsyncResult<java.util.List<io.vertx.armysystem.microservice.account.User>> ar) {
-        resultHandler.handle(ar.map(event -> event != null ? event.stream().map(elt -> elt != null ? io.vertx.core.impl.ConversionHelper.fromJsonObject(elt.toJson()) : null).collect(java.util.stream.Collectors.toList()) : null));
+  public static io.vertx.armysystem.microservice.account.UserService retrieveAll(io.vertx.armysystem.microservice.account.UserService j_receiver, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.List<java.util.Map<String, Object>>>> resultHandler) {
+    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.retrieveAll(principal != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(principal) : null,
+      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.List<io.vertx.core.json.JsonObject>>>() {
+      public void handle(io.vertx.core.AsyncResult<java.util.List<io.vertx.core.json.JsonObject>> ar) {
+        resultHandler.handle(ar.map(event -> event != null ? event.stream().map(elt -> io.vertx.core.impl.ConversionHelper.fromJsonObject(elt)).collect(java.util.stream.Collectors.toList()) : null));
       }
     } : null));
     return j_receiver;
@@ -49,28 +39,29 @@ public class UserService_GroovyExtension {
     } : null));
     return j_receiver;
   }
-  public static io.vertx.armysystem.microservice.account.UserService retrieveUsersByCondition(io.vertx.armysystem.microservice.account.UserService j_receiver, java.util.Map<String, Object> condition, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.List<java.util.Map<String, Object>>>> resultHandler) {
-    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.retrieveUsersByCondition(condition != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(condition) : null,
+  public static io.vertx.armysystem.microservice.account.UserService retrieveManyByCondition(io.vertx.armysystem.microservice.account.UserService j_receiver, java.util.Map<String, Object> condition, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.List<java.util.Map<String, Object>>>> resultHandler) {
+    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.retrieveManyByCondition(condition != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(condition) : null,
       principal != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(principal) : null,
-      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.List<io.vertx.armysystem.microservice.account.User>>>() {
-      public void handle(io.vertx.core.AsyncResult<java.util.List<io.vertx.armysystem.microservice.account.User>> ar) {
-        resultHandler.handle(ar.map(event -> event != null ? event.stream().map(elt -> elt != null ? io.vertx.core.impl.ConversionHelper.fromJsonObject(elt.toJson()) : null).collect(java.util.stream.Collectors.toList()) : null));
+      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.List<io.vertx.core.json.JsonObject>>>() {
+      public void handle(io.vertx.core.AsyncResult<java.util.List<io.vertx.core.json.JsonObject>> ar) {
+        resultHandler.handle(ar.map(event -> event != null ? event.stream().map(elt -> io.vertx.core.impl.ConversionHelper.fromJsonObject(elt)).collect(java.util.stream.Collectors.toList()) : null));
       }
     } : null));
     return j_receiver;
   }
-  public static io.vertx.armysystem.microservice.account.UserService updateUser(io.vertx.armysystem.microservice.account.UserService j_receiver, java.util.Map<String, Object> user, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.Map<String, Object>>> resultHandler) {
-    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.updateUser(user != null ? new io.vertx.armysystem.microservice.account.User(io.vertx.core.impl.ConversionHelper.toJsonObject(user)) : null,
+  public static io.vertx.armysystem.microservice.account.UserService updateOne(io.vertx.armysystem.microservice.account.UserService j_receiver, java.lang.String id, java.util.Map<String, Object> item, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.Map<String, Object>>> resultHandler) {
+    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.updateOne(id,
+      item != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(item) : null,
       principal != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(principal) : null,
-      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<io.vertx.armysystem.microservice.account.User>>() {
-      public void handle(io.vertx.core.AsyncResult<io.vertx.armysystem.microservice.account.User> ar) {
-        resultHandler.handle(ar.map(event -> event != null ? io.vertx.core.impl.ConversionHelper.fromJsonObject(event.toJson()) : null));
+      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<io.vertx.core.json.JsonObject>>() {
+      public void handle(io.vertx.core.AsyncResult<io.vertx.core.json.JsonObject> ar) {
+        resultHandler.handle(ar.map(event -> io.vertx.core.impl.ConversionHelper.fromJsonObject(event)));
       }
     } : null));
     return j_receiver;
   }
-  public static io.vertx.armysystem.microservice.account.UserService deleteUser(io.vertx.armysystem.microservice.account.UserService j_receiver, java.lang.String id, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.lang.Void>> resultHandler) {
-    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.deleteUser(id,
+  public static io.vertx.armysystem.microservice.account.UserService deleteOne(io.vertx.armysystem.microservice.account.UserService j_receiver, java.lang.String id, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.lang.Void>> resultHandler) {
+    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.deleteOne(id,
       principal != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(principal) : null,
       resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<java.lang.Void>>() {
       public void handle(io.vertx.core.AsyncResult<java.lang.Void> ar) {
@@ -93,9 +84,9 @@ public class UserService_GroovyExtension {
     io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.updatePassword(username,
       oldPassword,
       newPassword,
-      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<io.vertx.armysystem.microservice.account.User>>() {
-      public void handle(io.vertx.core.AsyncResult<io.vertx.armysystem.microservice.account.User> ar) {
-        resultHandler.handle(ar.map(event -> event != null ? io.vertx.core.impl.ConversionHelper.fromJsonObject(event.toJson()) : null));
+      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<io.vertx.core.json.JsonObject>>() {
+      public void handle(io.vertx.core.AsyncResult<io.vertx.core.json.JsonObject> ar) {
+        resultHandler.handle(ar.map(event -> io.vertx.core.impl.ConversionHelper.fromJsonObject(event)));
       }
     } : null));
     return j_receiver;

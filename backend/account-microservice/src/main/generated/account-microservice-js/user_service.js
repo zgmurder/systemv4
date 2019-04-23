@@ -16,11 +16,11 @@
 
 /** @module account-microservice-js/user_service */
 var utils = require('vertx-js/util/utils');
+var CRUDService = require('business-common-js/crud_service');
 
 var io = Packages.io;
 var JsonObject = io.vertx.core.json.JsonObject;
 var JUserService = Java.type('io.vertx.armysystem.microservice.account.UserService');
-var User = Java.type('io.vertx.armysystem.microservice.account.User');
 
 /**
  A service interface managing user accounts.
@@ -34,6 +34,7 @@ var UserService = function(j_val) {
 
   var j_userService = j_val;
   var that = this;
+  CRUDService.call(this, j_val);
 
   /**
    Initialize the persistence.
@@ -57,20 +58,20 @@ var UserService = function(j_val) {
   };
 
   /**
-   Add a account to the persistence.
+   Add an item to the persistence.
 
    @public
-   @param user {Object} a account entity that we want to add 
+   @param item {Object} an entity that we want to add 
    @param principal {Object} 
-   @param resultHandler {function} the result handler will be called as soon as the account has been added. The async result indicates whether the operation was successful or not. 
+   @param resultHandler {function} the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not. 
    @return {UserService}
    */
-  this.addUser = function(user, principal, resultHandler) {
+  this.addOne = function(item, principal, resultHandler) {
     var __args = arguments;
     if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
-      j_userService["addUser(io.vertx.armysystem.microservice.account.User,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](user != null ? new User(new JsonObject(Java.asJSONCompatible(user))) : null, utils.convParamJsonObject(principal), function(ar) {
+      j_userService["addOne(io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(item), utils.convParamJsonObject(principal), function(ar) {
       if (ar.succeeded()) {
-        resultHandler(utils.convReturnDataObject(ar.result()), null);
+        resultHandler(utils.convReturnJson(ar.result()), null);
       } else {
         resultHandler(null, ar.cause());
       }
@@ -80,20 +81,20 @@ var UserService = function(j_val) {
   };
 
   /**
-   Retrieve the user account with certain `id`.
+   Retrieve the item with certain `id`.
 
    @public
-   @param id {string} user account id 
+   @param id {string} item id 
    @param principal {Object} 
-   @param resultHandler {function} the result handler will be called as soon as the user has been retrieved. The async result indicates whether the operation was successful or not. 
+   @param resultHandler {function} the result handler will be called as soon as the item has been retrieved. The async result indicates whether the operation was successful or not. 
    @return {UserService}
    */
-  this.retrieveUser = function(id, principal, resultHandler) {
+  this.retrieveOne = function(id, principal, resultHandler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
-      j_userService["retrieveUser(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](id, utils.convParamJsonObject(principal), function(ar) {
+      j_userService["retrieveOne(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](id, utils.convParamJsonObject(principal), function(ar) {
       if (ar.succeeded()) {
-        resultHandler(utils.convReturnDataObject(ar.result()), null);
+        resultHandler(utils.convReturnJson(ar.result()), null);
       } else {
         resultHandler(null, ar.cause());
       }
@@ -103,42 +104,19 @@ var UserService = function(j_val) {
   };
 
   /**
-   Retrieve the user account with certain `username`.
-
-   @public
-   @param username {string} username 
-   @param principal {Object} 
-   @param resultHandler {function} the result handler will be called as soon as the user has been retrieved. The async result indicates whether the operation was successful or not. 
-   @return {UserService}
-   */
-  this.retrieveByUsername = function(username, principal, resultHandler) {
-    var __args = arguments;
-    if (__args.length === 3 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
-      j_userService["retrieveByUsername(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](username, utils.convParamJsonObject(principal), function(ar) {
-      if (ar.succeeded()) {
-        resultHandler(utils.convReturnDataObject(ar.result()), null);
-      } else {
-        resultHandler(null, ar.cause());
-      }
-    });
-      return that;
-    } else throw new TypeError('function invoked with invalid arguments');
-  };
-
-  /**
-   Retrieve all user accounts.
+   Retrieve all items.
 
    @public
    @param principal {Object} 
-   @param resultHandler {function} the result handler will be called as soon as the users have been retrieved. The async result indicates whether the operation was successful or not. 
+   @param resultHandler {function} the result handler will be called as soon as the items have been retrieved. The async result indicates whether the operation was successful or not. 
    @return {UserService}
    */
-  this.retrieveAllUsers = function(principal, resultHandler) {
+  this.retrieveAll = function(principal, resultHandler) {
     var __args = arguments;
     if (__args.length === 2 && (typeof __args[0] === 'object' && __args[0] != null) && typeof __args[1] === 'function') {
-      j_userService["retrieveAllUsers(io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(principal), function(ar) {
+      j_userService["retrieveAll(io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(principal), function(ar) {
       if (ar.succeeded()) {
-        resultHandler(utils.convReturnListSetDataObject(ar.result()), null);
+        resultHandler(utils.convReturnListSetJson(ar.result()), null);
       } else {
         resultHandler(null, ar.cause());
       }
@@ -148,12 +126,12 @@ var UserService = function(j_val) {
   };
 
   /**
-   Retrieve user count with query conditions.
+   Retrieve item count with query conditions.
 
    @public
    @param condition {Object} query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents 
    @param principal {Object} 
-   @param resultHandler {function} the result handler will be called as soon as the user count has been retrieved. The async result indicates whether the operation was successful or not. 
+   @param resultHandler {function} the result handler will be called as soon as the device count has been retrieved. The async result indicates whether the operation was successful or not. 
    @return {UserService}
    */
   this.count = function(condition, principal, resultHandler) {
@@ -171,20 +149,20 @@ var UserService = function(j_val) {
   };
 
   /**
-   Retrieve the user accounts by page with query conditions.
+   Retrieve items by page with query conditions.
 
    @public
    @param condition {Object} query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents 
    @param principal {Object} 
-   @param resultHandler {function} the result handler will be called as soon as the users has been retrieved. The async result indicates whether the operation was successful or not. 
+   @param resultHandler {function} the result handler will be called as soon as the devices has been retrieved. The async result indicates whether the operation was successful or not. 
    @return {UserService}
    */
-  this.retrieveUsersByCondition = function(condition, principal, resultHandler) {
+  this.retrieveManyByCondition = function(condition, principal, resultHandler) {
     var __args = arguments;
     if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
-      j_userService["retrieveUsersByCondition(io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(condition), utils.convParamJsonObject(principal), function(ar) {
+      j_userService["retrieveManyByCondition(io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(condition), utils.convParamJsonObject(principal), function(ar) {
       if (ar.succeeded()) {
-        resultHandler(utils.convReturnListSetDataObject(ar.result()), null);
+        resultHandler(utils.convReturnListSetJson(ar.result()), null);
       } else {
         resultHandler(null, ar.cause());
       }
@@ -194,20 +172,21 @@ var UserService = function(j_val) {
   };
 
   /**
-   Update user account info.
+   Update an item info.
 
    @public
-   @param user {Object} a account entity that we want to update 
+   @param id {string} the item id 
+   @param item {Object} an entity that we want to update 
    @param principal {Object} 
-   @param resultHandler {function} the result handler will be called as soon as the account has been added. The async result indicates whether the operation was successful or not. 
+   @param resultHandler {function} the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not. 
    @return {UserService}
    */
-  this.updateUser = function(user, principal, resultHandler) {
+  this.updateOne = function(id, item, principal, resultHandler) {
     var __args = arguments;
-    if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
-      j_userService["updateUser(io.vertx.armysystem.microservice.account.User,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](user != null ? new User(new JsonObject(Java.asJSONCompatible(user))) : null, utils.convParamJsonObject(principal), function(ar) {
+    if (__args.length === 4 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && (typeof __args[2] === 'object' && __args[2] != null) && typeof __args[3] === 'function') {
+      j_userService["updateOne(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](id, utils.convParamJsonObject(item), utils.convParamJsonObject(principal), function(ar) {
       if (ar.succeeded()) {
-        resultHandler(utils.convReturnDataObject(ar.result()), null);
+        resultHandler(utils.convReturnJson(ar.result()), null);
       } else {
         resultHandler(null, ar.cause());
       }
@@ -217,18 +196,18 @@ var UserService = function(j_val) {
   };
 
   /**
-   Delete a user account from the persistence
+   Delete an item from the persistence
 
    @public
-   @param id {string} user account id 
+   @param id {string} the item id 
    @param principal {Object} 
-   @param resultHandler {function} the result handler will be called as soon as the user has been removed. The async result indicates whether the operation was successful or not. 
+   @param resultHandler {function} the result handler will be called as soon as the item has been removed. The async result indicates whether the operation was successful or not. 
    @return {UserService}
    */
-  this.deleteUser = function(id, principal, resultHandler) {
+  this.deleteOne = function(id, principal, resultHandler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
-      j_userService["deleteUser(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](id, utils.convParamJsonObject(principal), function(ar) {
+      j_userService["deleteOne(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](id, utils.convParamJsonObject(principal), function(ar) {
       if (ar.succeeded()) {
         resultHandler(null, null);
       } else {
@@ -277,7 +256,7 @@ var UserService = function(j_val) {
     if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && typeof __args[2] === 'string' && typeof __args[3] === 'function') {
       j_userService["updatePassword(java.lang.String,java.lang.String,java.lang.String,io.vertx.core.Handler)"](username, oldPassword, newPassword, function(ar) {
       if (ar.succeeded()) {
-        resultHandler(utils.convReturnDataObject(ar.result()), null);
+        resultHandler(utils.convReturnJson(ar.result()), null);
       } else {
         resultHandler(null, ar.cause());
       }

@@ -20,7 +20,7 @@
     "displayName": "操作员",
     "buildIn": true,
     "permissions": [{
-      "schemaName": "user",
+      "schemaName": "User",
       "actions": ["Read", "Create", "Update", "Delete"]
     }, {
       "schemaName": "*",

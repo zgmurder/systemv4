@@ -26,6 +26,7 @@
     UserService = factory();
   }
 }(function () {
+  var CRUDService = require('business-common-js/crud_service-proxy');
 
   /**
  A service interface managing user accounts.
@@ -48,6 +49,7 @@
       }
       return ret;
     };
+  CRUDService.call(this, j_val);
 
     /**
      Initialize the persistence.
@@ -68,91 +70,71 @@
     };
 
     /**
-     Add a account to the persistence.
+     Add an item to the persistence.
 
      @public
-     @param user {Object} a account entity that we want to add 
+     @param item {Object} an entity that we want to add 
      @param principal {Object} 
-     @param resultHandler {function} the result handler will be called as soon as the account has been added. The async result indicates whether the operation was successful or not. 
+     @param resultHandler {function} the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not. 
      @return {UserService}
      */
-    this.addUser = function(user, principal, resultHandler) {
+    this.addOne = function(item, principal, resultHandler) {
       var __args = arguments;
       if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"user":__args[0], "principal":__args[1]}, {"action":"addUser"}, function(err, result) { __args[2](err, result &&result.body); });
+        j_eb.send(j_address, {"item":__args[0], "principal":__args[1]}, {"action":"addOne"}, function(err, result) { __args[2](err, result &&result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
 
     /**
-     Retrieve the user account with certain `id`.
+     Retrieve the item with certain `id`.
 
      @public
-     @param id {string} user account id 
+     @param id {string} item id 
      @param principal {Object} 
-     @param resultHandler {function} the result handler will be called as soon as the user has been retrieved. The async result indicates whether the operation was successful or not. 
+     @param resultHandler {function} the result handler will be called as soon as the item has been retrieved. The async result indicates whether the operation was successful or not. 
      @return {UserService}
      */
-    this.retrieveUser = function(id, principal, resultHandler) {
+    this.retrieveOne = function(id, principal, resultHandler) {
       var __args = arguments;
       if (__args.length === 3 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"id":__args[0], "principal":__args[1]}, {"action":"retrieveUser"}, function(err, result) { __args[2](err, result &&result.body); });
+        j_eb.send(j_address, {"id":__args[0], "principal":__args[1]}, {"action":"retrieveOne"}, function(err, result) { __args[2](err, result &&result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
 
     /**
-     Retrieve the user account with certain `username`.
-
-     @public
-     @param username {string} username 
-     @param principal {Object} 
-     @param resultHandler {function} the result handler will be called as soon as the user has been retrieved. The async result indicates whether the operation was successful or not. 
-     @return {UserService}
-     */
-    this.retrieveByUsername = function(username, principal, resultHandler) {
-      var __args = arguments;
-      if (__args.length === 3 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
-        if (closed) {
-          throw new Error('Proxy is closed');
-        }
-        j_eb.send(j_address, {"username":__args[0], "principal":__args[1]}, {"action":"retrieveByUsername"}, function(err, result) { __args[2](err, result &&result.body); });
-        return that;
-      } else throw new TypeError('function invoked with invalid arguments');
-    };
-
-    /**
-     Retrieve all user accounts.
+     Retrieve all items.
 
      @public
      @param principal {Object} 
-     @param resultHandler {function} the result handler will be called as soon as the users have been retrieved. The async result indicates whether the operation was successful or not. 
+     @param resultHandler {function} the result handler will be called as soon as the items have been retrieved. The async result indicates whether the operation was successful or not. 
      @return {UserService}
      */
-    this.retrieveAllUsers = function(principal, resultHandler) {
+    this.retrieveAll = function(principal, resultHandler) {
       var __args = arguments;
       if (__args.length === 2 && (typeof __args[0] === 'object' && __args[0] != null) && typeof __args[1] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"principal":__args[0]}, {"action":"retrieveAllUsers"}, function(err, result) { __args[1](err, result &&result.body); });
+        j_eb.send(j_address, {"principal":__args[0]}, {"action":"retrieveAll"}, function(err, result) { __args[1](err, result &&result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
 
     /**
-     Retrieve user count with query conditions.
+     Retrieve item count with query conditions.
 
      @public
      @param condition {Object} query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents 
      @param principal {Object} 
-     @param resultHandler {function} the result handler will be called as soon as the user count has been retrieved. The async result indicates whether the operation was successful or not. 
+     @param resultHandler {function} the result handler will be called as soon as the device count has been retrieved. The async result indicates whether the operation was successful or not. 
      @return {UserService}
      */
     this.count = function(condition, principal, resultHandler) {
@@ -167,61 +149,62 @@
     };
 
     /**
-     Retrieve the user accounts by page with query conditions.
+     Retrieve items by page with query conditions.
 
      @public
      @param condition {Object} query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents 
      @param principal {Object} 
-     @param resultHandler {function} the result handler will be called as soon as the users has been retrieved. The async result indicates whether the operation was successful or not. 
+     @param resultHandler {function} the result handler will be called as soon as the devices has been retrieved. The async result indicates whether the operation was successful or not. 
      @return {UserService}
      */
-    this.retrieveUsersByCondition = function(condition, principal, resultHandler) {
+    this.retrieveManyByCondition = function(condition, principal, resultHandler) {
       var __args = arguments;
       if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"condition":__args[0], "principal":__args[1]}, {"action":"retrieveUsersByCondition"}, function(err, result) { __args[2](err, result &&result.body); });
+        j_eb.send(j_address, {"condition":__args[0], "principal":__args[1]}, {"action":"retrieveManyByCondition"}, function(err, result) { __args[2](err, result &&result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
 
     /**
-     Update user account info.
+     Update an item info.
 
      @public
-     @param user {Object} a account entity that we want to update 
+     @param id {string} the item id 
+     @param item {Object} an entity that we want to update 
      @param principal {Object} 
-     @param resultHandler {function} the result handler will be called as soon as the account has been added. The async result indicates whether the operation was successful or not. 
+     @param resultHandler {function} the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not. 
      @return {UserService}
      */
-    this.updateUser = function(user, principal, resultHandler) {
+    this.updateOne = function(id, item, principal, resultHandler) {
       var __args = arguments;
-      if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
+      if (__args.length === 4 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && (typeof __args[2] === 'object' && __args[2] != null) && typeof __args[3] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"user":__args[0], "principal":__args[1]}, {"action":"updateUser"}, function(err, result) { __args[2](err, result &&result.body); });
+        j_eb.send(j_address, {"id":__args[0], "item":__args[1], "principal":__args[2]}, {"action":"updateOne"}, function(err, result) { __args[3](err, result &&result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
 
     /**
-     Delete a user account from the persistence
+     Delete an item from the persistence
 
      @public
-     @param id {string} user account id 
+     @param id {string} the item id 
      @param principal {Object} 
-     @param resultHandler {function} the result handler will be called as soon as the user has been removed. The async result indicates whether the operation was successful or not. 
+     @param resultHandler {function} the result handler will be called as soon as the item has been removed. The async result indicates whether the operation was successful or not. 
      @return {UserService}
      */
-    this.deleteUser = function(id, principal, resultHandler) {
+    this.deleteOne = function(id, principal, resultHandler) {
       var __args = arguments;
       if (__args.length === 3 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"id":__args[0], "principal":__args[1]}, {"action":"deleteUser"}, function(err, result) { __args[2](err, result &&result.body); });
+        j_eb.send(j_address, {"id":__args[0], "principal":__args[1]}, {"action":"deleteOne"}, function(err, result) { __args[2](err, result &&result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };

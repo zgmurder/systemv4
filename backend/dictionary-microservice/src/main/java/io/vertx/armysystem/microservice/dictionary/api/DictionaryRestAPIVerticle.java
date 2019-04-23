@@ -39,17 +39,17 @@ public class DictionaryRestAPIVerticle extends RestAPIVerticle {
 
     services.forEach(service -> {
       ServiceBase serviceBase = (ServiceBase)service;
-      router.post(PREFIX+serviceBase.getCollectionName())
+      router.post(PREFIX+serviceBase.getCollectionName().toLowerCase())
           .handler(context -> requireAuth(context, serviceBase.getPermission(), Action.Create.toString(), this::apiAddItem));
-      router.get(PREFIX+serviceBase.getCollectionName()+"/:id")
+      router.get(PREFIX+serviceBase.getCollectionName().toLowerCase()+"/:id")
           .handler(context -> requireAuth(context, serviceBase.getPermission(), Action.Read.toString(), this::apiFetchItem));
-      router.post(PREFIX+serviceBase.getCollectionName()+"s")
+      router.post(PREFIX+serviceBase.getCollectionName().toLowerCase()+"s")
           .handler(context -> requireAuth(context, serviceBase.getPermission(), Action.Read.toString(), this::apiQueryItems));
-      router.post(PREFIX+serviceBase.getCollectionName()+"s/count")
+      router.post(PREFIX+serviceBase.getCollectionName().toLowerCase()+"s/count")
           .handler(context -> requireAuth(context, serviceBase.getPermission(), Action.Read.toString(), this::apiCountItems));
-      router.patch(PREFIX+serviceBase.getCollectionName()+"/:id")
+      router.patch(PREFIX+serviceBase.getCollectionName().toLowerCase()+"/:id")
           .handler(context -> requireAuth(context, serviceBase.getPermission(), Action.Update.toString(), this::apiUpdateItem));
-      router.delete(PREFIX+serviceBase.getCollectionName()+"/:id")
+      router.delete(PREFIX+serviceBase.getCollectionName().toLowerCase()+"/:id")
           .handler(context -> requireAuth(context, serviceBase.getPermission(), Action.Delete.toString(), this::apiDeleteItem));
     });
 

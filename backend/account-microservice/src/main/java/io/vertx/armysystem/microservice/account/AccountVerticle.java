@@ -1,5 +1,7 @@
 package io.vertx.armysystem.microservice.account;
 
+import io.vertx.armysystem.business.common.CRUDService;
+import io.vertx.armysystem.business.common.ServiceBase;
 import io.vertx.armysystem.microservice.account.api.AccountRestAPIVerticle;
 import io.vertx.armysystem.microservice.account.impl.RoleServiceImpl;
 import io.vertx.armysystem.microservice.account.impl.UserServiceImpl;
@@ -11,7 +13,7 @@ import io.vertx.serviceproxy.ProxyHelper;
 
 public class AccountVerticle extends BaseMicroserviceVerticle {
   private UserService userService;
-  private RoleService roleService;
+  private CRUDService roleService;
 
   @Override
   public void start(Future<Void> future) throws Exception {
@@ -24,15 +26,15 @@ public class AccountVerticle extends BaseMicroserviceVerticle {
     userService = new UserServiceImpl(vertx, config(), roleService);
 
     // register the service proxy on event bus
-    ProxyHelper.registerService(UserService.class, vertx, userService, UserService.SERVICE_ADDRESS);
-    ProxyHelper.registerService(RoleService.class, vertx, roleService, RoleService.SERVICE_ADDRESS);
+    ProxyHelper.registerService(UserService.class, vertx, userService, ((ServiceBase)userService).getServiceAddress());
+    ProxyHelper.registerService(CRUDService.class, vertx, roleService, ((ServiceBase)roleService).getServiceAddress());
 
     // publish the service and REST endpoint in the discovery infrastructure
     new MongoRepositoryWrapper(vertx, config()).checkDatabase()
         .compose(r -> initUserDatabase(userService))
         .compose(o -> initRoleDatabase(roleService))
-        .compose(o -> publishEventBusService(UserService.SERVICE_NAME, UserService.SERVICE_ADDRESS, UserService.class))
-        .compose(o -> publishEventBusService(RoleService.SERVICE_NAME, RoleService.SERVICE_ADDRESS, RoleService.class))
+        .compose(o -> publishEventBusService(((ServiceBase)userService).getServiceName(), ((ServiceBase)userService).getServiceAddress(), UserService.class))
+        .compose(o -> publishEventBusService(((ServiceBase)roleService).getServiceName(), ((ServiceBase)roleService).getServiceAddress(), CRUDService.class))
         .compose(servicePublished -> deployRestVerticle())
         .setHandler(future.completer());
   }
@@ -43,7 +45,7 @@ public class AccountVerticle extends BaseMicroserviceVerticle {
     return initFuture;
   }
 
-  private Future<Void> initRoleDatabase(RoleService service) {
+  private Future<Void> initRoleDatabase(CRUDService service) {
     Future<Void> initFuture = Future.future();
     service.initializePersistence(initFuture.completer());
     return initFuture;

@@ -1,6 +1,8 @@
 package io.vertx.armysystem.microservice.account.api;
 
 import io.vertx.armysystem.business.common.Action;
+import io.vertx.armysystem.business.common.CRUDService;
+import io.vertx.armysystem.business.common.ServiceBase;
 import io.vertx.armysystem.microservice.account.*;
 import io.vertx.core.Future;
 import io.vertx.core.json.Json;
@@ -22,7 +24,7 @@ public class AccountRestAPIVerticle extends RestAPIVerticle {
   private static final String SERVICE_NAME = "account-rest-api";
 
   private final UserService userService;
-  private final RoleService roleService;
+  private final CRUDService roleService;
 
   private static final String API_USER_ADD = "/user";
   private static final String API_USER_FETCH = "/user/:id";
@@ -41,7 +43,7 @@ public class AccountRestAPIVerticle extends RestAPIVerticle {
   private static final String API_ROLE_UPDATE = "/role/:id";
   private static final String API_ROLE_DELETE = "/role/:id";
 
-  public AccountRestAPIVerticle(UserService userService, RoleService roleService) {
+  public AccountRestAPIVerticle(UserService userService, CRUDService roleService) {
     super();
 
     this.userService = userService;
@@ -60,22 +62,22 @@ public class AccountRestAPIVerticle extends RestAPIVerticle {
     enableCorsSupport(router);
 
     // user api route handler
-    router.post(API_USER_ADD).handler(context -> requireAuth(context, UserService.PERMISSION_NAME, Action.Create.toString(), this::apiAddUser));
-    router.get(API_USER_FETCH).handler(context -> requireAuth(context, UserService.PERMISSION_NAME, Action.Read.toString(), this::apiFetchUser));
-    router.post(API_USER_QUERY).handler(context -> requireAuth(context, UserService.PERMISSION_NAME, Action.Read.toString(), this::apiQueryUsers));
-    router.post(API_USER_COUNT).handler(context -> requireAuth(context, UserService.PERMISSION_NAME, Action.Read.toString(), this::apiCountUsers));
-    router.patch(API_USER_UPDATE).handler(context -> requireAuth(context, UserService.PERMISSION_NAME, Action.Update.toString(), this::apiUpdateUser));
-    router.delete(API_USER_DELETE).handler(context -> requireAuth(context, UserService.PERMISSION_NAME, Action.Delete.toString(), this::apiDeleteUser));
+    router.post(API_USER_ADD).handler(context -> requireAuth(context, ((ServiceBase)userService).getPermission(), Action.Create.toString(), this::apiAddUser));
+    router.get(API_USER_FETCH).handler(context -> requireAuth(context, ((ServiceBase)userService).getPermission(), Action.Read.toString(), this::apiFetchUser));
+    router.post(API_USER_QUERY).handler(context -> requireAuth(context, ((ServiceBase)userService).getPermission(), Action.Read.toString(), this::apiQueryUsers));
+    router.post(API_USER_COUNT).handler(context -> requireAuth(context, ((ServiceBase)userService).getPermission(), Action.Read.toString(), this::apiCountUsers));
+    router.patch(API_USER_UPDATE).handler(context -> requireAuth(context, ((ServiceBase)userService).getPermission(), Action.Update.toString(), this::apiUpdateUser));
+    router.delete(API_USER_DELETE).handler(context -> requireAuth(context, ((ServiceBase)userService).getPermission(), Action.Delete.toString(), this::apiDeleteUser));
     router.post(API_USER_LOGIN).handler(this::apiLogin);
     router.post(API_USER_UPDATEPWD).handler(context -> requireLogin(context, this::apiUpdatePwd));
 
     // role api route handler
-    router.post(API_ROLE_ADD).handler(context -> requireAuth(context, RoleService.PERMISSION_NAME, Action.Create.toString(), this::apiAddRole));
-    router.get(API_ROLE_FETCH).handler(context -> requireAuth(context, RoleService.PERMISSION_NAME, Action.Read.toString(), this::apiFetchRole));
-    router.post(API_ROLE_QUERY).handler(context -> requireAuth(context, RoleService.PERMISSION_NAME, Action.Read.toString(), this::apiQueryRoles));
-    router.post(API_ROLE_COUNT).handler(context -> requireAuth(context, RoleService.PERMISSION_NAME, Action.Read.toString(), this::apiCountRoles));
-    router.patch(API_ROLE_UPDATE).handler(context -> requireAuth(context, RoleService.PERMISSION_NAME, Action.Update.toString(), this::apiUpdateRole));
-    router.delete(API_ROLE_DELETE).handler(context -> requireAuth(context, RoleService.PERMISSION_NAME, Action.Delete.toString(), this::apiDeleteRole));
+    router.post(API_ROLE_ADD).handler(context -> requireAuth(context, ((ServiceBase)roleService).getPermission(), Action.Create.toString(), this::apiAddRole));
+    router.get(API_ROLE_FETCH).handler(context -> requireAuth(context, ((ServiceBase)roleService).getPermission(), Action.Read.toString(), this::apiFetchRole));
+    router.post(API_ROLE_QUERY).handler(context -> requireAuth(context, ((ServiceBase)roleService).getPermission(), Action.Read.toString(), this::apiQueryRoles));
+    router.post(API_ROLE_COUNT).handler(context -> requireAuth(context, ((ServiceBase)roleService).getPermission(), Action.Read.toString(), this::apiCountRoles));
+    router.patch(API_ROLE_UPDATE).handler(context -> requireAuth(context, ((ServiceBase)roleService).getPermission(), Action.Update.toString(), this::apiUpdateRole));
+    router.delete(API_ROLE_DELETE).handler(context -> requireAuth(context, ((ServiceBase)roleService).getPermission(), Action.Delete.toString(), this::apiDeleteRole));
 
     String host = config().getString("http.address", "0.0.0.0");
     int port = config().getInteger("http.port", 8082);
@@ -94,24 +96,23 @@ public class AccountRestAPIVerticle extends RestAPIVerticle {
     if (user.getUsername() == null || user.getPassword() == null) {
       badRequest(context, new IllegalArgumentException("Username or password is not valid"));
     } else {
-      userService.addUser(user, principal, resultHandlerNonEmpty(context));
+      userService.addOne(user.toJson(), principal, resultHandlerNonEmpty(context));
     }
   }
 
   private void apiFetchUser(RoutingContext context, JsonObject principal) {
     String id = context.request().getParam("id");
-    userService.retrieveUser(id, principal, resultHandlerNonEmpty(context));
+    userService.retrieveOne(id, principal, resultHandlerNonEmpty(context));
   }
 
   private void apiQueryUsers(RoutingContext context, JsonObject principal) {
     System.out.println("apiQueryUsers " + context.getBodyAsJson());
 
-    Future<List<User>> future = Future.future();
+    Future<List<JsonObject>> future = Future.future();
 
-    userService.retrieveUsersByCondition(context.getBodyAsJson(), principal, future.completer());
+    userService.retrieveManyByCondition(context.getBodyAsJson(), principal, future.completer());
 
-    future.map(list -> list.stream().map(user -> user.toJson()).collect(Collectors.toList()))
-        .setHandler(resultHandler(context, Json::encodePrettily));
+    future.setHandler(resultHandler(context, Json::encodePrettily));
   }
 
   private void apiCountUsers(RoutingContext context, JsonObject principal) {
@@ -128,15 +129,14 @@ public class AccountRestAPIVerticle extends RestAPIVerticle {
   private void apiUpdateUser(RoutingContext context, JsonObject principal) {
     String id = context.request().getParam("id");
     User user = new User(context.getBodyAsJson());
-    user.setId(id);
 
-    userService.updateUser(user, principal, resultHandlerNonEmpty(context));
+    userService.updateOne(id, user.toJson(), principal, resultHandlerNonEmpty(context));
   }
 
   private void apiDeleteUser(RoutingContext context, JsonObject principal) {
     String id = context.request().getParam("id");
 
-    userService.deleteUser(id, principal, deleteResultHandler(context));
+    userService.deleteOne(id, principal, deleteResultHandler(context));
   }
 
   private void apiLogin(RoutingContext context) {
@@ -174,24 +174,23 @@ public class AccountRestAPIVerticle extends RestAPIVerticle {
     if (role.getRoleName() == null || role.getPermissions() == null) {
       badRequest(context, new IllegalArgumentException("The parameters are not valid"));
     } else {
-      roleService.addRole(role, resultHandlerNonEmpty(context));
+      roleService.addOne(role.toJson(), principal, resultHandlerNonEmpty(context));
     }
   }
 
   private void apiFetchRole(RoutingContext context, JsonObject principal) {
     String id = context.request().getParam("id");
-    roleService.retrieveRole(id, resultHandlerNonEmpty(context));
+    roleService.retrieveOne(id, principal, resultHandlerNonEmpty(context));
   }
 
   private void apiQueryRoles(RoutingContext context, JsonObject principal) {
     System.out.println("apiQueryRoles " + context.getBodyAsJson());
 
-    Future<List<Role>> future = Future.future();
+    Future<List<JsonObject>> future = Future.future();
 
-    roleService.retrieveRolesByCondition(context.getBodyAsJson(), future.completer());
+    roleService.retrieveManyByCondition(context.getBodyAsJson(), principal, future.completer());
 
-    future.map(list -> list.stream().map(role -> role.toJson()).collect(Collectors.toList()))
-        .setHandler(resultHandler(context, Json::encodePrettily));
+    future.setHandler(resultHandler(context, Json::encodePrettily));
   }
 
   private void apiCountRoles(RoutingContext context, JsonObject principal) {
@@ -199,7 +198,7 @@ public class AccountRestAPIVerticle extends RestAPIVerticle {
 
     Future<Long> future = Future.future();
 
-    roleService.count(context.getBodyAsJson(), future.completer());
+    roleService.count(context.getBodyAsJson(), principal, future.completer());
 
     future.map(c -> new JsonObject().put("count", c))
         .setHandler(resultHandlerNonEmpty(context));
@@ -208,14 +207,13 @@ public class AccountRestAPIVerticle extends RestAPIVerticle {
   private void apiUpdateRole(RoutingContext context, JsonObject principal) {
     String id = context.request().getParam("id");
     Role role = new Role(context.getBodyAsJson());
-    role.setId(id);
 
-    roleService.updateRole(role, resultHandlerNonEmpty(context));
+    roleService.updateOne(id, role.toJson(), principal, resultHandlerNonEmpty(context));
   }
 
   private void apiDeleteRole(RoutingContext context, JsonObject principal) {
     String id = context.request().getParam("id");
 
-    roleService.deleteRole(id, deleteResultHandler(context));
+    roleService.deleteOne(id, principal, deleteResultHandler(context));
   }
 }

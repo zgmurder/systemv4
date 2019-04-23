@@ -1,18 +1,18 @@
 package io.vertx.armysystem.microservice.account.impl;
 
+import io.vertx.armysystem.business.common.CRUDService;
+import io.vertx.armysystem.business.common.ServiceBase;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.armysystem.business.common.QueryCondition;
 import io.vertx.armysystem.microservice.account.Role;
-import io.vertx.armysystem.microservice.account.RoleService;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RoleServiceImpl extends MongoRepositoryWrapper implements RoleService {
-  private static final String COLLECTION = "roles";
+public class RoleServiceImpl extends MongoRepositoryWrapper implements CRUDService, ServiceBase {
   private final Vertx vertx;
 
   public RoleServiceImpl(Vertx vertx, JsonObject config) {
@@ -23,12 +23,32 @@ public class RoleServiceImpl extends MongoRepositoryWrapper implements RoleServi
   }
 
   @Override
-  public RoleService initializePersistence(Handler<AsyncResult<Void>> resultHandler) {
+  public String getServiceName() {
+    return "account-role-eb-service";
+  }
+
+  @Override
+  public String getServiceAddress() {
+    return "service.account.role";
+  }
+
+  @Override
+  public String getPermission() {
+    return "Role";
+  }
+
+  @Override
+  public String getCollectionName() {
+    return "Role";
+  }
+
+  @Override
+  public CRUDService initializePersistence(Handler<AsyncResult<Void>> resultHandler) {
     System.out.println("init role collection...");
 
-    this.createCollection(COLLECTION)
+    this.createCollection(getCollectionName())
         .otherwise(err -> null)
-        .compose(o -> this.createIndexWithOptions(COLLECTION,
+        .compose(o -> this.createIndexWithOptions(getCollectionName(),
             new JsonObject().put("roleName", 1), new JsonObject().put("unique", true)))
         .otherwise(err -> null)
         .compose(o -> initRoleData())
@@ -52,7 +72,7 @@ public class RoleServiceImpl extends MongoRepositoryWrapper implements RoleServi
             if (roles != null) {
               CompositeFuture.join(roles.stream()
                   .filter(item -> item instanceof JsonObject)
-                  .map(json -> this.insertOne(COLLECTION, (JsonObject)json))
+                  .map(json -> this.insertOne(getCollectionName(), (JsonObject)json))
                   .collect(Collectors.toList()))
                   .setHandler(ar2 -> future.complete());
             } else {
@@ -69,72 +89,56 @@ public class RoleServiceImpl extends MongoRepositoryWrapper implements RoleServi
   }
 
   @Override
-  public RoleService addRole(Role role, Handler<AsyncResult<Role>> resultHandler) {
-    this.insertOne(COLLECTION, role.toJson())
-        .map(Role::new)
+  public CRUDService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
+    this.insertOne(getCollectionName(), new Role(item).toJson())
         .setHandler(resultHandler);
 
     return this;
   }
 
   @Override
-  public RoleService retrieveRole(String id, Handler<AsyncResult<Role>> resultHandler) {
-    JsonObject query = new JsonObject().put("_id", id);
-    this.findOne(COLLECTION, query, new JsonObject())
-        .map(option -> option.map(Role::new).orElse(null))
+  public CRUDService retrieveOne(String id, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
+    this.findOne(getCollectionName(), getIdQuery(id), new JsonObject())
+        .map(option -> option.orElse(null))
         .setHandler(resultHandler);
 
     return this;
   }
 
   @Override
-  public RoleService retrieveByRoleName(String roleName, Handler<AsyncResult<Role>> resultHandler) {
-    JsonObject query = new JsonObject().put("roleName", roleName);
-    this.findOne(COLLECTION, query, new JsonObject())
-        .map(option -> option.map(Role::new).orElse(null))
-        .setHandler(resultHandler);
+  public CRUDService retrieveAll(JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) {
+    this.retrieveManyByCondition(new JsonObject(), principal, resultHandler);
 
     return this;
   }
 
   @Override
-  public RoleService retrieveAllRoles(Handler<AsyncResult<List<Role>>> resultHandler) {
-    this.retrieveRolesByCondition(new JsonObject(), resultHandler);
-
-    return this;
-  }
-
-  @Override
-  public RoleService count(JsonObject condition, Handler<AsyncResult<Long>> resultHandler) {
+  public CRUDService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
-    this.count(COLLECTION, qCondition.getQuery()).setHandler(resultHandler);
+    this.count(getCollectionName(), qCondition.getQuery()).setHandler(resultHandler);
 
     return this;
   }
 
   @Override
-  public RoleService retrieveRolesByCondition(JsonObject condition, Handler<AsyncResult<List<Role>>> resultHandler) {
+  public CRUDService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
 
-    this.findWithOptions(COLLECTION, qCondition.getQuery(), qCondition.getOption())
-        .map(list -> list.stream()
-            .map(Role::new)
-            .collect(Collectors.toList()))
+    this.findWithOptions(getCollectionName(), qCondition.getQuery(), qCondition.getOption())
         .setHandler(resultHandler);
 
     return this;
   }
 
   @Override
-  public RoleService updateRole(Role role, Handler<AsyncResult<Role>> resultHandler) {
-    JsonObject updateObj = role.toJson();
-    updateObj.remove("id");
-    updateObj.remove("buildIn");
+  public CRUDService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
+    item.remove("id");
+    item.remove("buildIn");
 
-    this.update(COLLECTION, new JsonObject().put("_id", role.getId()), updateObj)
+    this.update(getCollectionName(), getIdQuery(id), new Role(item).toJson())
         .setHandler(ar -> {
           if (ar.succeeded()) {
-            this.retrieveRole(role.getId(), resultHandler);
+            this.retrieveOne(id, principal, resultHandler);
           } else {
             resultHandler.handle(Future.failedFuture(ar.cause()));
           }
@@ -144,9 +148,16 @@ public class RoleServiceImpl extends MongoRepositoryWrapper implements RoleServi
   }
 
   @Override
-  public RoleService deleteRole(String id, Handler<AsyncResult<Void>> resultHandler) {
-    this.removeById(COLLECTION, id).setHandler(resultHandler);
+  public CRUDService deleteOne(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) {
+    this.remove(getCollectionName(), getIdQuery(id))
+        .setHandler(resultHandler);
 
     return this;
+  }
+
+  private JsonObject getIdQuery(String id) {
+    return new JsonObject().put("$or", new JsonArray()
+        .add(new JsonObject().put("_id", id))
+        .add(new JsonObject().put("name", id)));
   }
 }

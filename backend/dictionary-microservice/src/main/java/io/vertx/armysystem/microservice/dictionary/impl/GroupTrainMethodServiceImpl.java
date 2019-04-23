@@ -120,7 +120,8 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
 
   @Override
   public CRUDService deleteOne(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) {
-    this.remove(getCollectionName(), getIdQuery(id)).setHandler(resultHandler);
+    this.remove(getCollectionName(), getIdQuery(id))
+        .setHandler(resultHandler);
 
     return this;
   }
