@@ -2,6 +2,7 @@ package io.vertx.armysystem.microservice.dictionary.impl;
 
 import io.vertx.armysystem.business.common.CRUDService;
 import io.vertx.armysystem.business.common.QueryCondition;
+import io.vertx.armysystem.business.common.ServiceBase;
 import io.vertx.armysystem.business.common.dictionary.GroupTrainMethod;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
 import io.vertx.core.AsyncResult;
@@ -13,7 +14,7 @@ import io.vertx.core.json.JsonObject;
 
 import java.util.List;
 
-public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implements CRUDService {
+public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implements CRUDService, ServiceBase {
   private static final String COLLECTION = "GroupTrainMethod";
   private final Vertx vertx;
 

@@ -181,12 +181,13 @@ public class CRUDServiceVertxEBProxy implements CRUDService {
     return this;
   }
 
-  public CRUDService updateOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
+  public CRUDService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
     }
     JsonObject _json = new JsonObject();
+    _json.put("id", id);
     _json.put("item", item);
     _json.put("principal", principal);
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();

@@ -2,6 +2,7 @@ package io.vertx.armysystem.microservice.dictionary.api;
 
 import io.vertx.armysystem.business.common.Action;
 import io.vertx.armysystem.business.common.CRUDService;
+import io.vertx.armysystem.business.common.ServiceBase;
 import io.vertx.armysystem.microservice.common.RestAPIVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.json.Json;
@@ -10,10 +11,8 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class DictionaryRestAPIVerticle extends RestAPIVerticle {
   private static final String SERVICE_NAME = "account-rest-api";
@@ -39,18 +38,19 @@ public class DictionaryRestAPIVerticle extends RestAPIVerticle {
     enableCorsSupport(router);
 
     services.forEach(service -> {
-      router.post(PREFIX+service.getCollectionName())
-          .handler(context -> requireAuth(context, service.getPermission(), Action.Create.toString(), this::apiAddItem));
-      router.get(PREFIX+service.getCollectionName()+"/:id")
-          .handler(context -> requireAuth(context, service.getPermission(), Action.Read.toString(), this::apiFetchItem));
-      router.post(PREFIX+service.getCollectionName()+"s")
-          .handler(context -> requireAuth(context, service.getPermission(), Action.Read.toString(), this::apiQueryItems));
-      router.post(PREFIX+service.getCollectionName()+"s/count")
-          .handler(context -> requireAuth(context, service.getPermission(), Action.Read.toString(), this::apiCountItems));
-      router.patch(PREFIX+service.getCollectionName()+"/:id")
-          .handler(context -> requireAuth(context, service.getPermission(), Action.Update.toString(), this::apiUpdateItem));
-      router.delete(PREFIX+service.getCollectionName()+"/:id")
-          .handler(context -> requireAuth(context, service.getPermission(), Action.Delete.toString(), this::apiDeleteItem));
+      ServiceBase serviceBase = (ServiceBase)service;
+      router.post(PREFIX+serviceBase.getCollectionName())
+          .handler(context -> requireAuth(context, serviceBase.getPermission(), Action.Create.toString(), this::apiAddItem));
+      router.get(PREFIX+serviceBase.getCollectionName()+"/:id")
+          .handler(context -> requireAuth(context, serviceBase.getPermission(), Action.Read.toString(), this::apiFetchItem));
+      router.post(PREFIX+serviceBase.getCollectionName()+"s")
+          .handler(context -> requireAuth(context, serviceBase.getPermission(), Action.Read.toString(), this::apiQueryItems));
+      router.post(PREFIX+serviceBase.getCollectionName()+"s/count")
+          .handler(context -> requireAuth(context, serviceBase.getPermission(), Action.Read.toString(), this::apiCountItems));
+      router.patch(PREFIX+serviceBase.getCollectionName()+"/:id")
+          .handler(context -> requireAuth(context, serviceBase.getPermission(), Action.Update.toString(), this::apiUpdateItem));
+      router.delete(PREFIX+serviceBase.getCollectionName()+"/:id")
+          .handler(context -> requireAuth(context, serviceBase.getPermission(), Action.Delete.toString(), this::apiDeleteItem));
     });
 
     String host = config().getString("http.address", "0.0.0.0");
@@ -116,7 +116,7 @@ public class DictionaryRestAPIVerticle extends RestAPIVerticle {
   private CRUDService getService(RoutingContext context) {
     String path = context.request().path();
     Optional<CRUDService> service = services.stream()
-        .filter(item -> path.toLowerCase().indexOf(item.getCollectionName().toLowerCase()) > 0)
+        .filter(item -> path.toLowerCase().indexOf(((ServiceBase)item).getCollectionName().toLowerCase()) > 0)
         .findAny();
 
     return service.orElse(null);

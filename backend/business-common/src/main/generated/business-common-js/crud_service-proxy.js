@@ -170,18 +170,19 @@
      Update an item info.
 
      @public
+     @param id {string} the item id 
      @param item {Object} an entity that we want to update 
      @param principal {Object} 
      @param resultHandler {function} the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not. 
      @return {CRUDService}
      */
-    this.updateOne = function(item, principal, resultHandler) {
+    this.updateOne = function(id, item, principal, resultHandler) {
       var __args = arguments;
-      if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
+      if (__args.length === 4 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && (typeof __args[2] === 'object' && __args[2] != null) && typeof __args[3] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"item":__args[0], "principal":__args[1]}, {"action":"updateOne"}, function(err, result) { __args[2](err, result &&result.body); });
+        j_eb.send(j_address, {"id":__args[0], "item":__args[1], "principal":__args[2]}, {"action":"updateOne"}, function(err, result) { __args[3](err, result &&result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };

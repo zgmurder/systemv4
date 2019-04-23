@@ -192,25 +192,27 @@ public class CRUDService {
 
   /**
    * Update an item info.
+   * @param id the item id
    * @param item an entity that we want to update
    * @param principal 
    * @param resultHandler the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not.
    * @return 
    */
-  public CRUDService updateOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) { 
-    delegate.updateOne(item, principal, resultHandler);
+  public CRUDService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) { 
+    delegate.updateOne(id, item, principal, resultHandler);
     return this;
   }
 
   /**
    * Update an item info.
+   * @param id the item id
    * @param item an entity that we want to update
    * @param principal 
    * @return 
    */
-  public Single<JsonObject> rxUpdateOne(JsonObject item, JsonObject principal) { 
+  public Single<JsonObject> rxUpdateOne(String id, JsonObject item, JsonObject principal) { 
     return Single.create(new io.vertx.rx.java.SingleOnSubscribeAdapter<>(fut -> {
-      updateOne(item, principal, fut);
+      updateOne(id, item, principal, fut);
     }));
   }
 

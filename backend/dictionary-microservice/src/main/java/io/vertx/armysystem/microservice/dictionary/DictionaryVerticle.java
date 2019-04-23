@@ -1,6 +1,7 @@
 package io.vertx.armysystem.microservice.dictionary;
 
 import io.vertx.armysystem.business.common.CRUDService;
+import io.vertx.armysystem.business.common.ServiceBase;
 import io.vertx.armysystem.microservice.common.BaseMicroserviceVerticle;
 import io.vertx.armysystem.microservice.common.functional.Functional;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
@@ -29,7 +30,7 @@ public class DictionaryVerticle extends BaseMicroserviceVerticle {
 
     // register the service proxy on event bus
     services.forEach(service -> {
-      ProxyHelper.registerService(CRUDService.class, vertx, service, service.getServiceAddress());
+      ProxyHelper.registerService(CRUDService.class, vertx, service, ((ServiceBase)service).getServiceAddress());
     });
 
     // publish the service and REST endpoint in the discovery infrastructure
@@ -54,7 +55,7 @@ public class DictionaryVerticle extends BaseMicroserviceVerticle {
 
   private Future<List<Void>> publicServices() {
     return Functional.allOfFutures(services.stream()
-        .map(service -> publishEventBusService(service.getServiceName(), service.getServiceAddress(), CRUDService.class))
+        .map(service -> publishEventBusService(((ServiceBase)service).getServiceName(), ((ServiceBase)service).getServiceAddress(), CRUDService.class))
         .collect(Collectors.toList()));
   }
 

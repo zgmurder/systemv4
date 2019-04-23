@@ -49,8 +49,9 @@ public class CRUDService_GroovyExtension {
     } : null));
     return j_receiver;
   }
-  public static io.vertx.armysystem.business.common.CRUDService updateOne(io.vertx.armysystem.business.common.CRUDService j_receiver, java.util.Map<String, Object> item, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.Map<String, Object>>> resultHandler) {
-    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.updateOne(item != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(item) : null,
+  public static io.vertx.armysystem.business.common.CRUDService updateOne(io.vertx.armysystem.business.common.CRUDService j_receiver, java.lang.String id, java.util.Map<String, Object> item, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.util.Map<String, Object>>> resultHandler) {
+    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.updateOne(id,
+      item != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(item) : null,
       principal != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(principal) : null,
       resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<io.vertx.core.json.JsonObject>>() {
       public void handle(io.vertx.core.AsyncResult<io.vertx.core.json.JsonObject> ar) {

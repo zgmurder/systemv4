@@ -147,7 +147,7 @@ public class CRUDServiceVertxProxyHandler extends ProxyHandler {
           break;
         }
         case "updateOne": {
-          service.updateOne((io.vertx.core.json.JsonObject)json.getValue("item"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
+          service.updateOne((java.lang.String)json.getValue("id"), (io.vertx.core.json.JsonObject)json.getValue("item"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
           break;
         }
         case "deleteOne": {
