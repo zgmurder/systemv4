@@ -11,6 +11,10 @@
 
     <artifactId>dictionary-microservice</artifactId>
 
+    <properties>
+        <main.verticle>io.vertx.armysystem.microservice.dictionary.DictionaryVerticle</main.verticle>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.vertx.armysystem</groupId>

@@ -47,12 +47,12 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
 
   @Override
   public String getPermission() {
-    return "Role";
+    return "User";
   }
 
   @Override
   public String getCollectionName() {
-    return "Role";
+    return "User";
   }
 
   @Override
@@ -120,6 +120,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
             } else {
               this.insertOne(getCollectionName(), user.toJson())
                   .map(json -> json.putNull("password"))
+//                  .map(json -> new User(json).toJson())
                   .setHandler(resultHandler);
             }
           } else {
@@ -233,6 +234,10 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
   }
 
   private Future<JsonObject> fillPermissionsInUser(User user) {
+    if (user == null) {
+      return Future.succeededFuture();
+    }
+
     JsonObject userObj = user.toJson();
 
     return Functional.getPermissitions(user.getRoleName(), roleService)
@@ -369,7 +374,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
   private QueryCondition getCondition(String id, JsonObject principal) {
     JsonObject query = new JsonObject().put("$or", new JsonArray()
         .add(new JsonObject().put("_id", id))
-        .add(new JsonObject().put("name", id)));
+        .add(new JsonObject().put("username", id)));
 
     QueryCondition condition = new QueryCondition(query, new JsonObject())
         .filterByUserOrganizationV1(FILTER_COLUMN_NAME, principal);

@@ -12,8 +12,11 @@
     "displayName": "业务管理员",
     "buildIn": true,
     "permissions": [{
-      "schemaName": "*",
+      "schemaName": "User",
       "actions": ["Read", "Create", "Update", "Delete"]
+    }, {
+      "schemaName": "*",
+      "actions": ["Read"]
     }]
   }, {
     "roleName": "Operator",

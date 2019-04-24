@@ -158,6 +158,6 @@ public class RoleServiceImpl extends MongoRepositoryWrapper implements CRUDServi
   private JsonObject getIdQuery(String id) {
     return new JsonObject().put("$or", new JsonArray()
         .add(new JsonObject().put("_id", id))
-        .add(new JsonObject().put("name", id)));
+        .add(new JsonObject().put("roleName", id)));
   }
 }

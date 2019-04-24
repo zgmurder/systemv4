@@ -31,7 +31,7 @@ public class MongoRepositoryWrapper {
             if (ar.result() == null)
               future.complete(Optional.empty());
             else
-              future.complete(Optional.of(ar.result().put("id", ar.result().getString("_id"))));
+              future.complete(Optional.of(ar.result().put("id", ar.result().remove("_id"))));
           } else {
             future.fail(ar.cause());
           }
@@ -49,7 +49,7 @@ public class MongoRepositoryWrapper {
         ar -> {
           if (ar.succeeded())
             future.complete(ar.result().stream()
-                .map(json -> json.put("id", json.getString("_id")))
+                .map(json -> json.put("id", json.remove("_id")))
                 .collect(Collectors.toList()));
           else
             future.fail(ar.cause());
@@ -90,8 +90,10 @@ public class MongoRepositoryWrapper {
 
     client.insert(collection, document,
         ar -> {
-          if (ar.succeeded())
+          if (ar.succeeded()) {
+            document.remove("_id");
             future.complete(document.put("id", ar.result()));
+          }
           else
             future.fail(ar.cause());
         });

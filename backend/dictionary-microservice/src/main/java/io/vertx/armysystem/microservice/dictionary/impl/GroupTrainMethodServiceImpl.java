@@ -95,6 +95,10 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
   public CRUDService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
 
+    if (qCondition.getOption().getJsonObject("sort") == null) {
+      qCondition.getOption().put("sort", new JsonObject().put("order", 1));
+    }
+
     this.findWithOptions(getCollectionName(), qCondition.getQuery(), qCondition.getOption())
         .setHandler(resultHandler);
 

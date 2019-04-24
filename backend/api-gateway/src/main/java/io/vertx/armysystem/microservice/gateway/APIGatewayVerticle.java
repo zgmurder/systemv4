@@ -125,9 +125,10 @@ public class APIGatewayVerticle extends RestAPIVerticle {
     HttpClientRequest toReq = client
         .request(context.request().method(), path, response -> {
           response.bodyHandler(body -> {
-            if (response.statusCode() >= 500) { // api endpoint server error, circuit breaker should fail
-              cbFuture.fail(response.statusCode() + ": " + body.toString());
-            } else {
+//            if (response.statusCode() >= 500) { // api endpoint server error, circuit breaker should fail
+//              cbFuture.fail(response.statusCode() + ": " + body.toString());
+//            } else
+            {
               HttpServerResponse toRsp = context.response()
                   .setStatusCode(response.statusCode());
               response.headers().forEach(header -> {

@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public class DictionaryRestAPIVerticle extends RestAPIVerticle {
   private static final String SERVICE_NAME = "account-rest-api";
-  private static final String PREFIX = "/dictionary/";
+  private static final String PREFIX = "/";
 
   private List<CRUDService> services;
 
