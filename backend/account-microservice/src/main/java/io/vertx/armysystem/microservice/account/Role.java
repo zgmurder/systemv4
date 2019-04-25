@@ -16,6 +16,7 @@ public class Role {
   private String id;
   private String roleName;
   private String displayName;
+  private int level;
   private boolean buildIn;
   private String description;
   private Long createdTime;
@@ -59,6 +60,15 @@ public class Role {
 
   public Role setDisplayName(String displayName) {
     this.displayName = displayName;
+    return this;
+  }
+
+  public int getLevel() {
+    return level;
+  }
+
+  public Role setLevel(int level) {
+    this.level = level;
     return this;
   }
 

@@ -33,6 +33,7 @@
 |[[description]]`description`|`String`|-
 |[[displayName]]`displayName`|`String`|-
 |[[id]]`id`|`String`|-
+|[[level]]`level`|`Number (int)`|-
 |[[permissions]]`permissions`|`Array of link:dataobjects.html#Permission[Permission]`|-
 |[[roleName]]`roleName`|`String`|-
 |[[updatedTime]]`updatedTime`|`Number (Long)`|-
@@ -62,6 +63,7 @@
 |[[parentOrgIds]]`parentOrgIds`|`Array of String`|-
 |[[password]]`password`|`String`|-
 |[[phone]]`phone`|`String`|-
+|[[roleLevel]]`roleLevel`|`Number (int)`|-
 |[[roleName]]`roleName`|`String`|-
 |[[updatedTime]]`updatedTime`|`Number (Long)`|-
 |[[username]]`username`|`String`|-

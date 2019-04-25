@@ -14,7 +14,7 @@ public class MilitaryRank {
   private String name;            // 军衔名称
   private String rankLevel1;      // 军衔1级分类：区分义务兵、士官、军官
   private String rankLevel2;      // 军衔2级分类：比如尉官、校官、将官等
-  private int levelCode;          // 军衔等级排序码
+  private int order;              // 军衔等级排序码
 
   public MilitaryRank() {
     // Empty constructor
@@ -66,12 +66,12 @@ public class MilitaryRank {
     return this;
   }
 
-  public int getLevelCode() {
-    return levelCode;
+  public int getOrder() {
+    return order;
   }
 
-  public MilitaryRank setLevelCode(int levelCode) {
-    this.levelCode = levelCode;
+  public MilitaryRank setOrder(int order) {
+    this.order = order;
     return this;
   }
 

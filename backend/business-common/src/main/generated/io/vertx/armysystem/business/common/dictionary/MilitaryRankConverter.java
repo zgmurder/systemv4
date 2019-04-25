@@ -30,11 +30,11 @@ public class MilitaryRankConverter {
     if (json.getValue("id") instanceof String) {
       obj.setId((String)json.getValue("id"));
     }
-    if (json.getValue("levelCode") instanceof Number) {
-      obj.setLevelCode(((Number)json.getValue("levelCode")).intValue());
-    }
     if (json.getValue("name") instanceof String) {
       obj.setName((String)json.getValue("name"));
+    }
+    if (json.getValue("order") instanceof Number) {
+      obj.setOrder(((Number)json.getValue("order")).intValue());
     }
     if (json.getValue("rankLevel1") instanceof String) {
       obj.setRankLevel1((String)json.getValue("rankLevel1"));
@@ -48,10 +48,10 @@ public class MilitaryRankConverter {
     if (obj.getId() != null) {
       json.put("id", obj.getId());
     }
-    json.put("levelCode", obj.getLevelCode());
     if (obj.getName() != null) {
       json.put("name", obj.getName());
     }
+    json.put("order", obj.getOrder());
     if (obj.getRankLevel1() != null) {
       json.put("rankLevel1", obj.getRankLevel1());
     }

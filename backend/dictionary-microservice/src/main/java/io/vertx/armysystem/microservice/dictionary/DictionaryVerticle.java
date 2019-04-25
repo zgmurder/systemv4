@@ -6,7 +6,7 @@ import io.vertx.armysystem.microservice.common.BaseMicroserviceVerticle;
 import io.vertx.armysystem.microservice.common.functional.Functional;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
 import io.vertx.armysystem.microservice.dictionary.api.DictionaryRestAPIVerticle;
-import io.vertx.armysystem.microservice.dictionary.impl.GroupTrainMethodServiceImpl;
+import io.vertx.armysystem.microservice.dictionary.impl.*;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.serviceproxy.ProxyHelper;
@@ -25,13 +25,45 @@ public class DictionaryVerticle extends BaseMicroserviceVerticle {
     System.out.println("Starting DictionaryVerticle : " + config());
 
     // create the service instance
-    CRUDService groupTrainMethodService = new GroupTrainMethodServiceImpl(vertx, config());
-    services.add(groupTrainMethodService);
+    CRUDService crudService = new GroupTrainMethodServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new GunnerTypeServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new MilitaryRankServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new MotorTypeServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new OrdnanceTypeServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new OrgCategoryServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new OrgPropertyServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new PhysicalLevelServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new PlaceTypeServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new PositionServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new SpecialMissionServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new SportCategoryServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new SupporterMajorServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new TrainerLevelServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new TrainStepServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new TroopCategoryServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new WeatherTypeServiceImpl(vertx, config());
+    services.add(crudService);
 
     // register the service proxy on event bus
-    services.forEach(service -> {
-      ProxyHelper.registerService(CRUDService.class, vertx, service, ((ServiceBase)service).getServiceAddress());
-    });
+    services.forEach(service ->
+      ProxyHelper.registerService(CRUDService.class, vertx, service, ((ServiceBase)service).getServiceAddress())
+    );
 
     // publish the service and REST endpoint in the discovery infrastructure
     new MongoRepositoryWrapper(vertx, config()).checkDatabase()

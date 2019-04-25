@@ -65,6 +65,9 @@ public class UserConverter {
     if (json.getValue("phone") instanceof String) {
       obj.setPhone((String)json.getValue("phone"));
     }
+    if (json.getValue("roleLevel") instanceof Number) {
+      obj.setRoleLevel(((Number)json.getValue("roleLevel")).intValue());
+    }
     if (json.getValue("roleName") instanceof String) {
       obj.setRoleName((String)json.getValue("roleName"));
     }
@@ -113,6 +116,7 @@ public class UserConverter {
     if (obj.getPhone() != null) {
       json.put("phone", obj.getPhone());
     }
+    json.put("roleLevel", obj.getRoleLevel());
     if (obj.getRoleName() != null) {
       json.put("roleName", obj.getRoleName());
     }

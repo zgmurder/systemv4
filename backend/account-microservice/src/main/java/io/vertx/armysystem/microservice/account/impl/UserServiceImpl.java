@@ -161,6 +161,11 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
   @Override
   public UserService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
+
+    if (qCondition.getOption().getJsonObject("sort") == null) {
+      qCondition.getOption().put("sort", new JsonObject().put("roleLevel", 1));
+    }
+
     qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
     this.findWithOptions(getCollectionName(), qCondition.getQuery(), qCondition.getOption())
         .map(list -> list.stream()

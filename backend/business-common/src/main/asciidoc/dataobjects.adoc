@@ -48,8 +48,8 @@
 |===
 ^|Name | Type ^| Description
 |[[id]]`id`|`String`|-
-|[[levelCode]]`levelCode`|`Number (int)`|-
 |[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
 |[[rankLevel1]]`rankLevel1`|`String`|-
 |[[rankLevel2]]`rankLevel2`|`String`|-
 |===

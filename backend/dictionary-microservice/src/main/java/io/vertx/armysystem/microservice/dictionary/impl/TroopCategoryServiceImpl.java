@@ -3,7 +3,7 @@ package io.vertx.armysystem.microservice.dictionary.impl;
 import io.vertx.armysystem.business.common.CRUDService;
 import io.vertx.armysystem.business.common.QueryCondition;
 import io.vertx.armysystem.business.common.ServiceBase;
-import io.vertx.armysystem.business.common.dictionary.GroupTrainMethod;
+import io.vertx.armysystem.business.common.dictionary.TroopCategory;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -14,10 +14,10 @@ import io.vertx.core.json.JsonObject;
 
 import java.util.List;
 
-public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implements CRUDService, ServiceBase {
+public class TroopCategoryServiceImpl extends MongoRepositoryWrapper implements CRUDService, ServiceBase {
   private final Vertx vertx;
 
-  public GroupTrainMethodServiceImpl(Vertx vertx, JsonObject config) {
+  public TroopCategoryServiceImpl(Vertx vertx, JsonObject config) {
     super(vertx, config);
 
     this.vertx = vertx;
@@ -25,12 +25,12 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
 
   @Override
   public String getServiceName() {
-    return "dictionary-GroupTrainMethod-eb-service";
+    return "dictionary-TroopCategory-eb-service";
   }
 
   @Override
   public String getServiceAddress() {
-    return "service.dictionary.GroupTrainMethod";
+    return "service.dictionary.TroopCategory";
   }
 
   @Override
@@ -40,7 +40,7 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
 
   @Override
   public String getCollectionName() {
-    return "GroupTrainMethod";
+    return "TroopCategory";
   }
 
   @Override
@@ -60,7 +60,7 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
 
   @Override
   public CRUDService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
-    this.insertOne(getCollectionName(), new GroupTrainMethod(item).toJson())
+    this.insertOne(getCollectionName(), new TroopCategory(item).toJson())
         .setHandler(resultHandler);
 
     return this;
@@ -109,7 +109,7 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
     item.remove("id");
     item.remove("_id");
 
-    this.update(getCollectionName(), getIdQuery(id), new GroupTrainMethod(item).toJson())
+    this.update(getCollectionName(), getIdQuery(id), new TroopCategory(item).toJson())
         .setHandler(ar -> {
           if (ar.succeeded()) {
             this.retrieveOne(id, principal, resultHandler);

@@ -17,6 +17,7 @@ public class User {
   private String password;
   private boolean buildIn;
   private String roleName;
+  private int roleLevel;
   private String organizationId;
   private List<String> parentOrgIds;
 
@@ -77,6 +78,15 @@ public class User {
 
   public User setRoleName(String roleName) {
     this.roleName = roleName;
+    return this;
+  }
+
+  public int getRoleLevel() {
+    return roleLevel;
+  }
+
+  public User setRoleLevel(int roleLevel) {
+    this.roleLevel = roleLevel;
     return this;
   }
 

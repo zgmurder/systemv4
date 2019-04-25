@@ -124,6 +124,10 @@ public class RoleServiceImpl extends MongoRepositoryWrapper implements CRUDServi
   public CRUDService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
 
+    if (qCondition.getOption().getJsonObject("sort") == null) {
+      qCondition.getOption().put("sort", new JsonObject().put("level", 1));
+    }
+
     this.findWithOptions(getCollectionName(), qCondition.getQuery(), qCondition.getOption())
         .setHandler(resultHandler);
 

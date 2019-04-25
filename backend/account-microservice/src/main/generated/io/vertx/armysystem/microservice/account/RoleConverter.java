@@ -42,6 +42,9 @@ public class RoleConverter {
     if (json.getValue("id") instanceof String) {
       obj.setId((String)json.getValue("id"));
     }
+    if (json.getValue("level") instanceof Number) {
+      obj.setLevel(((Number)json.getValue("level")).intValue());
+    }
     if (json.getValue("permissions") instanceof JsonArray) {
       java.util.ArrayList<io.vertx.armysystem.microservice.account.Permission> list = new java.util.ArrayList<>();
       json.getJsonArray("permissions").forEach( item -> {
@@ -72,6 +75,7 @@ public class RoleConverter {
     if (obj.getId() != null) {
       json.put("id", obj.getId());
     }
+    json.put("level", obj.getLevel());
     if (obj.getPermissions() != null) {
       JsonArray array = new JsonArray();
       obj.getPermissions().forEach(item -> array.add(item.toJson()));
