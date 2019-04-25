@@ -147,6 +147,46 @@ ExtraL2(6),       // 特二级
 ExtraL1(7);       // 特一级
 ```
 
+### 体能等级 PhysicalLevel
+常量
+```
+Level1("一类人员"),
+Level2("二类人员"),
+Level3("三类人员"),
+Recruit("新兵"),
+CivilServant("文职人员");
+```
+
+### 军兵种类型 TroopCategory
+常量
+```
+LandForce("地面人员"),
+AirForce("空勤人员"),
+BoatForce("船艇人员");
+```
+
+### 人员分类 SoldierCategory (添加人员的时候使用)
+常量
+```
+Officer("指挥警官"),
+TechOfficer("技术警官"),
+CivilServant("文职人员"),
+Sergeant("士官"),
+Soldier("义务兵");
+```
+
+### 人员属性 PersonProperty (添加课目的时候使用)
+常量
+```
+UnitForce("分队"),
+Officer("警官"),
+TechOfficer("技术警官"),
+Supporter("保障人员"),
+ReserveMember("预备队员"),
+Recruit("新兵"),
+RecruitOfficer("新训干部骨干");
+```
+
 ### 组训类型 GroupTrainMethod
 ```java
 class GroupTrainMethod {
@@ -232,15 +272,6 @@ class OrgProperty {
 }
 ```
 
-### 体能等级 PhysicalLevel
-```java
-class PhysicalLevel {
-    private String id;
-    private String name;
-    private int order;
-}
-```
-
 ### 场地类型 PlaceType
 ```java
 class PlaceType {
@@ -312,15 +343,6 @@ class TrainStep {
 }
 ```
 
-### 军兵种类型 TroopCategory
-```java
-class TroopCategory {
-    private String id;
-    private String name;
-    private int order;
-}
-```
-
 ### 天气类型 WeatherType
 ```java
 class WeatherType {
@@ -328,4 +350,15 @@ class WeatherType {
     private String name;
     private int order;
 }
+```
+
+## 大纲标准
+
+### 枚举
+#### 大纲启用状态 StandardState
+常量
+```
+Initial(0),
+Activated(1),
+Stopped(2);
 ```

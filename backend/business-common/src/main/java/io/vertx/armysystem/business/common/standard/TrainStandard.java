@@ -21,12 +21,12 @@ public class TrainStandard {
   }
 
   public TrainStandard(JsonObject json) {
-//    TrainStandardConverter.fromJson(json, this);
+    TrainStandardConverter.fromJson(json, this);
   }
 
   public JsonObject toJson() {
     JsonObject json = new JsonObject();
-//    TrainStandardConverter.toJson(this, json);
+    TrainStandardConverter.toJson(this, json);
     return json;
   }
 

@@ -1,10 +1,10 @@
 = Cheatsheets
 
-[[TrainStandard]]
-== TrainStandard
+[[StageTime]]
+== StageTime
 
 ++++
- 训练大纲标准
+ 一个训练阶段时长定义
 ++++
 '''
 
@@ -12,10 +12,47 @@
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[endTime]]`endTime`|`Number (Long)`|-
+|[[months]]`months`|`Number (Double)`|-
+|[[task]]`task`|`String`|-
+|===
+
+[[TrainSection]]
+== TrainSection
+
+++++
+ 训练大纲标准分册
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[code]]`code`|`String`|-
 |[[id]]`id`|`String`|-
 |[[name]]`name`|`String`|-
-|[[startTime]]`startTime`|`Number (Long)`|-
-|[[state]]`state`|`Number (int)`|-
+|[[orgCategories]]`orgCategories`|`Array of String`|-
+|[[orgTypes]]`orgTypes`|`Array of String`|-
+|[[personProperties]]`personProperties`|`Array of String`|-
+|[[standardName]]`standardName`|`String`|-
+|===
+
+[[TrainStageTime]]
+== TrainStageTime
+
+++++
+ 训练大纲标准分册
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[majors]]`majors`|`Array of String`|-
+|[[orgCategories]]`orgCategories`|`Array of String`|-
+|[[stageTimes]]`stageTimes`|`Array of link:dataobjects.html#StageTime[StageTime]`|-
+|[[standardName]]`standardName`|`String`|-
 |===
 
