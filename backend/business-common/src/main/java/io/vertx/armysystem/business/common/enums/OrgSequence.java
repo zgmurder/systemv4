@@ -1,7 +1,7 @@
-package io.vertx.armysystem.business.common.dictionary;
+package io.vertx.armysystem.business.common.enums;
 
 /**
- * 武警部队编制序列，比如地面人员/空勤人员/船艇人员
+ * 武警部队编制序列
  *
  * @author Derek Zheng
  */

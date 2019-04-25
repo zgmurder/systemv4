@@ -98,6 +98,55 @@ class Role {
 
 ## Dictionary
 
+### 军械类型 OrdnanceCategory
+常量：武器, 弹药, 物资
+
+### 武警部队编制序列 OrgSequence
+常量：
+```
+Army(1, "总部", "部队"),
+Division(2, "总队", "部队"),
+Brigade(3, "旅级支队", "部队"),
+Regiment(4, "团级支队", "部队"),
+Battalion(5, "大队", "分队"),
+Company(6, "中队", "分队"),
+Platoon(7, "排", "分队"),
+Class(8, "班", "分队"),
+Team(9, "小队", "分队"),
+Soldier(10, "单兵", "人员");
+```
+
+### 单位类型 OrgType
+常量
+```
+Troop("部队"),
+UnitForce("分队"),
+LeaderOffice("首长机关"),
+Department("部门")
+```
+
+### 评分标准 ScoreCriteria
+常量
+```
+Level2("二级制"),
+Level4("四级制"),
+Level7("七级制"),
+NumberScore("百分制");
+```
+
+### 成绩等级 ScoreLevel
+常量
+```
+NoScore(0),       // 未参考
+Unpass(1),        // 不合格或不及格
+Pass(2),          // 合格或及格
+Good(3),          // 良好
+Excellent(4),     // 优秀
+ExtraL3(5),       // 特三级
+ExtraL2(6),       // 特二级
+ExtraL1(7);       // 特一级
+```
+
 ### 组训类型 GroupTrainMethod
 ```java
 class GroupTrainMethod {

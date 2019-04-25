@@ -39,8 +39,6 @@ public class DictionaryVerticle extends BaseMicroserviceVerticle {
     services.add(crudService);
     crudService = new OrgPropertyServiceImpl(vertx, config());
     services.add(crudService);
-    crudService = new PhysicalLevelServiceImpl(vertx, config());
-    services.add(crudService);
     crudService = new PlaceTypeServiceImpl(vertx, config());
     services.add(crudService);
     crudService = new PositionServiceImpl(vertx, config());
@@ -54,8 +52,6 @@ public class DictionaryVerticle extends BaseMicroserviceVerticle {
     crudService = new TrainerLevelServiceImpl(vertx, config());
     services.add(crudService);
     crudService = new TrainStepServiceImpl(vertx, config());
-    services.add(crudService);
-    crudService = new TroopCategoryServiceImpl(vertx, config());
     services.add(crudService);
     crudService = new WeatherTypeServiceImpl(vertx, config());
     services.add(crudService);
