@@ -6,15 +6,15 @@ Content-Type: application/json
 Authorization: Bearer [token]
 
 ### Add
-URL: POST http://127.0.0.1/api/[ServiceName]/[CollectionName]
+URL: POST http://127.0.0.1:8080/api/[ServiceName]/[CollectionName]
 BODY: json object
 
 ### Fetch Item
-URL: GET http://127.0.0.1/api/[ServiceName]/[CollectionName]/[id or name]
+URL: GET http://127.0.0.1:8080/api/[ServiceName]/[CollectionName]/[id or name]
 BODY: empty
 
 ### Query List
-URL: POST http://127.0.0.1/api/[ServiceName]/[CollectionName]s
+URL: POST http://127.0.0.1:8080/api/[ServiceName]/[CollectionName]s
 BODY: MongoDB query condition
 {
     "where": {...}
@@ -27,11 +27,11 @@ BODY: MongoDB query condition
 }
 
 ### Update Item
-URL: PATCH http://127.0.0.1/api/[ServiceName]/[CollectionName]/[id or name]
+URL: PATCH http://127.0.0.1:8080/api/[ServiceName]/[CollectionName]/[id or name]
 BODY: json object
 
 ### Delete Item
-URL: DELETE http://127.0.0.1/api/[ServiceName]/[CollectionName]/[id or name]
+URL: DELETE http://127.0.0.1:8080/api/[ServiceName]/[CollectionName]/[id or name]
 BODY: empty
 
 ## Account
@@ -60,7 +60,7 @@ class User {
 
 额外两个接口：
 #### 登陆
-POST http://127.0.0.1/api/account/user/login
+POST http://127.0.0.1:8080/api/account/user/login
 BODY:
 ```json
 {
@@ -70,7 +70,7 @@ BODY:
 ```
 
 #### 修改密码
-POST http://127.0.0.1/api/account/user/updatepwd
+POST http://127.0.0.1:8080/api/account/user/updatepwd
 BODY:
 ```json
 {
