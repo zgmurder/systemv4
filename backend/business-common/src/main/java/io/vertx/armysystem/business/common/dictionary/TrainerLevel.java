@@ -47,6 +47,15 @@ public class TrainerLevel {
     return this;
   }
 
+  public int getScoreReq() {
+    return scoreReq;
+  }
+
+  public TrainerLevel setScoreReq(int scoreReq) {
+    this.scoreReq = scoreReq;
+    return this;
+  }
+
   public int getOrder() {
     return order;
   }

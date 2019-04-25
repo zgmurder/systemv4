@@ -1,0 +1,282 @@
+# API 接口定义
+
+## 接口格式
+## HTTP Headers
+Content-Type: application/json
+Authorization: Bearer [token]
+
+### Add
+URL: POST http://127.0.0.1/api/[ServiceName]/[CollectionName]
+BODY: json object
+
+### Fetch Item
+URL: GET http://127.0.0.1/api/[ServiceName]/[CollectionName]/[id or name]
+BODY: empty
+
+### Query List
+URL: POST http://127.0.0.1/api/[ServiceName]/[CollectionName]s
+BODY: MongoDB query condition
+{
+    "where": {...}
+    "option": {
+        "fields": [...],
+        "sort": {...}
+        "skip": 0,
+        "limit": 10
+    }
+}
+
+### Update Item
+URL: PATCH http://127.0.0.1/api/[ServiceName]/[CollectionName]/[id or name]
+BODY: json object
+
+### Delete Item
+URL: DELETE http://127.0.0.1/api/[ServiceName]/[CollectionName]/[id or name]
+BODY: empty
+
+## Account
+### User
+```java
+class User {
+  private String id;        // auto
+  private String username;
+  private String password;
+  private boolean buildIn; // auto
+  private String roleName;
+  private int roleLevel;   // auto
+  private String organizationId;
+  private List<String> parentOrgIds; // auto
+
+  private String phone;
+  private String email;
+  private String firstName;
+  private String lastName;
+  private String description;
+
+  private Long createdTime; // auto
+  private Long updatedTime; // auto
+}
+```
+
+额外两个接口：
+#### 登陆
+POST http://127.0.0.1/api/account/user/login
+BODY:
+```json
+{
+  "username": "admin",
+  "password": "123456"
+}
+```
+
+#### 修改密码
+POST http://127.0.0.1/api/account/user/updatepwd
+BODY:
+```json
+{
+  "username": "admin",
+  "oldPassword": "123456",
+  "newPassword": "111111"
+}
+```
+
+### 角色 Role
+```java
+class Role {
+  private String id;
+  private String roleName;
+  private String displayName;
+  private int level;
+  private boolean buildIn;
+  private String description;
+  private Long createdTime;
+  private Long updatedTime;
+
+  private List<Permission> permissions;
+}
+```
+
+## Dictionary
+
+### 组训类型 GroupTrainMethod
+```java
+class GroupTrainMethod {
+  private String id;    // auto
+  private String name;
+  private int order;
+}
+```
+
+### 枪手类型 GunnerType
+```java
+class GunnerType {
+  private String id;      // auto
+  private String name;
+  private List<String> gunTypes;
+  private int order;
+}
+```
+
+### 军衔等级 MilitaryRank
+```java
+class MilitaryRank {
+    private String id;
+    private String name;            // 军衔名称
+    private String rankLevel1;      // 军衔1级分类：区分义务兵、士官、军官
+    private String rankLevel2;      // 军衔2级分类：比如尉官、校官、将官等
+    private int order;              // 军衔等级排序码
+}
+```
+
+### 摩托类型 MotorType
+```java
+class MotorType {
+    private String id;
+    private String name;
+    private String unit;  // 计量单位
+    private int order;
+}
+```
+
+### 军械类型 OrdnanceType
+```java
+class OrdnanceType {
+    private String id;
+    private String name;
+    private String category;        // 军械分类，参考OrdnanceCategory, 分为武器、弹药、物资
+    private String weaponUnit;      // 武器计量单位
+    private String bulletUnit;      // 对应弹药/物资计量单位
+    private int order;
+}
+```
+
+### 武警部队单位详细分类 OrgCategory
+```java
+class OrgCategory {
+    private String id;
+    private String name;
+    private String orgType;                                         // 单位类型: 部队/分队/首长机关/部门
+  
+    private String orgProperty;                                     // 单位属性
+    private List<String> optionalServices;      // 单位勤务类型
+    private List<TrainTask> optionalTasks;      // 单位训练任务列表
+  
+    private List<String> optionalMajors;        // 单位可选专业
+    private String physicalLevel;                                   // 战士体能等级
+    private String troopCategory;                                   // 军兵种类型，比如地面人员/空勤人员/船艇人员
+    private int order;
+}
+
+class TrainTask {
+    private String name;
+    private List<String> optionalSubjects;    // 可选课题
+}
+```
+
+### 武警部队单位属性 OrgProperty
+```java
+class OrgProperty {
+    private String id;
+    private String name;
+    private List<String> optionalMajors;    // 可选专业
+    private int order;
+}
+```
+
+### 体能等级 PhysicalLevel
+```java
+class PhysicalLevel {
+    private String id;
+    private String name;
+    private int order;
+}
+```
+
+### 场地类型 PlaceType
+```java
+class PlaceType {
+     private String id;
+     private String name;
+     private int order;
+}
+```
+
+### 人员职务 Position
+```java
+class Position {
+    private String id;
+    private String name;
+    private int orgSequence;      // 根据编制序列区分职务
+    private String orgCategory;   // 根据单位分类区分职务
+    private boolean isCommander;  // 指挥员
+    private boolean isMaster;     // 军政主官
+    private int order;
+}
+```
+
+### 特殊任务类型 SpecialMission
+```java
+class SpecialMission {
+    private String id;
+    private String name;
+    private int order;
+}
+```
+
+### 体育课目分类 SportCategory
+```java
+class SportCategory {
+    private String id;
+    private String name;
+    private int order;
+}
+```
+
+### 保障人员专业类型 SupporterMajor
+```java
+class SupporterMajor {
+    private String id;
+    private String name;
+    private int order;
+}
+```
+
+### 教练员等级 TrainerLevel
+```java
+class TrainerLevel {
+    private String id;
+    private String name;
+    private int scoreReq;           // 该等级教练员所教授课目需要达到的成绩
+    private int order;
+}
+```
+
+### 训练步骤 TrainStep
+```java
+class TrainStep {
+    private String id;
+    private String name;
+    private String orgType;
+    private List<Integer> trainUnits;
+    private int priority;
+    private int order;
+}
+```
+
+### 军兵种类型 TroopCategory
+```java
+class TroopCategory {
+    private String id;
+    private String name;
+    private int order;
+}
+```
+
+### 天气类型 WeatherType
+```java
+class WeatherType {
+    private String id;
+    private String name;
+    private int order;
+}
+```
