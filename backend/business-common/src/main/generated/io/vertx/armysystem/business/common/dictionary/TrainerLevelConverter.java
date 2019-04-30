@@ -36,6 +36,9 @@ public class TrainerLevelConverter {
     if (json.getValue("order") instanceof Number) {
       obj.setOrder(((Number)json.getValue("order")).intValue());
     }
+    if (json.getValue("scoreReq") instanceof Number) {
+      obj.setScoreReq(((Number)json.getValue("scoreReq")).intValue());
+    }
   }
 
   public static void toJson(TrainerLevel obj, JsonObject json) {
@@ -46,5 +49,6 @@ public class TrainerLevelConverter {
       json.put("name", obj.getName());
     }
     json.put("order", obj.getOrder());
+    json.put("scoreReq", obj.getScoreReq());
   }
 }

@@ -291,6 +291,7 @@
 |[[id]]`id`|`String`|-
 |[[name]]`name`|`String`|-
 |[[order]]`order`|`Number (int)`|-
+|[[scoreReq]]`scoreReq`|`Number (int)`|-
 |===
 
 [[TroopCategory]]
