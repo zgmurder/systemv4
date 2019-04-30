@@ -1,13 +1,12 @@
 <template>
   <div class="app-container">
-    <form-and-table :handler="Handler" :columns="columns" :schema="schema" :no-handle="noHandle"/>
+    <form-and-table url="/account/users" :columns="columns" :schema="schema" :no-handle="noHandle" @cell-mouse-enter="()=>false" />
   </div>
 </template>
 
 <script>
 import formAndTable from '@/components/formAndTable'
-// import { saveItem, deleteItem, toPointer, queryListAndTotal } from '@/api/account'
-import { queryUsers as queryList, deleteUser as deleteItem, updateUser as updateItem, saveUser as saveItem, queryUsersAndTotal as queryListAndTotal, queryRoles } from '@/api/account'
+import { queryRoles } from '@/api/account'
 import { queryOrgs } from '@/api/org'
 export default {
   components: {
@@ -15,15 +14,29 @@ export default {
   },
   data() {
     return {
-      Handler: { queryList, deleteItem, saveItem, queryListAndTotal, updateItem },
+      option: {},
       columns: [
         { prop: 'username', label: '用户名', noHandle: true },
-        { prop: 'roleName', label: '角色' },
+        { prop: 'roleName', label: '角色', handleValue: this.handleRole },
         { prop: 'organization', label: '单位', handleValue: org => org && org.displayName }
         // { prop: 'organization', label: '支持功能' }
       ],
       noHandle: row => {
-        return row.roleName === 'Administrator'
+        if (row.username === this.$store.getters.username) {
+          return true
+        }
+        const found = this.schemaRoleName.options.find(item => item.roleName === row.roleName)
+        const permissions = found.permissions.reduce((prev, curr) => {
+          const arr = curr.actions.map(item => `${curr.schemaName}:${item}`)
+          return prev.concat(arr)
+        }, [])
+        const ownPermissions = this.$store.getters.permissions
+        const is = permissions.every(item => {
+          const str = item.replace(/[\w\W]*:/g, '*:')
+          // || ownPermissions.includes(item.replace(/\d?=:/))
+          return ownPermissions.includes(item) || ownPermissions.includes(str)
+        })
+        return !is
       },
       schema: [
         {
@@ -104,10 +117,13 @@ export default {
   },
   created() {
     queryRoles().then(list => {
-      this.schemaRoleName.options = list.filter(item => item.roleName !== 'Administrator')
+      this.schemaRoleName.options = list
     })
   },
   methods: {
+    aaaa() {
+      console.log(111)
+    },
     async querySearch(queryString = '', cb) {
       // let str
       // const { orgSequence, displayName } = this.$store.getters.organization
@@ -131,6 +147,12 @@ export default {
     beforeEdit(target) {
       this.org = { ...(target.organization || {}) }
       target.organizationId = target.organization && target.organization.displayName
+    },
+    handleRole(roleName) {
+      const found = this.schemaRoleName.options.find(item => item.roleName === roleName)
+      return found.displayName + '（' + found.permissions.reduce((prev, curr) => {
+        return `${prev}${curr.schemaName}：${curr.actions.join('、')}；`
+      }, '') + '）'
     }
   }
 }

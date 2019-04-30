@@ -1,71 +1,77 @@
 import axios from 'axios'
-// eslint-disable-next-line no-unused-vars
-import { Message, MessageBox } from 'element-ui'
-// import store from '../store'
-import { getToken } from '@/utils/auth'
+import { Message } from 'element-ui' // MessageBox,
+import store from '@/store'
+// import { getToken } from '@/utils/auth'
 
-// 创建axios实例
+// create an axios instance
 const service = axios.create({
-  baseURL: process.env.BASE_API, // api 的 base_url
-  timeout: 5000 // 请求超时时间
+  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: 'http://192.168.10.65:8080/api/', // url = base url + request url
+  withCredentials: false, // send cookies when cross-domain requests
+  timeout: 5000 // request timeout
 })
 
-// request拦截器
+// request interceptor
 service.interceptors.request.use(
   config => {
-    if (getToken()) {
-      config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    // do something before request is sent
+    if (store.getters.token) {
+      // let each request carry token --['X-Token'] as a custom key.
+      // please modify it according to the actual situation.
+      config.headers['Authorization'] = 'Bearer ' + store.getters.token
     }
     return config
   },
   error => {
-    // Do something with request error
+    // do something with request error
     console.log(error) // for debug
-    Promise.reject(error)
+    return Promise.reject(error)
   }
 )
 
-// response 拦截器
+// response interceptor
 service.interceptors.response.use(
-  response => {
-    /**
-     * code为非20000是抛错 可结合自己业务进行修改
-     */
-    // const res = response.data
+  /**
+   * If you want to get information such as headers or status
+   * Please return  response => response
+  */
 
-    // if (res.code !== 200) {
+  /**
+   * Determine the request status by custom code
+   * Here is just an example
+   * You can also judge the status by HTTP Status Code.
+   */
+  response => {
+    const res = response.data
+    // if the custom code is not 20000, it is judged as an error.
+    // if (res.code !== 20000) {
     //   Message({
-    //     message: res.message,
+    //     message: res.message || 'error',
     //     type: 'error',
     //     duration: 5 * 1000
     //   })
 
-    // 50008:非法的token; 50012:其他客户端登录了;  50014:User 过期了;
-    // if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-    //   MessageBox.confirm(
-    //     '你已被登出，可以取消继续留在该页面，或者重新登录',
-    //     '确定登出',
-    //     {
-    //       confirmButtonText: '重新登录',
-    //       cancelButtonText: '取消',
+    //   // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
+    //   if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+    //     // to re-login
+    //     MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
+    //       confirmButtonText: 'Re-Login',
+    //       cancelButtonText: 'Cancel',
     //       type: 'warning'
-    //     }
-    //   ).then(() => {
-    //     store.dispatch('FedLogOut').then(() => {
-    //       location.reload() // 为了重新实例化vue-router对象 避免bug
+    //     }).then(() => {
+    //       store.dispatch('user/resetToken').then(() => {
+    //         location.reload()
+    //       })
     //     })
-    //   })
-    // }
-    //   return Promise.reject('error')
+    //   }
+    //   return Promise.reject(res.message || 'error')
     // } else {
-
+    //   return res
     // }
-    return response.data
+    return res
   },
   error => {
-    // console.log('err' + error) // for debug
-    console.log(error.message)
-
+    console.log('err' + error) // for debug
     Message({
       message: error.message,
       type: 'error',

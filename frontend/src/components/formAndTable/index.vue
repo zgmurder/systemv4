@@ -1,5 +1,13 @@
+
 <template>
   <div class="property">
+    <div ref="search" class="search">
+      <el-input v-model="where[filterName]" size="mini" placeholder="请输入内容" clearable @input="handleSearch">
+        <el-select slot="prepend" v-model="filterName" closed style="width:100px" placeholder="请选择">
+          <el-option v-for="(item,index) in searchColumns" :key="index" :label="item.searchLabel || item.label" :value="item.prop" />
+        </el-select>
+      </el-input>
+    </div>
     <tableSchema
       :data="tableList"
       v-bind="$attrs"
@@ -8,22 +16,24 @@
       stripe
       @deleteItem="deleteItem"
       @editItem="editItem"
-      v-on="$listeners"/>
+      v-on="$listeners"
+    />
     <!--
       @filter-change="handleTableFilter"
 
        -->
     <div :style="{'justify-content':btnShow?'space-between':'flex-end'}" class="btn-and-page">
-      <el-button v-show="btnShow" class="btn" type="primary" icon="el-icon-plus" circle @click="dialogVisible = true"/>
+      <el-button v-show="btnShow" class="btn" type="primary" icon="el-icon-plus" circle @click="dialogVisible = true" />
       <el-pagination
-        :current-page.sync ="options.skip"
+        :current-page.sync="options.skip"
         :page-sizes="[10, 20, 50, 100]"
         :page-size.sync="options.limit"
         :total="total"
         background
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSearch"
-        @current-change="fetchTableList"/>
+        @current-change="fetchTableList"
+      />
     </div>
     <el-dialog
       :title="id?'修改数据':'添加数据'"
@@ -31,8 +41,9 @@
       :close-on-click-modal="false"
       :visible.sync="dialogVisible"
       width="80%"
-      @close="dialogIsClose">
-      <formSchema ref="formSchema" :schema="schema" :editing="!!id" @formFinish="formFinish"/>
+      @close="dialogIsClose"
+    >
+      <formSchema ref="formSchema" :schema="schema" :editing="!!id" @formFinish="formFinish" />
     </el-dialog>
     <!-- <div ref="search" class="search">
       <el-input v-model="options.contains[filterName]" size="mini" placeholder="请输入内容" clearable @input="handleSearch">
@@ -48,7 +59,7 @@
 <script>
 import tableSchema from './tableSchema'
 import formSchema from './formSchema'
-// import { saveItem, deleteItem, toPointer, queryListAndTotal } from '@/api/baseApi'
+import { saveItem, deleteItem, queryListAndTotal, updateItem } from '@/api/baseApi'
 import { cloneDeep } from './units'
 export default {
   name: 'TableAndForm',
@@ -66,60 +77,54 @@ export default {
       // required: true
       default: () => []
     },
-    handler: {
-      type: Object,
-      required: true
-    },
+    // handler: {
+    //   type: Object,
+    //   required: true
+    // },
     btnShow: {
       type: Boolean,
       default: true
+    },
+    url: {
+      required: true,
+      type: String,
+      default: ''
     }
 
   },
   data() {
     return {
       tableList: [],
-      curPage: 1,
       dialogVisible: false,
       id: undefined,
       total: 0,
-      filterOptions: {
-        contains: ['', ''],
-        equalTo: {}
-      },
       options: {
         skip: 1,
-        limit: 10,
-        contains: {}
+        limit: 10
       },
-      isDim: false,
+      where: {},
       filterName: ''
     }
   },
-  // computed: {
-  //   className() {
-  //     if (this.$parent.className) return this.$parent.className
-  //     const arr = this.$route.path.split('/')
-  //     const className = arr[arr.length - 1]
-  //     return className.slice(0, 1).toUpperCase() + className.slice(1)
-  //   },
-  //   searchColumns() {
-  //     return this.columns.filter(item => !item.noFilter)
-  //   }
-  // },
-  // watch: {
-  //   'filterName': {
-  //     handler(newValue, oldValue) {
-  //       if (oldValue) {
-  //         this.options.contains[oldValue] = ''
-  //         this.fetchTableList()
-  //       }
-  //     },
-  //     immediate: false
-  //   }
-  // },
+  computed: {
+    searchColumns() {
+      return this.columns.filter(item => !item.noFilter)
+    }
+  },
+  watch: {
+    'filterName': {
+      handler(newValue, oldValue) {
+        if (oldValue) {
+          this.$delete(this.where, oldValue)
+          // this.options.contains[oldValue] = ''
+          this.fetchTableList()
+        }
+      },
+      immediate: false
+    }
+  },
   created() {
-    // this.filterName = this.columns[0].prop
+    this.filterName = this.columns[0].prop
     this.fetchTableList()
     // setTimeout(() => {
     //   this.$refs.search && (this.$refs.search.style['z-index'] = 5)
@@ -135,11 +140,25 @@ export default {
         this.fetchTableList()
       }, 500)
     },
-    fetchTableList(curPage, filterArr) {
-      // const skip = (this.options.skip - 1) * this.options.limit
-      this.handler.queryListAndTotal({ option: {
-        sort: { updatedTime: -1 }
-      }}).then(({ list, total }) => {
+    fetchTableList() {
+      // eslint-disable-next-line no-unused-vars
+      const { limit, skip } = this.options
+      const num = (skip - 1) * limit
+      const where = cloneDeep(this.where)
+      if (where[this.filterName]) {
+        where[this.filterName] = {
+          '$regex': where[this.filterName]
+        }
+      } else {
+        delete where[this.filterName]
+      }
+      console.log(where)
+
+      queryListAndTotal(this.url, { option: {
+        sort: { updatedTime: -1 },
+        skip: num,
+        limit
+      }, where }).then(({ list, total }) => {
         this.tableList = list
         this.total = total
       })
@@ -155,11 +174,12 @@ export default {
     },
     async formFinish(formData) {
       this.$parent.beforeSubmit && this.$parent.beforeSubmit(formData)
+      const url = this.url.slice(0, this.url.length - 1)
       if (this.id) {
         formData.id = this.id
-        await this.handler.updateItem(formData)
+        await updateItem(url, formData)
       } else {
-        await this.handler.saveItem(formData)
+        await saveItem(url, formData)
       }
 
       this.dialogVisible = false
@@ -173,7 +193,8 @@ export default {
         type: 'warning'
       }).catch(() => false)
       if (!isOk) return
-      await this.handler.deleteItem(row.id)
+      const url = this.url.slice(0, this.url.length - 1)
+      await deleteItem(url, row.id)
       this.$message({ showClose: true, type: 'success', message: '删除成功' })
       this.fetchTableList()
     },
@@ -204,11 +225,13 @@ export default {
   padding:10px;
   }
 .search{
-    position:fixed;
-    top:0;
-    left:50%;
-    display:flex;
-    z-index: -1;
-    padding: 10px;
+    // position:fixed;
+    // top:0;
+    // left:50%;
+    // display:flex;
+    // justify-content: end;
+    // padding: 10px;
+    float: right;
+    margin-bottom: 15px
 }
 </style>

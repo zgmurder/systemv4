@@ -1,83 +1,114 @@
-import { login, getOrg } from '@/api/login'
-import { getUser, setUser, removeUser, setToken, removeToken } from '@/utils/auth'
+import { login, getOrg } from '@/api/user'
+import { getToken, setToken, removeToken, setUser, removeUser } from '@/utils/auth'
+import router, { resetRouter } from '@/router'
 
-const user = {
-  state: {
-    token: getUser(),
-    username: '',
-    avatar: '',
-    roles: [],
-    roleName: '',
-    permissions: [],
-    organization: null,
-    accessedRouters: []
+const state = {
+  token: getToken(),
+  name: '',
+  avatar: '',
+  introduction: '',
+  roles: [],
+  roleName: '',
+  organization: null,
+  permissions: []
+}
+
+const mutations = {
+  SET_TOKEN: (state, token) => {
+    state.token = token
   },
-
-  mutations: {
-    SET_TOKEN: (state, token) => {
-      state.token = token
-    },
-    SET_NAME: (state, username) => {
-      state.username = username
-    },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
-    },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
-    },
-    SET_ROLENAME: (state, roleName) => {
-      state.roleName = roleName
-    },
-    SET_ORGANIZATION: (state, organization) => {
-      state.organization = organization
-    },
-    SET_PERMISSIONS: (state, permissions) => {
-      state.permissions = permissions
-    }
+  SET_INTRODUCTION: (state, introduction) => {
+    state.introduction = introduction
   },
-
-  actions: {
-    // 登录
-    async Login({ commit }, userInfo) {
-      const username = userInfo.username.trim()
-      const { user, token } = await login(username, userInfo.password)
-      setToken(token)
-      if (user.organizationId) {
-        user.organization = await getOrg(user.organizationId)
-      }
-      setUser(JSON.stringify(user))
-      return { user, token }
-    },
-    SaveToVuex({ commit, state }, user) {
-      return new Promise((resolve) => {
-        commit('SET_NAME', user.username)
-        commit('SET_ROLENAME', user.roleName)
-        commit('SET_PERMISSIONS', user.permissions)
-        commit('SET_ORGANIZATION', user.organization)
-        resolve(user)
-      })
-    },
-    // 登出
-    LogOut() {
-      this.dispatch('SaveToVuex', {}).then(() => {
-        removeUser()
-        removeToken()
-      })
-    },
-
-    // 前端 登出
-    FedLogOut({ commit }) {
-      return new Promise(resolve => {
-        commit('SET_NAME', '')
-        commit('SET_ROLENAME', '')
-        commit('SET_PERMISSIONS', [])
-        removeUser()
-        removeToken()
-        resolve()
-      })
-    }
+  SET_NAME: (state, name) => {
+    state.name = name
+  },
+  SET_AVATAR: (state, avatar) => {
+    state.avatar = avatar
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
+  },
+  SET_ORGANIZATION: (state, organization) => {
+    state.organization = organization
+  },
+  SET_PERMISSIONS: (state, permissions) => {
+    state.permissions = permissions
+  },
+  SET_ROLENAME: (state, roleName) => {
+    state.roleName = roleName
   }
 }
 
-export default user
+const actions = {
+  // 登录
+  async login({ commit }, userInfo) {
+    const { password } = userInfo
+    const username = userInfo.username.trim()
+    const { user, token } = await login({ username, password })
+    setToken(token)
+    commit('SET_TOKEN', token)
+    if (user.organizationId) {
+      user.organization = await getOrg(user.organizationId)
+    }
+    setUser(JSON.stringify(user))
+    return { user, token }
+  },
+
+  saveToVuex({ commit, state }, user) {
+    return new Promise((resolve) => {
+      commit('SET_NAME', user.username)
+      commit('SET_ROLENAME', user.roleName)
+      commit('SET_PERMISSIONS', user.permissions)
+      commit('SET_ORGANIZATION', user.organization)
+      resolve(user)
+    })
+  },
+  // 登出
+  logout() {
+    this.dispatch('user/saveToVuex', {}).then(() => {
+      removeUser()
+      removeToken()
+      window.location.reload()
+    })
+  },
+
+  // remove token
+  resetToken({ commit }) {
+    return new Promise(resolve => {
+      commit('SET_TOKEN', '')
+      commit('SET_ROLES', [])
+      removeToken()
+      resolve()
+    })
+  },
+
+  // Dynamically modify permissions
+  changeRoles({ commit, dispatch }, role) {
+    return new Promise(async resolve => {
+      const token = role + '-token'
+
+      commit('SET_TOKEN', token)
+      setToken(token)
+
+      const { roles } = await dispatch('getInfo')
+
+      resetRouter()
+
+      // generate accessible routes map based on roles
+      const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
+
+      // dynamically add accessible routes
+      router.addRoutes(accessRoutes)
+
+      resolve()
+    })
+  }
+}
+
+export default {
+  namespaced: true,
+  state,
+  mutations,
+  actions
+}

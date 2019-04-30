@@ -42,17 +42,11 @@ export function saveUser(user) {
     data: user
   })
 }
-
-export function updateUser(id) {
+export function updateUser(obj) {
+  const { id, ...data } = obj
   return request({
     url: `/account/user/${id}`,
-    method: 'PATCH'
-  })
-}
-
-export function logout() {
-  return request({
-    url: '/user/logout',
-    method: 'post'
+    method: 'PATCH',
+    data
   })
 }

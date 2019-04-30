@@ -5,22 +5,22 @@
     class="com-form"
     label-width="100px"
   >
-    <slot name="title"/>
+    <slot name="title" />
     <el-form-item
       v-for="(field, index) in schema"
       v-show="handleControl(field.controlBy)"
+      :key="index"
       :label="field.label"
       :required="field.required"
       :error="field.error"
-      :key="index"
       :style="{width: field.width}"
       class="schema-form-item"
     >
       <component
         :is="'el-'+field.fieldType"
+        v-model="field[field.vModel]"
         :default-first-option="true"
         v-bind="field"
-        v-model="field[field.vModel]"
         style="width: 100%"
         clearable
         @input="handleInput($event,field)"
@@ -30,20 +30,20 @@
 
         <template v-if="field.fieldType === 'select'">
           <el-option
-            v-for="(item,index) in field.options||[]"
-            :key="index"
+            v-for="(item,i) in field.options||[]"
+            :key="i"
             :disabled="item.disabled"
             :label="handleLabel(item,field)"
-            :value="handleValue(item,field,index)"
+            :value="handleValue(item,field,i)"
           />
         </template>
         <template v-if="field.fieldType === 'radio-group'">
           <el-radio
-            v-for="(item,index) in field.options"
-            :key="index"
+            v-for="(item,i) in field.options"
+            :key="i"
             :disabled="item.disabled"
-            :label="handleValue(item,field,index)"
-          >{{ handleLabel(item,field,index) }}</el-radio>
+            :label="handleValue(item,field,i)"
+          >{{ handleLabel(item,field,i) }}</el-radio>
         </template>
       </component>
       <!-- <component v-if="field.component" :is="field.component"></component>
