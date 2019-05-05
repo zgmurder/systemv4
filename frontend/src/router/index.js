@@ -7,8 +7,8 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-// import componentsRouter from './modules/components'
-// import chartsRouter from './modules/charts'
+import componentsRouter from './modules/components'
+import chartsRouter from './modules/charts'
 // import tableRouter from './modules/table'
 // import nestedRouter from './modules/nested'
 
@@ -109,7 +109,10 @@ export const constantRoutes = [
     ]
   }
 ]
-
+export const routeModules = {
+  train: chartsRouter,
+  organization: componentsRouter
+}
 /**
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles

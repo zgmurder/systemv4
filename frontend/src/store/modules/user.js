@@ -1,6 +1,7 @@
 import { login, getOrg } from '@/api/user'
 import { getToken, setToken, removeToken, setUser, removeUser } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+// import { mapModules } from '@/const'
 
 const state = {
   token: getToken(),
@@ -8,9 +9,12 @@ const state = {
   avatar: '',
   introduction: '',
   roles: [],
+
   roleName: '',
   organization: null,
-  permissions: []
+  permissions: [],
+  moduleName: 'train'
+
 }
 
 const mutations = {
@@ -37,6 +41,9 @@ const mutations = {
   },
   SET_ROLENAME: (state, roleName) => {
     state.roleName = roleName
+  },
+  SET_MODULENAME: (state, moduleName) => {
+    state.moduleName = moduleName
   }
 }
 
