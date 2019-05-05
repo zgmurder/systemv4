@@ -1,6 +1,6 @@
-import { routeModules, constantRoutes } from '@/router'
+import { constantRouterMap, asyncRouterMap } from '@/router'
 import { mapModules } from '@/const'
-
+import { getModuleName } from '@/utils/auth'
 /**
  * Use meta.role to determine if the current user has permission
  * @param roles
@@ -43,23 +43,28 @@ const state = {
 }
 
 const mutations = {
-  SET_ROUTES: (state, moduleName) => {
-    state.addRoutes = routeModules[moduleName]
-    state.routes = constantRoutes.concat(state.addRoutes)
+  SET_ROUTES: (state, routers) => {
+    state.addRoutes = routers
+    state.routes = constantRouterMap.concat(routers)
   },
-  SET_MAPMODULES: (state, roleName) => {
-    state.mapModules = mapModules.filter(item => item.roles ? item.roles.includes(roleName) : true)
-    // state.routes = constantRoutes.concat(routes)
+  SET_MODULENAME: (state, moduleName) => {
+    state.moduleName = moduleName
   }
 }
 
 const actions = {
   generateRoutes({ commit, state }, roleName) {
     state.mapModules = mapModules.filter(item => item.roles ? item.roles.includes(roleName) : true)
-    state.moduleName = state.mapModules[0].value
-    commit('SET_ROUTES', state.moduleName)
+    const name = getModuleName() || state.mapModules[0].value
+    console.log(roleName)
+
+    commit('SET_MODULENAME', name)
     return new Promise(resolve => {
-      resolve(state.routes)
+      const accessedRouters = filterAsyncRoutes(asyncRouterMap, roleName)
+      commit('SET_ROUTES', accessedRouters)
+      console.log(accessedRouters, 44)
+
+      resolve(accessedRouters)
     })
   }
 }

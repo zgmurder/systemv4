@@ -1,7 +1,8 @@
 import Cookies from 'js-cookie'
 
 const UserKey = 'vue_admin_template_userKey'
-const TokenKey = 'vue_admin_template_tokenKey '
+const TokenKey = 'vue_admin_template_tokenKey'
+const ModuleKey = 'vue_admin_template_moduleKey'
 
 export function getUser() {
   return Cookies.get(UserKey)
@@ -24,4 +25,13 @@ export function setToken(token) {
 
 export function removeToken() {
   return Cookies.remove(TokenKey)
+}
+export function getModuleName() {
+  return Cookies.get(ModuleKey)
+}
+export function setModuleName(moduleName) {
+  return Cookies.set(ModuleKey, moduleName)
+}
+export function removeModuleName() {
+  return Cookies.remove(ModuleKey)
 }

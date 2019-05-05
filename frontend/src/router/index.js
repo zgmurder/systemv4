@@ -7,10 +7,11 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import componentsRouter from './modules/components'
-import chartsRouter from './modules/charts'
+// import componentsRouter from './modules/components'
+// import chartsRouter from './modules/charts'
 // import tableRouter from './modules/table'
 // import nestedRouter from './modules/nested'
+import baseDataRouter from './modules/baseData'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -38,7 +39,7 @@ import chartsRouter from './modules/charts'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [
+export const constantRouterMap = [
   {
     path: '/redirect',
     component: Layout,
@@ -69,11 +70,49 @@ export const constantRoutes = [
     path: '/401',
     component: () => import('@/views/error-page/401'),
     hidden: true
-  },
+  }
+  // {
+  //   path: '*',
+  //   redirect: '/404',
+  //   hidden: true
+  // }
+
+  // {
+  //   path: '/documentation',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/documentation/index'),
+  //       name: 'Documentation',
+  //       meta: { title: 'documentation', icon: 'documentation' }// affix: true
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/guide',
+  //   component: Layout,
+  //   redirect: '/guide/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/guide/index'),
+  //       name: 'Guide',
+  //       meta: { title: 'guide', icon: 'guide', noCache: true }
+  //     }
+  //   ]
+  // }
+]
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRouterMap = [
   {
     path: '',
     component: Layout,
     redirect: 'dashboard',
+    belong: ['train'],
     children: [
       {
         path: 'dashboard',
@@ -83,41 +122,9 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/documentation',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'documentation', icon: 'documentation' }// affix: true
-      }
-    ]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'guide', icon: 'guide', noCache: true }
-      }
-    ]
-  }
-]
-export const routeModules = {
-  train: chartsRouter,
-  organization: componentsRouter
-}
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
+  ...baseDataRouter,
+  // componentsRouter,
+  // chartsRouter
   // {
   //   path: '/permission',
   //   component: Layout,
@@ -163,18 +170,24 @@ export const asyncRoutes = [
   {
     path: '/icon',
     component: Layout,
+    belong: ['train'],
     children: [
       {
         path: 'index',
         component: () => import('@/views/icons/index'),
         name: 'Icons',
-        meta: { title: 'icons', icon: 'icon', noCache: true }
+        meta: {
+          title: 'icons',
+          icon: 'icon',
+          noCache: true
+        }
       }
     ]
   },
   {
     path: '/account',
     component: Layout,
+    belong: ['account'],
     children: [{
       path: 'index',
       name: 'account',
@@ -184,20 +197,20 @@ export const asyncRoutes = [
         icon: 'form'
       }
     }]
-  },
-  {
-    path: '/equipment',
-    component: Layout,
-    children: [{
-      path: 'index',
-      name: 'equipment',
-      component: () => import('@/views/equipment/index'),
-      meta: {
-        title: 'equipment',
-        icon: 'form'
-      }
-    }]
-  },
+  }
+  // {
+  //   path: '/equipment',
+  //   component: Layout,
+  //   children: [{
+  //     path: 'index',
+  //     name: 'equipment',
+  //     component: () => import('@/views/equipment/index'),
+  //     meta: {
+  //       title: 'equipment',
+  //       icon: 'form'
+  //     }
+  //   }]
+  // }
 
   /** when your routing map is too long, you can split it into small modules **/
   // componentsRouter,
@@ -411,13 +424,12 @@ export const asyncRoutes = [
   //   ]
   // },
 
-  { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: constantRouterMap
 })
 
 const router = createRouter()
