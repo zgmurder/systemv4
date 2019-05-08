@@ -112,7 +112,9 @@ export const asyncRouterMap = [
     path: '',
     component: Layout,
     redirect: 'dashboard',
-    belong: ['train'],
+    meta: {
+      belong: 'train'
+    },
     children: [
       {
         path: 'dashboard',
@@ -188,6 +190,9 @@ export const asyncRouterMap = [
     path: '/account',
     component: Layout,
     belong: ['account'],
+    meta: {
+      belong: 'account'
+    },
     children: [{
       path: 'index',
       name: 'account',

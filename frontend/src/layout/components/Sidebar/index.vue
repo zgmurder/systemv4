@@ -51,7 +51,7 @@ export default {
       return !this.sidebar.opened
     },
     permission_routes_map() {
-      return this.permission_routes.filter(item => item.belong ? item.belong.includes(this.moduleName) : true)
+      return this.permission_routes.filter(item => item.meta ? item.meta.belong === this.moduleName : true)
     }
   }
 }
