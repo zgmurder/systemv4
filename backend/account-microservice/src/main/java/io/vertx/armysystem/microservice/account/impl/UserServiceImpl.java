@@ -170,6 +170,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
     this.findWithOptions(getCollectionName(), qCondition.getQuery(), qCondition.getOption())
         .map(list -> list.stream()
             .map(json -> json.putNull("password"))
+            .map(json -> new User(json).toJson())
             .collect(Collectors.toList()))
         .setHandler(resultHandler);
 
