@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ressource-microservice</artifactId>
+    <artifactId>resource-microservice</artifactId>
 
     <properties>
         <main.verticle></main.verticle>
