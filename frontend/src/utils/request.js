@@ -18,6 +18,8 @@ service.interceptors.request.use(
     if (store.getters.token) {
       // let each request carry token --['X-Token'] as a custom key.
       // please modify it according to the actual situation.
+      console.log(config.headers, 222)
+
       config.headers['Authorization'] = 'Bearer ' + store.getters.token
     }
     return config

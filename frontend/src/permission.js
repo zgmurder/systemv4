@@ -47,8 +47,6 @@ router.beforeEach(async(to, from, next) => {
           // dynamically add accessible routes
           // console.log(accessRoutes)
           // console.log(store.getters.addRoutes, 111)
-          console.log(accessRoutes, 33)
-
           router.addRoutes(accessRoutes)
           // console.log(router)
 

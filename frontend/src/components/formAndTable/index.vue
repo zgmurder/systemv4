@@ -152,7 +152,6 @@ export default {
       } else {
         delete where[this.filterName]
       }
-      console.log(where)
 
       queryListAndTotal(this.url, { option: {
         sort: { updatedTime: -1 },

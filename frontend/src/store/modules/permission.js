@@ -62,8 +62,6 @@ const actions = {
     return new Promise(resolve => {
       const accessedRouters = filterAsyncRoutes(asyncRouterMap, roleName)
       commit('SET_ROUTES', accessedRouters)
-      console.log(accessedRouters, 44)
-
       resolve(accessedRouters)
     })
   }

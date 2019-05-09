@@ -27,20 +27,16 @@ export default {
       'moduleName'
     ])
   },
-  watch: {
-    'moduleName': {
-      handler(newVal) {
-        console.log(newVal, 111)
-      }
-    },
-    immediate: true,
-    deep: true
+  // watch: {
+  //   'moduleName': {
+  //     handler(newVal) {
+  //       console.log(newVal, 111)
+  //     }
+  //   },
+  //   immediate: true,
+  //   deep: true
 
-  },
-  created() {
-    console.log(this.moduleName)
-    console.log(this.$router)
-  },
+  // },
   methods: {
     handleClick(vm) {
       setModuleName(vm.name)

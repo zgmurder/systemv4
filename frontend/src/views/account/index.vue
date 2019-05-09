@@ -51,7 +51,6 @@ export default {
           width: '100%',
           onChange: (item, obj) => {
             this.org = { ...obj }
-            console.log(this.org)
             const initArr = [obj.value, '123456', '123456', '']
             this.schema.forEach((item, index) => {
               if (index) item[item.vModel] = initArr[index - 1]
@@ -142,7 +141,6 @@ export default {
     beforeSubmit(target) {
       target.organizationId = this.org.id
       target.parentOrgIds = this.org.parentIds
-      console.log(target)
     },
     beforeEdit(target) {
       this.org = { ...(target.organization || {}) }
