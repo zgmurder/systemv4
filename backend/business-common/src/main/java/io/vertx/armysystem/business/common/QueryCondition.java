@@ -3,7 +3,11 @@ package io.vertx.armysystem.business.common;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class QueryCondition {
+  private String organizationId;
   private JsonObject query;
   private JsonObject option;
 
@@ -16,11 +20,19 @@ public class QueryCondition {
   }
 
   public QueryCondition() {
+    this.organizationId = null;
     this.query = new JsonObject();
     this.option = new JsonObject();
   }
 
   public QueryCondition(JsonObject query, JsonObject option) {
+    this.organizationId = null;
+    this.query = query;
+    this.option = option;
+  }
+
+  public QueryCondition(String organizationId, JsonObject query, JsonObject option) {
+    this.organizationId = organizationId;
     this.query = query;
     this.option = option;
   }
@@ -29,12 +41,13 @@ public class QueryCondition {
     System.out.println("QueryCondition::parse " + body);
     if (body == null) body = new JsonObject();
 
+    String organizationId = body.getString("organizationId");
     JsonObject query = body.getJsonObject("where");
     JsonObject option = body.getJsonObject("option");
     if (query == null) query = new JsonObject();
     if (option == null) option = new JsonObject();
 
-    return new QueryCondition(query, option).convertId();
+    return new QueryCondition(organizationId, query, option).convertId();
   }
 
   /**
@@ -45,7 +58,7 @@ public class QueryCondition {
    * @return the new mongodb query object
    */
   public QueryCondition filterByUserOrganizationV1(String columnName, JsonObject principal) {
-    if (principal.getString("organizationId") != null) {
+    if (principal.containsKey("organizationId")) {
       query.put(columnName, new JsonObject().put("$eq", principal.getString("organizationId")));
     }
 

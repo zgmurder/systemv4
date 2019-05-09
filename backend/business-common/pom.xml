@@ -12,7 +12,11 @@
     <artifactId>business-common</artifactId>
 
     <dependencies>
-
+        <dependency>
+            <groupId>io.vertx.armysystem</groupId>
+            <artifactId>microservice-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

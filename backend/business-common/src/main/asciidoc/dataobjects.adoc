@@ -1,5 +1,43 @@
 = Cheatsheets
 
+[[Organization]]
+== Organization
+
+++++
+ Organization data object
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[address]]`address`|`String`|-
+|[[altitude]]`altitude`|`Number (Double)`|-
+|[[childrenIds]]`childrenIds`|`Array of String`|-
+|[[deleted]]`deleted`|`Boolean`|-
+|[[displayName]]`displayName`|`String`|-
+|[[divisionId]]`divisionId`|`String`|-
+|[[expireDate]]`expireDate`|`Number (Long)`|-
+|[[id]]`id`|`String`|-
+|[[important]]`important`|`Boolean`|-
+|[[latitude]]`latitude`|`Number (Double)`|-
+|[[longitude]]`longitude`|`Number (Double)`|-
+|[[name]]`name`|`String`|-
+|[[orgCategory]]`orgCategory`|`String`|-
+|[[orgCode]]`orgCode`|`String`|-
+|[[orgMajors]]`orgMajors`|`Array of String`|-
+|[[orgProperty]]`orgProperty`|`String`|-
+|[[orgSequence]]`orgSequence`|`Number (int)`|-
+|[[orgType]]`orgType`|`String`|-
+|[[parentId]]`parentId`|`String`|-
+|[[parentIds]]`parentIds`|`Array of String`|-
+|[[planSodierCount]]`planSodierCount`|`Number (int)`|-
+|[[serviceType]]`serviceType`|`String`|-
+|[[specialMission]]`specialMission`|`String`|-
+|[[temp]]`temp`|`Boolean`|-
+|===
+
 [[StageTime]]
 == StageTime
 
@@ -14,27 +52,6 @@
 ^|Name | Type ^| Description
 |[[months]]`months`|`Number (Double)`|-
 |[[task]]`task`|`String`|-
-|===
-
-[[TrainSection]]
-== TrainSection
-
-++++
- 训练大纲标准分册
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[code]]`code`|`String`|-
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[orgCategories]]`orgCategories`|`Array of String`|-
-|[[orgTypes]]`orgTypes`|`Array of String`|-
-|[[personProperties]]`personProperties`|`Array of String`|-
-|[[standardName]]`standardName`|`String`|-
 |===
 
 [[TrainStageTime]]
