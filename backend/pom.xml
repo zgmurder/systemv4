@@ -32,6 +32,7 @@
         <module>business-common</module>
         <module>dictionary-microservice</module>
         <module>standard-microservice</module>
+        <module>resource-microservice</module>
     </modules>
 
     <dependencyManagement>

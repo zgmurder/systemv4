@@ -23,7 +23,7 @@ public class MongoRepositoryWrapper {
     return this.getCollections().map(r -> null);
   }
 
-  protected Future<Optional<JsonObject>> findOne(String collection, JsonObject query, JsonObject fields) {
+  public Future<Optional<JsonObject>> findOne(String collection, JsonObject query, JsonObject fields) {
     Future<Optional<JsonObject>> future = Future.future();
     client.findOne(collection, query, fields,
         ar -> {
@@ -40,7 +40,7 @@ public class MongoRepositoryWrapper {
     return future;
   }
 
-  protected Future<List<JsonObject>> findWithOptions(String collection, JsonObject query, JsonObject findOptions) {
+  public Future<List<JsonObject>> findWithOptions(String collection, JsonObject query, JsonObject findOptions) {
     Future<List<JsonObject>> future = Future.future();
 
     FindOptions options = findOptions == null ? new FindOptions() : new FindOptions(findOptions);

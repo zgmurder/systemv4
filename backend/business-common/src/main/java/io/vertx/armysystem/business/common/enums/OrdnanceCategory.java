@@ -1,4 +1,4 @@
-package io.vertx.armysystem.business.common.dictionary;
+package io.vertx.armysystem.business.common.enums;
 
 /**
  * 军械类型: 武器, 弹药, 物资

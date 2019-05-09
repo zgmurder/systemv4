@@ -1,7 +1,7 @@
-package io.vertx.armysystem.business.common.dictionary;
+package io.vertx.armysystem.business.common.enums;
 
 public enum ScoreLevel {
-  NoScore(0),       // 未录入成绩
+  NoScore(0),       // 未参考
   Unpass(1),        // 不合格或不及格
   Pass(2),          // 合格或及格
   Good(3),          // 良好

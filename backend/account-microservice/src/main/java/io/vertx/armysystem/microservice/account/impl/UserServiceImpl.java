@@ -118,9 +118,9 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
               String failureMessage = "User already exists : " + user.getUsername();
               resultHandler.handle(Future.failedFuture(failureMessage));
             } else {
-              this.insertOne(getCollectionName(), user.toJson())
+              fillRoleLevel(user, principal)
+                  .compose(u -> this.insertOne(getCollectionName(), u.toJson()))
                   .map(json -> json.putNull("password"))
-//                  .map(json -> new User(json).toJson())
                   .setHandler(resultHandler);
             }
           } else {
@@ -170,6 +170,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
     this.findWithOptions(getCollectionName(), qCondition.getQuery(), qCondition.getOption())
         .map(list -> list.stream()
             .map(json -> json.putNull("password"))
+            .map(json -> new User(json).toJson())
             .collect(Collectors.toList()))
         .setHandler(resultHandler);
 
@@ -196,7 +197,8 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
               }
 
               io.vertx.armysystem.microservice.common.functional.Functional.allOfFutures(futures)
-                  .compose(r -> this.update(getCollectionName(), new JsonObject().put("_id", user.getId()), user.toJson()))
+                  .compose(r -> fillRoleLevel(user, principal))
+                  .compose(r -> this.update(getCollectionName(), new JsonObject().put("_id", id), user.toJson()))
                   .setHandler(ar2 -> {
                     if (ar2.succeeded()) {
                       this.retrieveOne(user.getId(), principal, resultHandler);
@@ -247,6 +249,22 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
 
     return Functional.getPermissitions(user.getRoleName(), roleService)
         .map(permissions -> userObj.put("permissions", new JsonArray(permissions)));
+  }
+
+  private Future<User> fillRoleLevel(User user, JsonObject principal) {
+    if (user.getRoleName() == null) {
+      return Future.succeededFuture(user);
+    }
+
+    Future<JsonObject> future = Future.future();
+    roleService.retrieveOne(user.getRoleName(), principal, future.completer());
+
+    return future.map(r -> {
+      if (r != null)
+        return user.setRoleLevel(r.getInteger("level"));
+      else
+        return user;
+    });
   }
 
   @Override

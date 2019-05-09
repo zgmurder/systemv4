@@ -1,7 +1,7 @@
-package io.vertx.armysystem.business.common.dictionary;
+package io.vertx.armysystem.business.common.enums;
 
 /**
- * 武警部队编制序列，比如地面人员/空勤人员/船艇人员
+ * 武警部队编制序列
  *
  * @author Derek Zheng
  */
@@ -18,18 +18,18 @@ public enum OrgSequence {
   Soldier(10, "单兵", "人员");
 
 
-  private int sequence;
+  private int value;
   private String name;
   private String description;
 
-  OrgSequence(int sequence, String name, String description) {
-    this.sequence = sequence;
+  OrgSequence(int value, String name, String description) {
+    this.value = value;
     this.name = name;
     this.description = description;
   }
 
-  public int getSequence() {
-    return sequence;
+  public int getValue() {
+    return value;
   }
 
   public String getName() {

@@ -14,41 +14,49 @@
  * under the License.
  */
 
-package io.vertx.armysystem.business.common.dictionary;
+package io.vertx.armysystem.business.common.standard;
 
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.JsonArray;
 
 /**
- * Converter for {@link io.vertx.armysystem.business.common.dictionary.TrainerLevel}.
+ * Converter for {@link io.vertx.armysystem.business.common.standard.TrainStandard}.
  *
- * NOTE: This class has been automatically generated from the {@link io.vertx.armysystem.business.common.dictionary.TrainerLevel} original class using Vert.x codegen.
+ * NOTE: This class has been automatically generated from the {@link io.vertx.armysystem.business.common.standard.TrainStandard} original class using Vert.x codegen.
  */
-public class TrainerLevelConverter {
+public class TrainStandardConverter {
 
-  public static void fromJson(JsonObject json, TrainerLevel obj) {
+  public static void fromJson(JsonObject json, TrainStandard obj) {
+    if (json.getValue("endTime") instanceof Number) {
+      obj.setEndTime(((Number)json.getValue("endTime")).longValue());
+    }
     if (json.getValue("id") instanceof String) {
       obj.setId((String)json.getValue("id"));
     }
     if (json.getValue("name") instanceof String) {
       obj.setName((String)json.getValue("name"));
     }
-    if (json.getValue("order") instanceof Number) {
-      obj.setOrder(((Number)json.getValue("order")).intValue());
+    if (json.getValue("startTime") instanceof Number) {
+      obj.setStartTime(((Number)json.getValue("startTime")).longValue());
     }
-    if (json.getValue("scoreReq") instanceof Number) {
-      obj.setScoreReq(((Number)json.getValue("scoreReq")).intValue());
+    if (json.getValue("state") instanceof Number) {
+      obj.setState(((Number)json.getValue("state")).intValue());
     }
   }
 
-  public static void toJson(TrainerLevel obj, JsonObject json) {
+  public static void toJson(TrainStandard obj, JsonObject json) {
+    if (obj.getEndTime() != null) {
+      json.put("endTime", obj.getEndTime());
+    }
     if (obj.getId() != null) {
       json.put("id", obj.getId());
     }
     if (obj.getName() != null) {
       json.put("name", obj.getName());
     }
-    json.put("order", obj.getOrder());
-    json.put("scoreReq", obj.getScoreReq());
+    if (obj.getStartTime() != null) {
+      json.put("startTime", obj.getStartTime());
+    }
+    json.put("state", obj.getState());
   }
 }

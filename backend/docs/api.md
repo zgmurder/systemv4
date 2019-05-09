@@ -98,6 +98,95 @@ class Role {
 
 ## Dictionary
 
+### 军械类型 OrdnanceCategory
+常量：武器, 弹药, 物资
+
+### 武警部队编制序列 OrgSequence
+常量：
+```
+Army(1, "总部", "部队"),
+Division(2, "总队", "部队"),
+Brigade(3, "旅级支队", "部队"),
+Regiment(4, "团级支队", "部队"),
+Battalion(5, "大队", "分队"),
+Company(6, "中队", "分队"),
+Platoon(7, "排", "分队"),
+Class(8, "班", "分队"),
+Team(9, "小队", "分队"),
+Soldier(10, "单兵", "人员");
+```
+
+### 单位类型 OrgType
+常量
+```
+Troop("部队"),
+UnitForce("分队"),
+LeaderOffice("首长机关"),
+Department("部门")
+```
+
+### 评分标准 ScoreCriteria
+常量
+```
+Level2("二级制"),
+Level4("四级制"),
+Level7("七级制"),
+NumberScore("百分制");
+```
+
+### 成绩等级 ScoreLevel
+常量
+```
+NoScore(0),       // 未参考
+Unpass(1),        // 不合格或不及格
+Pass(2),          // 合格或及格
+Good(3),          // 良好
+Excellent(4),     // 优秀
+ExtraL3(5),       // 特三级
+ExtraL2(6),       // 特二级
+ExtraL1(7);       // 特一级
+```
+
+### 体能等级 PhysicalLevel
+常量
+```
+Level1("一类人员"),
+Level2("二类人员"),
+Level3("三类人员"),
+Recruit("新兵"),
+CivilServant("文职人员");
+```
+
+### 军兵种类型 TroopCategory
+常量
+```
+LandForce("地面人员"),
+AirForce("空勤人员"),
+BoatForce("船艇人员");
+```
+
+### 人员分类 SoldierCategory (添加人员的时候使用)
+常量
+```
+Officer("指挥警官"),
+TechOfficer("技术警官"),
+CivilServant("文职人员"),
+Sergeant("士官"),
+Soldier("义务兵");
+```
+
+### 人员属性 PersonProperty (添加课目的时候使用)
+常量
+```
+UnitForce("分队"),
+Officer("警官"),
+TechOfficer("技术警官"),
+Supporter("保障人员"),
+ReserveMember("预备队员"),
+Recruit("新兵"),
+RecruitOfficer("新训干部骨干");
+```
+
 ### 组训类型 GroupTrainMethod
 ```java
 class GroupTrainMethod {
@@ -183,15 +272,6 @@ class OrgProperty {
 }
 ```
 
-### 体能等级 PhysicalLevel
-```java
-class PhysicalLevel {
-    private String id;
-    private String name;
-    private int order;
-}
-```
-
 ### 场地类型 PlaceType
 ```java
 class PlaceType {
@@ -263,15 +343,6 @@ class TrainStep {
 }
 ```
 
-### 军兵种类型 TroopCategory
-```java
-class TroopCategory {
-    private String id;
-    private String name;
-    private int order;
-}
-```
-
 ### 天气类型 WeatherType
 ```java
 class WeatherType {
@@ -279,4 +350,15 @@ class WeatherType {
     private String name;
     private int order;
 }
+```
+
+## 大纲标准
+
+### 枚举
+#### 大纲启用状态 StandardState
+常量
+```
+Initial(0),
+Activated(1),
+Stopped(2);
 ```

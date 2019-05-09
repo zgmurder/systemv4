@@ -1,4 +1,4 @@
-package io.vertx.armysystem.business.common.dictionary;
+package io.vertx.armysystem.business.common.enums;
 
 public enum OrgType {
   Troop("部队"),

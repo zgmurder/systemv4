@@ -1,27 +1,10 @@
 = Cheatsheets
 
-[[GroupTrainMethod]]
-== GroupTrainMethod
+[[Organization]]
+== Organization
 
 ++++
- 首长机关组训方法
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|===
-
-[[GunnerType]]
-== GunnerType
-
-++++
- 枪手类型
+ Organization data object
 ++++
 '''
 
@@ -29,258 +12,37 @@
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[gunTypes]]`gunTypes`|`Array of String`|-
+|[[address]]`address`|`String`|-
+|[[altitude]]`altitude`|`Number (Double)`|-
+|[[childrenIds]]`childrenIds`|`Array of String`|-
+|[[deleted]]`deleted`|`Boolean`|-
+|[[displayName]]`displayName`|`String`|-
+|[[divisionId]]`divisionId`|`String`|-
+|[[expireDate]]`expireDate`|`Number (Long)`|-
 |[[id]]`id`|`String`|-
+|[[important]]`important`|`Boolean`|-
+|[[latitude]]`latitude`|`Number (Double)`|-
+|[[longitude]]`longitude`|`Number (Double)`|-
 |[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|===
-
-[[MilitaryRank]]
-== MilitaryRank
-
-++++
- 武警部队军衔等级定义
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|[[rankLevel1]]`rankLevel1`|`String`|-
-|[[rankLevel2]]`rankLevel2`|`String`|-
-|===
-
-[[MotorType]]
-== MotorType
-
-++++
- 摩托类型
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|[[unit]]`unit`|`String`|-
-|===
-
-[[OrdnanceType]]
-== OrdnanceType
-
-++++
- 军械类型定义
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[bulletUnit]]`bulletUnit`|`String`|-
-|[[category]]`category`|`String`|-
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|[[weaponUnit]]`weaponUnit`|`String`|-
-|===
-
-[[OrgCategory]]
-== OrgCategory
-
-++++
- 武警部队单位分类，比如内卫总队执勤分队等
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[optionalMajors]]`optionalMajors`|`Array of String`|-
-|[[optionalServices]]`optionalServices`|`Array of String`|-
-|[[optionalTasks]]`optionalTasks`|`Array of link:dataobjects.html#TrainTask[TrainTask]`|-
-|[[order]]`order`|`Number (int)`|-
-|[[orgProperty]]`orgProperty`|`String`|-
-|[[orgType]]`orgType`|`String`|-
-|[[physicalLevel]]`physicalLevel`|`String`|-
-|[[troopCategory]]`troopCategory`|`String`|-
-|===
-
-[[OrgProperty]]
-== OrgProperty
-
-++++
- 武警部队单位属性，比如执勤、机动、工兵等
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[optionalMajors]]`optionalMajors`|`Array of String`|-
-|[[order]]`order`|`Number (int)`|-
-|===
-
-[[PhysicalLevel]]
-== PhysicalLevel
-
-++++
- 武警部队体能训练等级，(比如一类人员/二类人员/三类人员/新兵)
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|===
-
-[[PlaceType]]
-== PlaceType
-
-++++
- 武警部队训练场地类型
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|===
-
-[[Position]]
-== Position
-
-++++
- 武警部队职务列表
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[commander]]`commander`|`Boolean`|-
-|[[id]]`id`|`String`|-
-|[[master]]`master`|`Boolean`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
 |[[orgCategory]]`orgCategory`|`String`|-
+|[[orgCode]]`orgCode`|`String`|-
+|[[orgMajors]]`orgMajors`|`Array of String`|-
+|[[orgProperty]]`orgProperty`|`String`|-
 |[[orgSequence]]`orgSequence`|`Number (int)`|-
-|===
-
-[[SpecialMission]]
-== SpecialMission
-
-++++
- 特殊部队类型
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|===
-
-[[SportCategory]]
-== SportCategory
-
-++++
- 体育课目分类
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|===
-
-[[SupporterMajor]]
-== SupporterMajor
-
-++++
- 后勤保障人员专业类型
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|===
-
-[[TrainStep]]
-== TrainStep
-
-++++
- 武警军事训练步骤
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
 |[[orgType]]`orgType`|`String`|-
-|[[priority]]`priority`|`Number (int)`|-
-|[[trainUnits]]`trainUnits`|`Array of Number (Integer)`|-
+|[[parentId]]`parentId`|`String`|-
+|[[parentIds]]`parentIds`|`Array of String`|-
+|[[planSodierCount]]`planSodierCount`|`Number (int)`|-
+|[[serviceType]]`serviceType`|`String`|-
+|[[specialMission]]`specialMission`|`String`|-
+|[[temp]]`temp`|`Boolean`|-
 |===
 
-[[TrainTask]]
-== TrainTask
+[[StageTime]]
+== StageTime
 
 ++++
- 武警部队军事训练任务与课题，比如执勤/处突/抢险救援等
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[name]]`name`|`String`|-
-|[[optionalSubjects]]`optionalSubjects`|`Array of String`|-
-|===
-
-[[TrainerLevel]]
-== TrainerLevel
-
-++++
- 教练员评定等级
+ 一个训练阶段时长定义
 ++++
 '''
 
@@ -288,17 +50,15 @@
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|[[scoreReq]]`scoreReq`|`Number (int)`|-
+|[[months]]`months`|`Number (Double)`|-
+|[[task]]`task`|`String`|-
 |===
 
-[[TroopCategory]]
-== TroopCategory
+[[TrainStageTime]]
+== TrainStageTime
 
 ++++
- 武警部队军兵种类型，比如地面人员/空勤人员/船艇人员
+ 训练大纲标准分册
 ++++
 '''
 
@@ -307,24 +67,9 @@
 |===
 ^|Name | Type ^| Description
 |[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|===
-
-[[WeatherType]]
-== WeatherType
-
-++++
- 天气类型
-++++
-'''
-
-[cols=">25%,^25%,50%"]
-[frame="topbot"]
-|===
-^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
+|[[majors]]`majors`|`Array of String`|-
+|[[orgCategories]]`orgCategories`|`Array of String`|-
+|[[stageTimes]]`stageTimes`|`Array of link:dataobjects.html#StageTime[StageTime]`|-
+|[[standardName]]`standardName`|`String`|-
 |===
 

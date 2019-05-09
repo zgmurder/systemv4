@@ -1,4 +1,4 @@
-package io.vertx.armysystem.business.common.dictionary;
+package io.vertx.armysystem.business.common.enums;
 
 public enum ScoreCriteria {
   Level2("二级制"),
