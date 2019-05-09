@@ -1,0 +1,4 @@
+moduleName = io.vertx.armysystem.microservice.resource.OrganizationService-module
+moduleVersion = 1.0
+extensionClasses = io.vertx.armysystem.microservice.resource.groovy.OrganizationService_GroovyExtension
+staticExtensionClasses = 

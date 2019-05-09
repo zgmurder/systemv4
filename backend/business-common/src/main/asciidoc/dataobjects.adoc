@@ -1,5 +1,139 @@
 = Cheatsheets
 
+[[GroupTrainMethod]]
+== GroupTrainMethod
+
+++++
+ 首长机关组训方法
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|===
+
+[[GunnerType]]
+== GunnerType
+
+++++
+ 枪手类型
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[gunTypes]]`gunTypes`|`Array of String`|-
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|===
+
+[[MilitaryRank]]
+== MilitaryRank
+
+++++
+ 武警部队军衔等级定义
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|[[rankLevel1]]`rankLevel1`|`String`|-
+|[[rankLevel2]]`rankLevel2`|`String`|-
+|===
+
+[[MotorType]]
+== MotorType
+
+++++
+ 摩托类型
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|[[unit]]`unit`|`String`|-
+|===
+
+[[OrdnanceType]]
+== OrdnanceType
+
+++++
+ 军械类型定义
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[bulletUnit]]`bulletUnit`|`String`|-
+|[[category]]`category`|`String`|-
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|[[weaponUnit]]`weaponUnit`|`String`|-
+|===
+
+[[OrgCategory]]
+== OrgCategory
+
+++++
+ 武警部队单位分类，比如内卫总队执勤分队等
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[optionalMajors]]`optionalMajors`|`Array of String`|-
+|[[optionalServices]]`optionalServices`|`Array of String`|-
+|[[optionalTasks]]`optionalTasks`|`Array of link:dataobjects.html#TrainTask[TrainTask]`|-
+|[[order]]`order`|`Number (int)`|-
+|[[orgProperty]]`orgProperty`|`String`|-
+|[[orgType]]`orgType`|`String`|-
+|[[physicalLevel]]`physicalLevel`|`String`|-
+|[[troopCategory]]`troopCategory`|`String`|-
+|===
+
+[[OrgProperty]]
+== OrgProperty
+
+++++
+ 武警部队单位属性，比如执勤、机动、工兵等
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[optionalMajors]]`optionalMajors`|`Array of String`|-
+|[[order]]`order`|`Number (int)`|-
+|===
+
 [[Organization]]
 == Organization
 
@@ -17,7 +151,6 @@
 |[[childrenIds]]`childrenIds`|`Array of String`|-
 |[[deleted]]`deleted`|`Boolean`|-
 |[[displayName]]`displayName`|`String`|-
-|[[divisionId]]`divisionId`|`String`|-
 |[[expireDate]]`expireDate`|`Number (Long)`|-
 |[[id]]`id`|`String`|-
 |[[important]]`important`|`Boolean`|-
@@ -38,6 +171,78 @@
 |[[temp]]`temp`|`Boolean`|-
 |===
 
+[[PlaceType]]
+== PlaceType
+
+++++
+ 武警部队训练场地类型
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|===
+
+[[Position]]
+== Position
+
+++++
+ 武警部队职务列表
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[commander]]`commander`|`Boolean`|-
+|[[id]]`id`|`String`|-
+|[[master]]`master`|`Boolean`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|[[orgCategory]]`orgCategory`|`String`|-
+|[[orgSequence]]`orgSequence`|`Number (int)`|-
+|===
+
+[[SpecialMission]]
+== SpecialMission
+
+++++
+ 特殊部队类型
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|===
+
+[[SportCategory]]
+== SportCategory
+
+++++
+ 体育课目分类
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|===
+
 [[StageTime]]
 == StageTime
 
@@ -52,6 +257,44 @@
 ^|Name | Type ^| Description
 |[[months]]`months`|`Number (Double)`|-
 |[[task]]`task`|`String`|-
+|===
+
+[[SupporterMajor]]
+== SupporterMajor
+
+++++
+ 后勤保障人员专业类型
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|===
+
+[[TrainSection]]
+== TrainSection
+
+++++
+ 训练大纲标准分册
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[code]]`code`|`String`|-
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[orgCategories]]`orgCategories`|`Array of String`|-
+|[[orgTypes]]`orgTypes`|`Array of String`|-
+|[[personProperties]]`personProperties`|`Array of String`|-
+|[[standardName]]`standardName`|`String`|-
 |===
 
 [[TrainStageTime]]
@@ -71,5 +314,95 @@
 |[[orgCategories]]`orgCategories`|`Array of String`|-
 |[[stageTimes]]`stageTimes`|`Array of link:dataobjects.html#StageTime[StageTime]`|-
 |[[standardName]]`standardName`|`String`|-
+|===
+
+[[TrainStandard]]
+== TrainStandard
+
+++++
+ 训练大纲标准
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[endTime]]`endTime`|`Number (Long)`|-
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[startTime]]`startTime`|`Number (Long)`|-
+|[[state]]`state`|`Number (int)`|-
+|===
+
+[[TrainStep]]
+== TrainStep
+
+++++
+ 武警军事训练步骤
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|[[orgType]]`orgType`|`String`|-
+|[[priority]]`priority`|`Number (int)`|-
+|[[trainUnits]]`trainUnits`|`Array of Number (Integer)`|-
+|===
+
+[[TrainTask]]
+== TrainTask
+
+++++
+ 武警部队军事训练任务与课题，比如执勤/处突/抢险救援等
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[name]]`name`|`String`|-
+|[[optionalSubjects]]`optionalSubjects`|`Array of String`|-
+|===
+
+[[TrainerLevel]]
+== TrainerLevel
+
+++++
+ 教练员评定等级
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
+|[[scoreReq]]`scoreReq`|`Number (int)`|-
+|===
+
+[[WeatherType]]
+== WeatherType
+
+++++
+ 天气类型
+++++
+'''
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`id`|`String`|-
+|[[name]]`name`|`String`|-
+|[[order]]`order`|`Number (int)`|-
 |===
 
