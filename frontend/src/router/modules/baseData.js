@@ -7,7 +7,7 @@ const baseDataRouter = [
     path: '/orgRelated',
     component: Layout,
     name: 'OrgRelated',
-    redirect: '/baseData/orgRelated/orgProperty',
+    redirect: '/orgRelated/orgProperty',
     meta: {
       title: 'orgRelated',
       icon: 'chart',
@@ -46,7 +46,7 @@ const baseDataRouter = [
   {
     path: '/personRelated',
     component: Layout,
-    redirect: '/baseData/personRelated/position',
+    redirect: '/personRelated/position',
     name: 'PersonRelated',
     meta: {
       title: 'personRelated',
@@ -63,15 +63,15 @@ const baseDataRouter = [
           noCache: true
         }
       },
-      {
-        path: 'position2',
-        component: () => import('@/views/baseData/personRelated/Position2'),
-        name: 'Position2',
-        meta: {
-          title: 'position2',
-          noCache: true
-        }
-      },
+      // {
+      //   path: 'position2',
+      //   component: () => import('@/views/baseData/personRelated/Position2'),
+      //   name: 'Position2',
+      //   meta: {
+      //     title: 'position2',
+      //     noCache: true
+      //   }
+      // },
       {
         path: 'militaryRank',
         component: () => import('@/views/baseData/personRelated/MilitaryRank'),
@@ -105,7 +105,7 @@ const baseDataRouter = [
   {
     path: '/trainRelated',
     component: Layout,
-    redirect: '/baseData/trainRelated/trainStep',
+    redirect: '/trainRelated/trainStep',
     name: 'TrainRelated',
     meta: {
       title: 'trainRelated',
@@ -155,7 +155,7 @@ const baseDataRouter = [
   {
     path: '/otherRelated',
     component: Layout,
-    redirect: '/baseData/otherRelated/ordnanceType',
+    redirect: '/otherRelated/ordnanceType',
     name: 'OtherRelated',
     meta: {
       title: 'otherRelated',

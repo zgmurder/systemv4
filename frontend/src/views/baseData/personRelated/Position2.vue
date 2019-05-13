@@ -1,6 +1,6 @@
 <template>
   <div class="property">
-    <formAndTable :schema="schema" :columns="columns" />
+    <formAndTable :schema="schema" :columns="columns" url="dictionary/position2" />
   </div>
 </template>
 

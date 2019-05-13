@@ -3,7 +3,7 @@
   <div class="property">
     <div ref="search" class="search">
       <el-input v-model="where[filterName]" size="mini" placeholder="请输入内容" clearable @input="handleSearch">
-        <el-select slot="prepend" v-model="filterName" closed style="width:100px" placeholder="请选择">
+        <el-select slot="prepend" v-model="filterName" closed style="width:120px" placeholder="请选择">
           <el-option v-for="(item,index) in searchColumns" :key="index" :label="item.searchLabel || item.label" :value="item.prop" />
         </el-select>
       </el-input>
@@ -23,7 +23,7 @@
 
        -->
     <div :style="{'justify-content':btnShow?'space-between':'flex-end'}" class="btn-and-page">
-      <el-button v-show="btnShow" class="btn" type="primary" icon="el-icon-plus" circle @click="dialogVisible = true" />
+      <el-button v-show="btnShow" class="btn" type="primary" icon="el-icon-plus" circle @click="()=>{dialogVisible = true,$emit('dialogVisible',total)}" />
       <el-pagination
         :current-page.sync="options.skip"
         :page-sizes="[10, 20, 50, 100]"
@@ -124,15 +124,9 @@ export default {
     }
   },
   created() {
-    this.filterName = this.columns[0].prop
+    this.filterName = this.searchColumns[0].prop
     this.fetchTableList()
-    // setTimeout(() => {
-    //   this.$refs.search && (this.$refs.search.style['z-index'] = 5)
-    // }, 1000)
   },
-  // beforeDestroy() {
-  //   this.$refs.search.style['z-index'] = -1
-  // },
   methods: {
     handleSearch() {
       window.clearTimeout(this.timer)
@@ -152,9 +146,8 @@ export default {
       } else {
         delete where[this.filterName]
       }
-
       queryListAndTotal(this.url, { option: {
-        sort: { updatedTime: -1 },
+        // sort: { updatedTime: -1 },
         skip: num,
         limit
       }, where }).then(({ list, total }) => {
@@ -173,12 +166,12 @@ export default {
     },
     async formFinish(formData) {
       this.$parent.beforeSubmit && this.$parent.beforeSubmit(formData)
-      const url = this.url.slice(0, this.url.length - 1)
+      // const url = this.url.slice(0, this.url.length - 1)
       if (this.id) {
         formData.id = this.id
-        await updateItem(url, formData)
+        await updateItem(this.url, formData)
       } else {
-        await saveItem(url, formData)
+        await saveItem(this.url, formData)
       }
 
       this.dialogVisible = false
@@ -192,8 +185,7 @@ export default {
         type: 'warning'
       }).catch(() => false)
       if (!isOk) return
-      const url = this.url.slice(0, this.url.length - 1)
-      await deleteItem(url, row.id)
+      await deleteItem(this.url, row.id)
       this.$message({ showClose: true, type: 'success', message: '删除成功' })
       this.fetchTableList()
     },
@@ -231,6 +223,6 @@ export default {
     // justify-content: end;
     // padding: 10px;
     float: right;
-    margin-bottom: 15px
+    margin: 15px 0;
 }
 </style>

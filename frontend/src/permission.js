@@ -30,8 +30,11 @@ router.beforeEach(async(to, from, next) => {
       // determine whether the user has obtained his permission roles through getInfo
       const hasRoles = store.getters.roleName
       if (hasRoles) {
-        const name = (to.matched[0].meta || {}).belong
-        store.commit('permission/SET_MODULENAME', name)
+        console.log(to)
+        if (to.matched[0]) {
+          const name = (to.matched[0].meta || {}).belong
+          store.commit('permission/SET_MODULENAME', name)
+        }
         next()
       } else {
         try {

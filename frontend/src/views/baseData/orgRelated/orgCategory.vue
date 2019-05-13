@@ -1,13 +1,13 @@
 <template>
   <div class="category">
-    <form-and-table ref="formAndTable" :columns="columns" :schema="schema" @dialogIsClose="schemaOptionalMajors.options = []" />
+    <form-and-table ref="formAndTable" :columns="columns" url="dictionary/orgcategory" :schema="schema" @dialogIsClose="schemaOptionalMajors.options = []" @dialogVisible="dialogVisible" />
   </div>
 </template>
 
 <script>
 import formAndTable from '@/components/formAndTable'
 import { OrgType, TroopCategory, PhysicalLevel } from '@/const/index'
-import { queryListByKeyValue } from '@/api/baseApi'
+import { queryList } from '@/api/baseApi'
 
 export default {
   name: 'Category',
@@ -17,6 +17,7 @@ export default {
   data() {
     return {
       columns: [
+        { prop: 'order', label: '排序', width: '50', noFilter: true },
         { prop: 'name', label: '单位名称', style: { color: '#67C23A' }},
         { prop: 'orgType', label: '单位类型', style: { color: '#F56C6C' }},
         { prop: 'orgProperty', label: '单位属性' },
@@ -31,6 +32,7 @@ export default {
       ],
       schema: [
         { fieldType: 'input', placeholder: '单位名称', label: '单位名称', vModel: 'name', required: true },
+        { fieldType: 'input-number', placeholder: '排序码', label: '排序码', vModel: 'order', required: true, order: 0 },
         { fieldType: 'select', placeholder: '单位类型', label: '单位类型', vModel: 'orgType', orgType: '分队', required: true, options: Object.values(OrgType) },
         { fieldType: 'select', placeholder: '单位属性', label: '单位属性', vModel: 'orgProperty', filterable: true, required: true, orgProperty: '', options: [], onChange: (obj, value, found) => {
           this.schemaOptionalMajors.optionalMajors = []
@@ -83,7 +85,7 @@ export default {
     }
   },
   async created() {
-    this.schemaOrgProperty.options = await queryListByKeyValue('OrgProperty')
+    this.schemaOrgProperty.options = await queryList('dictionary/orgpropertys')
     // console.log(this.schemaOrgProperty.options)
     this._schemaLength = this.schema.length
   },
@@ -107,6 +109,9 @@ export default {
     },
     dialogIsClose() {
       this.schemaOptionalMajors.options = []
+    },
+    dialogVisible(count = 0) {
+      this.schema[1].order = count + 1
     }
   }
 }

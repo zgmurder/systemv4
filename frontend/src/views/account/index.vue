@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <form-and-table url="/account/users" :columns="columns" :schema="schema" :no-handle="noHandle" @cell-mouse-enter="()=>false" />
+    <form-and-table url="/account/user" :columns="columns" :schema="schema" :no-handle="noHandle" @cell-mouse-enter="()=>false" />
   </div>
 </template>
 
@@ -8,6 +8,7 @@
 import formAndTable from '@/components/formAndTable'
 import { queryRoles } from '@/api/account'
 import { queryOrgs } from '@/api/org'
+
 export default {
   components: {
     formAndTable
