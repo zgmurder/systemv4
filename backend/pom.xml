@@ -95,6 +95,16 @@
             <artifactId>vertx-hazelcast</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-auth-jwt</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-auth-mongo</artifactId>
+        </dependency>
+
         <!-- Microservice toolbox -->
         <dependency>
             <groupId>io.vertx</groupId>

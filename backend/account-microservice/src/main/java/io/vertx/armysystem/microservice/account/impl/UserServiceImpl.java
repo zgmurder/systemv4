@@ -5,14 +5,15 @@ import io.vertx.armysystem.business.common.ServiceBase;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.jwt.JWTAuth;
-import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.armysystem.business.common.ModelUtil;
 import io.vertx.armysystem.business.common.QueryCondition;
 import io.vertx.armysystem.microservice.account.User;
 import io.vertx.armysystem.microservice.account.UserService;
 import io.vertx.armysystem.microservice.account.common.Functional;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
+import io.vertx.ext.auth.jwt.JWTAuth;
+import io.vertx.ext.auth.jwt.JWTAuthOptions;
+import io.vertx.ext.jwt.JWTOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
 
     this.vertx = vertx;
     this.roleService = roleService;
-    authProvider = JWTAuth.create(vertx, config);
+    authProvider = JWTAuth.create(vertx, new JWTAuthOptions(config));
   }
 
   @Override
@@ -340,7 +341,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
     }
 
     JWTOptions options = new JWTOptions().
-        setExpiresInSeconds(24*3600L).
+        setExpiresInSeconds(24*3600).
         setAlgorithm("HS256");
     JsonArray permissions = user.getJsonArray("permissions");
     if (permissions != null) {

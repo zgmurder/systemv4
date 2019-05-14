@@ -21,11 +21,6 @@
             <artifactId>microservice-common</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.vertx.armysystem</groupId>
-            <artifactId>account-microservice</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
     <build>

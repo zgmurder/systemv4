@@ -20,8 +20,9 @@ public class Launcher extends io.vertx.core.Launcher {
 
   @Override
   public void beforeStartingVertx(VertxOptions options) {
-    options.setClustered(true)
-        .setClusterHost("127.0.0.1");
+    options.getEventBusOptions()
+        .setClustered(true)
+        .setHost("127.0.0.1");
   }
 
   @Override
