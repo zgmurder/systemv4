@@ -39,60 +39,56 @@ import io.vertx.serviceproxy.ProxyHelper;
 import io.vertx.serviceproxy.ProxyHandler;
 import io.vertx.serviceproxy.ServiceException;
 import io.vertx.serviceproxy.ServiceExceptionMessageCodec;
+import io.vertx.serviceproxy.HelperUtils;
+
 import java.util.List;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.AsyncResult;
 import io.vertx.armysystem.business.common.CRUDService;
 import io.vertx.core.Handler;
-
 /*
   Generated Proxy code - DO NOT EDIT
   @author Roger the Robot
 */
+
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class CRUDServiceVertxProxyHandler extends ProxyHandler {
 
   public static final long DEFAULT_CONNECTION_TIMEOUT = 5 * 60; // 5 minutes 
-
   private final Vertx vertx;
   private final CRUDService service;
   private final long timerID;
   private long lastAccessed;
   private final long timeoutSeconds;
 
-  public CRUDServiceVertxProxyHandler(Vertx vertx, CRUDService service) {
+  public CRUDServiceVertxProxyHandler(Vertx vertx, CRUDService service){
     this(vertx, service, DEFAULT_CONNECTION_TIMEOUT);
   }
 
-  public CRUDServiceVertxProxyHandler(Vertx vertx, CRUDService service, long timeoutInSecond) {
+  public CRUDServiceVertxProxyHandler(Vertx vertx, CRUDService service, long timeoutInSecond){
     this(vertx, service, true, timeoutInSecond);
   }
 
   public CRUDServiceVertxProxyHandler(Vertx vertx, CRUDService service, boolean topLevel, long timeoutSeconds) {
-    this.vertx = vertx;
-    this.service = service;
-    this.timeoutSeconds = timeoutSeconds;
-    try {
-      this.vertx.eventBus().registerDefaultCodec(ServiceException.class,
-          new ServiceExceptionMessageCodec());
-    } catch (IllegalStateException ex) {}
-    if (timeoutSeconds != -1 && !topLevel) {
-      long period = timeoutSeconds * 1000 / 2;
-      if (period > 10000) {
-        period = 10000;
+      this.vertx = vertx;
+      this.service = service;
+      this.timeoutSeconds = timeoutSeconds;
+      try {
+        this.vertx.eventBus().registerDefaultCodec(ServiceException.class,
+            new ServiceExceptionMessageCodec());
+      } catch (IllegalStateException ex) {}
+      if (timeoutSeconds != -1 && !topLevel) {
+        long period = timeoutSeconds * 1000 / 2;
+        if (period > 10000) {
+          period = 10000;
+        }
+        this.timerID = vertx.setPeriodic(period, this::checkTimedOut);
+      } else {
+        this.timerID = -1;
       }
-      this.timerID = vertx.setPeriodic(period, this::checkTimedOut);
-    } else {
-      this.timerID = -1;
+      accessed();
     }
-    accessed();
-  }
 
-  public MessageConsumer<JsonObject> registerHandler(String address) {
-    MessageConsumer<JsonObject> consumer = vertx.eventBus().<JsonObject>consumer(address).handler(this);
-    this.setConsumer(consumer);
-    return consumer;
-  }
 
   private void checkTimedOut(long id) {
     long now = System.nanoTime();
@@ -101,160 +97,76 @@ public class CRUDServiceVertxProxyHandler extends ProxyHandler {
     }
   }
 
-  @Override
-  public void close() {
-    if (timerID != -1) {
-      vertx.cancelTimer(timerID);
+    @Override
+    public void close() {
+      if (timerID != -1) {
+        vertx.cancelTimer(timerID);
+      }
+      super.close();
     }
-    super.close();
-  }
 
-  private void accessed() {
-    this.lastAccessed = System.nanoTime();
-  }
+    private void accessed() {
+      this.lastAccessed = System.nanoTime();
+    }
 
   public void handle(Message<JsonObject> msg) {
-    try {
+    try{
       JsonObject json = msg.body();
       String action = msg.headers().get("action");
-      if (action == null) {
-        throw new IllegalStateException("action not specified");
-      }
+      if (action == null) throw new IllegalStateException("action not specified");
       accessed();
       switch (action) {
         case "initializePersistence": {
-          service.initializePersistence(createHandler(msg));
+          service.initializePersistence(HelperUtils.createHandler(msg));
           break;
         }
         case "addOne": {
-          service.addOne((io.vertx.core.json.JsonObject)json.getValue("item"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
+          service.addOne((io.vertx.core.json.JsonObject)json.getValue("item"),
+                        (io.vertx.core.json.JsonObject)json.getValue("principal"),
+                        HelperUtils.createHandler(msg));
           break;
         }
         case "retrieveOne": {
-          service.retrieveOne((java.lang.String)json.getValue("id"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
+          service.retrieveOne((java.lang.String)json.getValue("id"),
+                        (io.vertx.core.json.JsonObject)json.getValue("principal"),
+                        HelperUtils.createHandler(msg));
           break;
         }
         case "retrieveAll": {
-          service.retrieveAll((io.vertx.core.json.JsonObject)json.getValue("principal"), createListHandler(msg));
+          service.retrieveAll((io.vertx.core.json.JsonObject)json.getValue("principal"),
+                        HelperUtils.createListHandler(msg));
           break;
         }
         case "count": {
-          service.count((io.vertx.core.json.JsonObject)json.getValue("condition"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
+          service.count((io.vertx.core.json.JsonObject)json.getValue("condition"),
+                        (io.vertx.core.json.JsonObject)json.getValue("principal"),
+                        HelperUtils.createHandler(msg));
           break;
         }
         case "retrieveManyByCondition": {
-          service.retrieveManyByCondition((io.vertx.core.json.JsonObject)json.getValue("condition"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createListHandler(msg));
+          service.retrieveManyByCondition((io.vertx.core.json.JsonObject)json.getValue("condition"),
+                        (io.vertx.core.json.JsonObject)json.getValue("principal"),
+                        HelperUtils.createListHandler(msg));
           break;
         }
         case "updateOne": {
-          service.updateOne((java.lang.String)json.getValue("id"), (io.vertx.core.json.JsonObject)json.getValue("item"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
+          service.updateOne((java.lang.String)json.getValue("id"),
+                        (io.vertx.core.json.JsonObject)json.getValue("item"),
+                        (io.vertx.core.json.JsonObject)json.getValue("principal"),
+                        HelperUtils.createHandler(msg));
           break;
         }
         case "deleteOne": {
-          service.deleteOne((java.lang.String)json.getValue("id"), (io.vertx.core.json.JsonObject)json.getValue("principal"), createHandler(msg));
+          service.deleteOne((java.lang.String)json.getValue("id"),
+                        (io.vertx.core.json.JsonObject)json.getValue("principal"),
+                        HelperUtils.createHandler(msg));
           break;
         }
-        default: {
-          throw new IllegalStateException("Invalid action: " + action);
-        }
+        default: throw new IllegalStateException("Invalid action: " + action);
       }
     } catch (Throwable t) {
       msg.reply(new ServiceException(500, t.getMessage()));
       throw t;
     }
-  }
-
-  private <T> Handler<AsyncResult<T>> createHandler(Message msg) {
-    return res -> {
-      if (res.failed()) {
-        if (res.cause() instanceof ServiceException) {
-          msg.reply(res.cause());
-        } else {
-          msg.reply(new ServiceException(-1, res.cause().getMessage()));
-        }
-      } else {
-        if (res.result() != null  && res.result().getClass().isEnum()) {
-          msg.reply(((Enum) res.result()).name());
-        } else {
-          msg.reply(res.result());
-        }
-      }
-    };
-  }
-
-  private <T> Handler<AsyncResult<List<T>>> createListHandler(Message msg) {
-    return res -> {
-      if (res.failed()) {
-        if (res.cause() instanceof ServiceException) {
-          msg.reply(res.cause());
-        } else {
-          msg.reply(new ServiceException(-1, res.cause().getMessage()));
-        }
-      } else {
-        msg.reply(new JsonArray(res.result()));
-      }
-    };
-  }
-
-  private <T> Handler<AsyncResult<Set<T>>> createSetHandler(Message msg) {
-    return res -> {
-      if (res.failed()) {
-        if (res.cause() instanceof ServiceException) {
-          msg.reply(res.cause());
-        } else {
-          msg.reply(new ServiceException(-1, res.cause().getMessage()));
-        }
-      } else {
-        msg.reply(new JsonArray(new ArrayList<>(res.result())));
-      }
-    };
-  }
-
-  private Handler<AsyncResult<List<Character>>> createListCharHandler(Message msg) {
-    return res -> {
-      if (res.failed()) {
-        if (res.cause() instanceof ServiceException) {
-          msg.reply(res.cause());
-        } else {
-          msg.reply(new ServiceException(-1, res.cause().getMessage()));
-        }
-      } else {
-        JsonArray arr = new JsonArray();
-        for (Character chr: res.result()) {
-          arr.add((int) chr);
-        }
-        msg.reply(arr);
-      }
-    };
-  }
-
-  private Handler<AsyncResult<Set<Character>>> createSetCharHandler(Message msg) {
-    return res -> {
-      if (res.failed()) {
-        if (res.cause() instanceof ServiceException) {
-          msg.reply(res.cause());
-        } else {
-          msg.reply(new ServiceException(-1, res.cause().getMessage()));
-        }
-      } else {
-        JsonArray arr = new JsonArray();
-        for (Character chr: res.result()) {
-          arr.add((int) chr);
-        }
-        msg.reply(arr);
-      }
-    };
-  }
-
-  private <T> Map<String, T> convertMap(Map map) {
-    return (Map<String, T>)map;
-  }
-
-  private <T> List<T> convertList(List list) {
-    return (List<T>)list;
-  }
-
-  private <T> Set<T> convertSet(List list) {
-    return new HashSet<T>((List<T>)list);
   }
 }

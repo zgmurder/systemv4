@@ -81,4 +81,15 @@ public class OrganizationService_GroovyExtension {
     } : null));
     return j_receiver;
   }
+  public static io.vertx.armysystem.microservice.resource.OrganizationService deactivate(io.vertx.armysystem.microservice.resource.OrganizationService j_receiver, java.lang.String id, java.lang.Boolean deactivated, java.util.Map<String, Object> principal, io.vertx.core.Handler<io.vertx.core.AsyncResult<java.lang.Void>> resultHandler) {
+    io.vertx.core.impl.ConversionHelper.fromObject(j_receiver.deactivate(id,
+      deactivated,
+      principal != null ? io.vertx.core.impl.ConversionHelper.toJsonObject(principal) : null,
+      resultHandler != null ? new io.vertx.core.Handler<io.vertx.core.AsyncResult<java.lang.Void>>() {
+      public void handle(io.vertx.core.AsyncResult<java.lang.Void> ar) {
+        resultHandler.handle(ar.map(event -> io.vertx.core.impl.ConversionHelper.fromObject(event)));
+      }
+    } : null));
+    return j_receiver;
+  }
 }

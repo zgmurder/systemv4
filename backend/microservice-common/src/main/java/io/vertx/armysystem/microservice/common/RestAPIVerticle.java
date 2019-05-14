@@ -109,7 +109,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
    * @param context   route context
    * @param biHandler the handler to be processed after authorization
    */
-  protected void requireLogin(RoutingContext context, BiConsumer<RoutingContext, JsonObject> biHandler) {
+  public void requireLogin(RoutingContext context, BiConsumer<RoutingContext, JsonObject> biHandler) {
     if (authProvider == null) {
       biHandler.accept(context, new JsonObject());
     } else {
@@ -145,7 +145,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
    * @param action    the action(Create, Read, Update, Delete) to be authorized
    * @param biHandler the handler to be processed after authorization
    */
-  protected void requireAuth(RoutingContext context, String resource, String action, BiConsumer<RoutingContext, JsonObject> biHandler) {
+  public void requireAuth(RoutingContext context, String resource, String action, BiConsumer<RoutingContext, JsonObject> biHandler) {
     if (authProvider == null) {
       biHandler.accept(context, new JsonObject());
     } else {
@@ -177,7 +177,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
     }
   }
 
-  protected Boolean isAuthorized(JsonObject principal, String schema, String action) {
+  public Boolean isAuthorized(JsonObject principal, String schema, String action) {
     Boolean authorized = false;
 
     String perm = schema + ":" + action;
@@ -194,7 +194,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
     return authorized;
   }
 
-  protected JsonObject getFindCondition(RoutingContext context) {
+  public JsonObject getFindCondition(RoutingContext context) {
     JsonObject condition = context.getBodyAsJson();
     System.out.println("getFindCondition " + condition);
     if (condition == null) condition = new JsonObject();
@@ -214,7 +214,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
   /**
    * This method generates handler for async methods in REST APIs.
    */
-  protected <T> Handler<AsyncResult<T>> resultHandler(RoutingContext context, Handler<T> handler) {
+  public <T> Handler<AsyncResult<T>> resultHandler(RoutingContext context, Handler<T> handler) {
     return res -> {
       if (res.succeeded()) {
         handler.handle(res.result());
@@ -229,7 +229,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
    * This method generates handler for async methods in REST APIs.
    * Use the result directly and invoke `toString` as the response. The content type is JSON.
    */
-  protected <T> Handler<AsyncResult<T>> resultHandler(RoutingContext context) {
+  public <T> Handler<AsyncResult<T>> resultHandler(RoutingContext context) {
     return ar -> {
       if (ar.succeeded()) {
         T res = ar.result();
@@ -253,7 +253,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
    * @param <T>       result type
    * @return generated handler
    */
-  protected <T> Handler<AsyncResult<T>> resultHandler(RoutingContext context, Function<T, String> converter) {
+  public <T> Handler<AsyncResult<T>> resultHandler(RoutingContext context, Function<T, String> converter) {
     return ar -> {
       if (ar.succeeded()) {
         T res = ar.result();
@@ -280,7 +280,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
    * @param <T>     result type
    * @return generated handler
    */
-  protected <T> Handler<AsyncResult<T>> resultHandlerNonEmpty(RoutingContext context) {
+  public <T> Handler<AsyncResult<T>> resultHandlerNonEmpty(RoutingContext context) {
     return ar -> {
       if (ar.succeeded()) {
         T res = ar.result();
@@ -306,7 +306,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
    * @param <T>     result type
    * @return generated handler
    */
-  protected <T> Handler<AsyncResult<T>> rawResultHandler(RoutingContext context) {
+  public <T> Handler<AsyncResult<T>> rawResultHandler(RoutingContext context) {
     return ar -> {
       if (ar.succeeded()) {
         T res = ar.result();
@@ -319,7 +319,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
     };
   }
 
-  protected Handler<AsyncResult<Void>> resultVoidHandler(RoutingContext context, JsonObject result) {
+  public Handler<AsyncResult<Void>> resultVoidHandler(RoutingContext context, JsonObject result) {
     return resultVoidHandler(context, result, 200);
   }
 
@@ -332,7 +332,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
    * @param status  status code
    * @return generated handler
    */
-  protected Handler<AsyncResult<Void>> resultVoidHandler(RoutingContext context, JsonObject result, int status) {
+  public Handler<AsyncResult<Void>> resultVoidHandler(RoutingContext context, JsonObject result, int status) {
     return ar -> {
       if (ar.succeeded()) {
         context.response()
@@ -346,7 +346,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
     };
   }
 
-  protected Handler<AsyncResult<Void>> resultVoidHandler(RoutingContext context, int status) {
+  public Handler<AsyncResult<Void>> resultVoidHandler(RoutingContext context, int status) {
     return ar -> {
       if (ar.succeeded()) {
         context.response()
@@ -370,7 +370,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
    * @param context routing context instance
    * @return generated handler
    */
-  protected Handler<AsyncResult<Void>> deleteResultHandler(RoutingContext context) {
+  public Handler<AsyncResult<Void>> deleteResultHandler(RoutingContext context) {
     return res -> {
       if (res.succeeded()) {
         context.response().setStatusCode(204)
@@ -385,31 +385,31 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
 
   // helper method dealing with failure
 
-  protected void badRequest(RoutingContext context, Throwable ex) {
+  public void badRequest(RoutingContext context, Throwable ex) {
     context.response().setStatusCode(400)
       .putHeader("content-type", "application/json")
       .end(new JsonObject().put("error", ex.getMessage()).encodePrettily());
   }
 
-  protected void notFound(RoutingContext context) {
+  public void notFound(RoutingContext context) {
     context.response().setStatusCode(404)
       .putHeader("content-type", "application/json")
       .end(new JsonObject().put("message", "not found").encodePrettily());
   }
 
-  protected void internalError(RoutingContext context, Throwable ex) {
+  public void internalError(RoutingContext context, Throwable ex) {
     context.response().setStatusCode(500)
       .putHeader("content-type", "application/json")
       .end(new JsonObject().put("error", ex.getMessage()).encodePrettily());
   }
 
-  protected void notImplemented(RoutingContext context) {
+  public void notImplemented(RoutingContext context) {
     context.response().setStatusCode(501)
       .putHeader("content-type", "application/json")
       .end(new JsonObject().put("message", "not implemented").encodePrettily());
   }
 
-  protected void badGateway(Throwable ex, RoutingContext context) {
+  public void badGateway(Throwable ex, RoutingContext context) {
     ex.printStackTrace();
     context.response()
       .setStatusCode(502)
@@ -419,29 +419,29 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
         .encodePrettily());
   }
 
-  protected void serviceUnavailable(RoutingContext context) {
+  public void serviceUnavailable(RoutingContext context) {
     context.fail(503);
   }
 
-  protected void serviceUnavailable(RoutingContext context, Throwable ex) {
+  public void serviceUnavailable(RoutingContext context, Throwable ex) {
     context.response().setStatusCode(503)
       .putHeader("content-type", "application/json")
       .end(new JsonObject().put("error", ex.getMessage()).encodePrettily());
   }
 
-  protected void serviceUnavailable(RoutingContext context, String cause) {
+  public void serviceUnavailable(RoutingContext context, String cause) {
     context.response().setStatusCode(503)
       .putHeader("content-type", "application/json")
       .end(new JsonObject().put("error", cause).encodePrettily());
   }
 
-  protected void unauthorized(RoutingContext context, String cause) {
+  public void unauthorized(RoutingContext context, String cause) {
     context.response().setStatusCode(401)
         .putHeader("content-type", "application/json")
         .end(new JsonObject().put("message", cause).encodePrettily());
   }
 
-  protected void forbidden(RoutingContext context, String cause) {
+  public void forbidden(RoutingContext context, String cause) {
     context.response().setStatusCode(403)
         .putHeader("content-type", "application/json")
         .end(new JsonObject().put("message", cause).encodePrettily());

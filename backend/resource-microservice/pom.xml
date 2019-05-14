@@ -12,7 +12,7 @@
     <artifactId>resource-microservice</artifactId>
 
     <properties>
-        <main.verticle></main.verticle>
+        <main.verticle>io.vertx.armysystem.microservice.resource.ResourceVerticle</main.verticle>
     </properties>
 
     <dependencies>

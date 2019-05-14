@@ -110,4 +110,15 @@ public interface OrganizationService {
    */
   @Fluent
   OrganizationService swapPosition(String id, String otherId, JsonObject principal, Handler<AsyncResult<Void>> resultHandler);
+
+  /**
+   * deactivate organization
+   *
+   * @param id            the item id
+   * @param deactivated   true for deactivate, false for activate
+   * @param resultHandler the result handler will be called as soon as the item has been removed. The async result indicates
+   *                      whether the operation was successful or not.
+   */
+  @Fluent
+  OrganizationService deactivate(String id, Boolean deactivated, JsonObject principal, Handler<AsyncResult<Void>> resultHandler);
 }

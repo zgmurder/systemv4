@@ -16,7 +16,6 @@
 
 package io.vertx.armysystem.microservice.resource;
 
-import io.vertx.armysystem.microservice.resource.OrganizationService;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.Future;
@@ -32,19 +31,20 @@ import java.util.function.Function;
 import io.vertx.serviceproxy.ProxyHelper;
 import io.vertx.serviceproxy.ServiceException;
 import io.vertx.serviceproxy.ServiceExceptionMessageCodec;
+import io.vertx.serviceproxy.ProxyUtils;
+
 import java.util.List;
 import io.vertx.armysystem.microservice.resource.OrganizationService;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-
 /*
   Generated Proxy code - DO NOT EDIT
   @author Roger the Robot
 */
+
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class OrganizationServiceVertxEBProxy implements OrganizationService {
-
   private Vertx _vertx;
   private String _address;
   private DeliveryOptions _options;
@@ -58,18 +58,19 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     this._vertx = vertx;
     this._address = address;
     this._options = options;
-    try {
-      this._vertx.eventBus().registerDefaultCodec(ServiceException.class,
-          new ServiceExceptionMessageCodec());
+    try{
+      this._vertx.eventBus().registerDefaultCodec(ServiceException.class, new ServiceExceptionMessageCodec());
     } catch (IllegalStateException ex) {}
   }
 
-  public OrganizationService initializePersistence(Handler<AsyncResult<Void>> resultHandler) {
+  @Override
+  public  OrganizationService initializePersistence(Handler<AsyncResult<Void>> resultHandler){
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
     }
     JsonObject _json = new JsonObject();
+
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
     _deliveryOptions.addHeader("action", "initializePersistence");
     _vertx.eventBus().<Void>send(_address, _json, _deliveryOptions, res -> {
@@ -81,8 +82,8 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     });
     return this;
   }
-
-  public OrganizationService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
+  @Override
+  public  OrganizationService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler){
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -90,6 +91,7 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     JsonObject _json = new JsonObject();
     _json.put("item", item);
     _json.put("principal", principal);
+
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
     _deliveryOptions.addHeader("action", "addOne");
     _vertx.eventBus().<JsonObject>send(_address, _json, _deliveryOptions, res -> {
@@ -101,8 +103,8 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     });
     return this;
   }
-
-  public OrganizationService retrieveOne(String id, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
+  @Override
+  public  OrganizationService retrieveOne(String id, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler){
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -110,6 +112,7 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     JsonObject _json = new JsonObject();
     _json.put("id", id);
     _json.put("principal", principal);
+
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
     _deliveryOptions.addHeader("action", "retrieveOne");
     _vertx.eventBus().<JsonObject>send(_address, _json, _deliveryOptions, res -> {
@@ -121,27 +124,28 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     });
     return this;
   }
-
-  public OrganizationService retrieveAll(JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) {
+  @Override
+  public  OrganizationService retrieveAll(JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler){
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
     }
     JsonObject _json = new JsonObject();
     _json.put("principal", principal);
+
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
     _deliveryOptions.addHeader("action", "retrieveAll");
     _vertx.eventBus().<JsonArray>send(_address, _json, _deliveryOptions, res -> {
       if (res.failed()) {
         resultHandler.handle(Future.failedFuture(res.cause()));
       } else {
-        resultHandler.handle(Future.succeededFuture(convertList(res.result().body().getList())));
+        resultHandler.handle(Future.succeededFuture(ProxyUtils.convertList(res.result().body().getList())));
       }
     });
     return this;
   }
-
-  public OrganizationService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler) {
+  @Override
+  public  OrganizationService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler){
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -149,6 +153,7 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     JsonObject _json = new JsonObject();
     _json.put("condition", condition);
     _json.put("principal", principal);
+
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
     _deliveryOptions.addHeader("action", "count");
     _vertx.eventBus().<Long>send(_address, _json, _deliveryOptions, res -> {
@@ -160,8 +165,8 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     });
     return this;
   }
-
-  public OrganizationService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) {
+  @Override
+  public  OrganizationService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler){
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -169,19 +174,20 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     JsonObject _json = new JsonObject();
     _json.put("condition", condition);
     _json.put("principal", principal);
+
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
     _deliveryOptions.addHeader("action", "retrieveManyByCondition");
     _vertx.eventBus().<JsonArray>send(_address, _json, _deliveryOptions, res -> {
       if (res.failed()) {
         resultHandler.handle(Future.failedFuture(res.cause()));
       } else {
-        resultHandler.handle(Future.succeededFuture(convertList(res.result().body().getList())));
+        resultHandler.handle(Future.succeededFuture(ProxyUtils.convertList(res.result().body().getList())));
       }
     });
     return this;
   }
-
-  public OrganizationService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
+  @Override
+  public  OrganizationService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler){
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -190,6 +196,7 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     _json.put("id", id);
     _json.put("item", item);
     _json.put("principal", principal);
+
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
     _deliveryOptions.addHeader("action", "updateOne");
     _vertx.eventBus().<JsonObject>send(_address, _json, _deliveryOptions, res -> {
@@ -201,8 +208,8 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     });
     return this;
   }
-
-  public OrganizationService deleteOne(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) {
+  @Override
+  public  OrganizationService deleteOne(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler){
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -210,6 +217,7 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     JsonObject _json = new JsonObject();
     _json.put("id", id);
     _json.put("principal", principal);
+
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
     _deliveryOptions.addHeader("action", "deleteOne");
     _vertx.eventBus().<Void>send(_address, _json, _deliveryOptions, res -> {
@@ -221,8 +229,8 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     });
     return this;
   }
-
-  public OrganizationService swapPosition(String id, String otherId, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) {
+  @Override
+  public  OrganizationService swapPosition(String id, String otherId, JsonObject principal, Handler<AsyncResult<Void>> resultHandler){
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -231,6 +239,7 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     _json.put("id", id);
     _json.put("otherId", otherId);
     _json.put("principal", principal);
+
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
     _deliveryOptions.addHeader("action", "swapPosition");
     _vertx.eventBus().<Void>send(_address, _json, _deliveryOptions, res -> {
@@ -242,65 +251,26 @@ public class OrganizationServiceVertxEBProxy implements OrganizationService {
     });
     return this;
   }
-
-
-  private List<Character> convertToListChar(JsonArray arr) {
-    List<Character> list = new ArrayList<>();
-    for (Object obj: arr) {
-      Integer jobj = (Integer)obj;
-      list.add((char)(int)jobj);
+  @Override
+  public  OrganizationService deactivate(String id, Boolean deactivated, JsonObject principal, Handler<AsyncResult<Void>> resultHandler){
+    if (closed) {
+      resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
+      return this;
     }
-    return list;
-  }
+    JsonObject _json = new JsonObject();
+    _json.put("id", id);
+    _json.put("deactivated", deactivated);
+    _json.put("principal", principal);
 
-  private Set<Character> convertToSetChar(JsonArray arr) {
-    Set<Character> set = new HashSet<>();
-    for (Object obj: arr) {
-      Integer jobj = (Integer)obj;
-      set.add((char)(int)jobj);
-    }
-    return set;
-  }
-
-  private <T> Map<String, T> convertMap(Map map) {
-    if (map.isEmpty()) { 
-      return (Map<String, T>) map; 
-    } 
-     
-    Object elem = map.values().stream().findFirst().get(); 
-    if (!(elem instanceof Map) && !(elem instanceof List)) { 
-      return (Map<String, T>) map; 
-    } else { 
-      Function<Object, T> converter; 
-      if (elem instanceof List) { 
-        converter = object -> (T) new JsonArray((List) object); 
-      } else { 
-        converter = object -> (T) new JsonObject((Map) object); 
-      } 
-      return ((Map<String, T>) map).entrySet() 
-       .stream() 
-       .collect(Collectors.toMap(Map.Entry::getKey, converter::apply)); 
-    } 
-  }
-  private <T> List<T> convertList(List list) {
-    if (list.isEmpty()) { 
-          return (List<T>) list; 
-        } 
-     
-    Object elem = list.get(0); 
-    if (!(elem instanceof Map) && !(elem instanceof List)) { 
-      return (List<T>) list; 
-    } else { 
-      Function<Object, T> converter; 
-      if (elem instanceof List) { 
-        converter = object -> (T) new JsonArray((List) object); 
-      } else { 
-        converter = object -> (T) new JsonObject((Map) object); 
-      } 
-      return (List<T>) list.stream().map(converter).collect(Collectors.toList()); 
-    } 
-  }
-  private <T> Set<T> convertSet(List list) {
-    return new HashSet<T>(convertList(list));
+    DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
+    _deliveryOptions.addHeader("action", "deactivate");
+    _vertx.eventBus().<Void>send(_address, _json, _deliveryOptions, res -> {
+      if (res.failed()) {
+        resultHandler.handle(Future.failedFuture(res.cause()));
+      } else {
+        resultHandler.handle(Future.succeededFuture(res.result().body()));
+      }
+    });
+    return this;
   }
 }

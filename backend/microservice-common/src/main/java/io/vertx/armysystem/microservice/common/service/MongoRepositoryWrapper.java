@@ -2,10 +2,10 @@ package io.vertx.armysystem.microservice.common.service;
 
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.FindOptions;
-import io.vertx.ext.mongo.IndexOptions;
-import io.vertx.ext.mongo.MongoClient;
+import io.vertx.core.streams.ReadStream;
+import io.vertx.ext.mongo.*;
 
 import java.util.Date;
 import java.util.List;
@@ -57,26 +57,6 @@ public class MongoRepositoryWrapper {
 
     return future;
   }
-
-//  protected Future<JsonObject> save(String collection, JsonObject document) {
-//    Future<JsonObject> future = Future.future();
-//    if (document.getString("id") != null)
-//      document.put("_id", document.getString("id"));
-//    if (document.getString("_id") == null) {
-//      document.put("createdTime", new Date().getTime());
-//    }
-//    document.put("updatedTime", new Date().getTime());
-//
-//    client.save(collection, document,
-//        ar -> {
-//          if (ar.succeeded())
-//            future.complete(document.put("id", ar.result()));
-//          else
-//            future.fail(ar.cause());
-//        });
-//
-//    return future;
-//  }
 
   // 只能插入新的数据
   protected Future<JsonObject> insertOne(String collection, JsonObject document) {
@@ -147,15 +127,45 @@ public class MongoRepositoryWrapper {
   protected Future<Long> count(String collection, JsonObject query) {
     Future<Long> future = Future.future();
 
-    client.count(collection, query, future.completer());
+    client.count(collection, query, ar -> {
+      if (ar.succeeded()) {
+        future.complete(ar.result());
+      } else {
+        future.fail(ar.cause());
+      }
+    });
 
     return future;
+  }
+
+  protected Future<List<JsonObject>> bulkWrite(String collection, List<BulkOperation> operations) {
+    Future<List<JsonObject>> future = Future.future();
+
+    client.bulkWrite(collection, operations, ar -> {
+      if (ar.succeeded()) {
+        future.complete(ar.result().getUpserts());
+      } else {
+        future.fail(ar.cause());
+      }
+    });
+
+    return future;
+  }
+
+  protected ReadStream<JsonObject> aggregateWithOptions(String collection, final JsonArray pipeline, JsonObject options) {
+    return client.aggregateWithOptions(collection, pipeline, new AggregateOptions(options));
   }
 
   protected Future<Void> createCollection(String collectionName) {
     Future<Void> future = Future.future();
 
-    client.createCollection(collectionName, future.completer());
+    client.createCollection(collectionName, ar -> {
+      if (ar.succeeded()) {
+        future.complete();
+      } else {
+        future.fail(ar.cause());
+      }
+    });
 
     return future;
   }
@@ -200,7 +210,13 @@ public class MongoRepositoryWrapper {
   protected Future<Void> dropCollection(String collectionName) {
     Future<Void> future = Future.future();
 
-    client.dropCollection(collectionName, future.completer());
+    client.dropCollection(collectionName, ar -> {
+      if (ar.succeeded()) {
+        future.complete();
+      } else {
+        future.fail(ar.cause());
+      }
+    });
 
     return future;
   }
@@ -208,7 +224,13 @@ public class MongoRepositoryWrapper {
   protected Future<Void> createIndexWithOptions(String collectionName, JsonObject key, JsonObject indexOptions) {
     Future<Void> future = Future.future();
 
-    client.createIndexWithOptions(collectionName, key, new IndexOptions(indexOptions), future.completer());
+    client.createIndexWithOptions(collectionName, key, new IndexOptions(indexOptions), ar -> {
+      if (ar.succeeded()) {
+        future.complete();
+      } else {
+        future.fail(ar.cause());
+      }
+    });
 
     return future;
   }

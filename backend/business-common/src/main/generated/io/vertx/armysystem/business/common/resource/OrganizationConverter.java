@@ -1,119 +1,158 @@
-/*
- * Copyright 2014 Red Hat, Inc.
- *
- * Red Hat licenses this file to you under the Apache License, version 2.0
- * (the "License"); you may not use this file except in compliance with the
- * License.  You may obtain a copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations
- * under the License.
- */
-
 package io.vertx.armysystem.business.common.resource;
 
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.JsonArray;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Converter for {@link io.vertx.armysystem.business.common.resource.Organization}.
- *
  * NOTE: This class has been automatically generated from the {@link io.vertx.armysystem.business.common.resource.Organization} original class using Vert.x codegen.
  */
 public class OrganizationConverter {
 
-  public static void fromJson(JsonObject json, Organization obj) {
-    if (json.getValue("address") instanceof String) {
-      obj.setAddress((String)json.getValue("address"));
-    }
-    if (json.getValue("altitude") instanceof Number) {
-      obj.setAltitude(((Number)json.getValue("altitude")).doubleValue());
-    }
-    if (json.getValue("childrenIds") instanceof JsonArray) {
-      java.util.ArrayList<java.lang.String> list = new java.util.ArrayList<>();
-      json.getJsonArray("childrenIds").forEach( item -> {
-        if (item instanceof String)
-          list.add((String)item);
-      });
-      obj.setChildrenIds(list);
-    }
-    if (json.getValue("deleted") instanceof Boolean) {
-      obj.setDeleted((Boolean)json.getValue("deleted"));
-    }
-    if (json.getValue("displayName") instanceof String) {
-      obj.setDisplayName((String)json.getValue("displayName"));
-    }
-    if (json.getValue("expireDate") instanceof Number) {
-      obj.setExpireDate(((Number)json.getValue("expireDate")).longValue());
-    }
-    if (json.getValue("id") instanceof String) {
-      obj.setId((String)json.getValue("id"));
-    }
-    if (json.getValue("important") instanceof Boolean) {
-      obj.setImportant((Boolean)json.getValue("important"));
-    }
-    if (json.getValue("latitude") instanceof Number) {
-      obj.setLatitude(((Number)json.getValue("latitude")).doubleValue());
-    }
-    if (json.getValue("longitude") instanceof Number) {
-      obj.setLongitude(((Number)json.getValue("longitude")).doubleValue());
-    }
-    if (json.getValue("name") instanceof String) {
-      obj.setName((String)json.getValue("name"));
-    }
-    if (json.getValue("orgCategory") instanceof String) {
-      obj.setOrgCategory((String)json.getValue("orgCategory"));
-    }
-    if (json.getValue("orgCode") instanceof String) {
-      obj.setOrgCode((String)json.getValue("orgCode"));
-    }
-    if (json.getValue("orgMajors") instanceof JsonArray) {
-      java.util.ArrayList<java.lang.String> list = new java.util.ArrayList<>();
-      json.getJsonArray("orgMajors").forEach( item -> {
-        if (item instanceof String)
-          list.add((String)item);
-      });
-      obj.setOrgMajors(list);
-    }
-    if (json.getValue("orgProperty") instanceof String) {
-      obj.setOrgProperty((String)json.getValue("orgProperty"));
-    }
-    if (json.getValue("orgSequence") instanceof Number) {
-      obj.setOrgSequence(((Number)json.getValue("orgSequence")).intValue());
-    }
-    if (json.getValue("orgType") instanceof String) {
-      obj.setOrgType((String)json.getValue("orgType"));
-    }
-    if (json.getValue("parentId") instanceof String) {
-      obj.setParentId((String)json.getValue("parentId"));
-    }
-    if (json.getValue("parentIds") instanceof JsonArray) {
-      java.util.ArrayList<java.lang.String> list = new java.util.ArrayList<>();
-      json.getJsonArray("parentIds").forEach( item -> {
-        if (item instanceof String)
-          list.add((String)item);
-      });
-      obj.setParentIds(list);
-    }
-    if (json.getValue("planSodierCount") instanceof Number) {
-      obj.setPlanSodierCount(((Number)json.getValue("planSodierCount")).intValue());
-    }
-    if (json.getValue("serviceType") instanceof String) {
-      obj.setServiceType((String)json.getValue("serviceType"));
-    }
-    if (json.getValue("specialMission") instanceof String) {
-      obj.setSpecialMission((String)json.getValue("specialMission"));
-    }
-    if (json.getValue("temp") instanceof Boolean) {
-      obj.setTemp((Boolean)json.getValue("temp"));
+  public static void fromJson(Iterable<java.util.Map.Entry<String, Object>> json, Organization obj) {
+    for (java.util.Map.Entry<String, Object> member : json) {
+      switch (member.getKey()) {
+        case "address":
+          if (member.getValue() instanceof String) {
+            obj.setAddress((String)member.getValue());
+          }
+          break;
+        case "altitude":
+          if (member.getValue() instanceof Number) {
+            obj.setAltitude(((Number)member.getValue()).doubleValue());
+          }
+          break;
+        case "childrenIds":
+          if (member.getValue() instanceof JsonArray) {
+            java.util.ArrayList<java.lang.String> list =  new java.util.ArrayList<>();
+            ((Iterable<Object>)member.getValue()).forEach( item -> {
+              if (item instanceof String)
+                list.add((String)item);
+            });
+            obj.setChildrenIds(list);
+          }
+          break;
+        case "deactivated":
+          if (member.getValue() instanceof Boolean) {
+            obj.setDeactivated((Boolean)member.getValue());
+          }
+          break;
+        case "deactivatedAt":
+          if (member.getValue() instanceof Number) {
+            obj.setDeactivatedAt(((Number)member.getValue()).longValue());
+          }
+          break;
+        case "displayName":
+          if (member.getValue() instanceof String) {
+            obj.setDisplayName((String)member.getValue());
+          }
+          break;
+        case "id":
+          if (member.getValue() instanceof String) {
+            obj.setId((String)member.getValue());
+          }
+          break;
+        case "important":
+          if (member.getValue() instanceof Boolean) {
+            obj.setImportant((Boolean)member.getValue());
+          }
+          break;
+        case "latitude":
+          if (member.getValue() instanceof Number) {
+            obj.setLatitude(((Number)member.getValue()).doubleValue());
+          }
+          break;
+        case "longitude":
+          if (member.getValue() instanceof Number) {
+            obj.setLongitude(((Number)member.getValue()).doubleValue());
+          }
+          break;
+        case "name":
+          if (member.getValue() instanceof String) {
+            obj.setName((String)member.getValue());
+          }
+          break;
+        case "nodeCode":
+          if (member.getValue() instanceof Number) {
+            obj.setNodeCode(((Number)member.getValue()).intValue());
+          }
+          break;
+        case "orgCategory":
+          if (member.getValue() instanceof String) {
+            obj.setOrgCategory((String)member.getValue());
+          }
+          break;
+        case "orgCode":
+          if (member.getValue() instanceof String) {
+            obj.setOrgCode((String)member.getValue());
+          }
+          break;
+        case "orgMajors":
+          if (member.getValue() instanceof JsonArray) {
+            java.util.ArrayList<java.lang.String> list =  new java.util.ArrayList<>();
+            ((Iterable<Object>)member.getValue()).forEach( item -> {
+              if (item instanceof String)
+                list.add((String)item);
+            });
+            obj.setOrgMajors(list);
+          }
+          break;
+        case "orgProperty":
+          if (member.getValue() instanceof String) {
+            obj.setOrgProperty((String)member.getValue());
+          }
+          break;
+        case "orgSequence":
+          if (member.getValue() instanceof Number) {
+            obj.setOrgSequence(((Number)member.getValue()).intValue());
+          }
+          break;
+        case "orgType":
+          if (member.getValue() instanceof String) {
+            obj.setOrgType((String)member.getValue());
+          }
+          break;
+        case "parentId":
+          if (member.getValue() instanceof String) {
+            obj.setParentId((String)member.getValue());
+          }
+          break;
+        case "parentIds":
+          if (member.getValue() instanceof JsonArray) {
+            java.util.ArrayList<java.lang.String> list =  new java.util.ArrayList<>();
+            ((Iterable<Object>)member.getValue()).forEach( item -> {
+              if (item instanceof String)
+                list.add((String)item);
+            });
+            obj.setParentIds(list);
+          }
+          break;
+        case "planSodierCount":
+          if (member.getValue() instanceof Number) {
+            obj.setPlanSodierCount(((Number)member.getValue()).intValue());
+          }
+          break;
+        case "serviceType":
+          if (member.getValue() instanceof String) {
+            obj.setServiceType((String)member.getValue());
+          }
+          break;
+        case "specialMission":
+          if (member.getValue() instanceof String) {
+            obj.setSpecialMission((String)member.getValue());
+          }
+          break;
+      }
     }
   }
 
   public static void toJson(Organization obj, JsonObject json) {
+    toJson(obj, json.getMap());
+  }
+
+  public static void toJson(Organization obj, java.util.Map<String, Object> json) {
     if (obj.getAddress() != null) {
       json.put("address", obj.getAddress());
     }
@@ -125,14 +164,14 @@ public class OrganizationConverter {
       obj.getChildrenIds().forEach(item -> array.add(item));
       json.put("childrenIds", array);
     }
-    if (obj.getDeleted() != null) {
-      json.put("deleted", obj.getDeleted());
+    if (obj.getDeactivated() != null) {
+      json.put("deactivated", obj.getDeactivated());
+    }
+    if (obj.getDeactivatedAt() != null) {
+      json.put("deactivatedAt", obj.getDeactivatedAt());
     }
     if (obj.getDisplayName() != null) {
       json.put("displayName", obj.getDisplayName());
-    }
-    if (obj.getExpireDate() != null) {
-      json.put("expireDate", obj.getExpireDate());
     }
     if (obj.getId() != null) {
       json.put("id", obj.getId());
@@ -149,6 +188,7 @@ public class OrganizationConverter {
     if (obj.getName() != null) {
       json.put("name", obj.getName());
     }
+    json.put("nodeCode", obj.getNodeCode());
     if (obj.getOrgCategory() != null) {
       json.put("orgCategory", obj.getOrgCategory());
     }
@@ -181,9 +221,6 @@ public class OrganizationConverter {
     }
     if (obj.getSpecialMission() != null) {
       json.put("specialMission", obj.getSpecialMission());
-    }
-    if (obj.getTemp() != null) {
-      json.put("temp", obj.getTemp());
     }
   }
 }

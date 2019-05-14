@@ -16,6 +16,7 @@ public class Organization {
   private String id;
   private String name;
   private String displayName;
+  private int nodeCode;
   private String orgCode;
   private String parentId;
 //  private String divisionId;
@@ -35,9 +36,12 @@ public class Organization {
   private Double latitude;    // 维度
   private Double altitude;    // 海拔高度
 
-  private Boolean deleted;
-  private Boolean temp;       // 临时单位，需要设置过期日期
-  private Long expireDate;
+  private Boolean deactivated;  // 失效标志
+  private Long deactivatedAt;   // 失效时间
+
+//  private Boolean deleted;
+//  private Boolean temp;       // 临时单位，需要设置过期日期
+//  private Long expireDate;
 
   public Organization() {
     // Empty constructor
@@ -77,6 +81,15 @@ public class Organization {
 
   public Organization setDisplayName(String displayName) {
     this.displayName = displayName;
+    return this;
+  }
+
+  public int getNodeCode() {
+    return nodeCode;
+  }
+
+  public Organization setNodeCode(int nodeCode) {
+    this.nodeCode = nodeCode;
     return this;
   }
 
@@ -188,14 +201,14 @@ public class Organization {
     return this;
   }
 
-  public Boolean getDeleted() {
-    return deleted;
-  }
-
-  public Organization setDeleted(Boolean deleted) {
-    this.deleted = deleted;
-    return this;
-  }
+//  public Boolean getDeleted() {
+//    return deleted;
+//  }
+//
+//  public Organization setDeleted(Boolean deleted) {
+//    this.deleted = deleted;
+//    return this;
+//  }
 
   public String getSpecialMission() {
     return specialMission;
@@ -224,23 +237,23 @@ public class Organization {
     return this;
   }
 
-  public Boolean getTemp() {
-    return temp;
-  }
-
-  public Organization setTemp(Boolean temp) {
-    this.temp = temp;
-    return this;
-  }
-
-  public Long getExpireDate() {
-    return expireDate;
-  }
-
-  public Organization setExpireDate(Long expireDate) {
-    this.expireDate = expireDate;
-    return this;
-  }
+//  public Boolean getTemp() {
+//    return temp;
+//  }
+//
+//  public Organization setTemp(Boolean temp) {
+//    this.temp = temp;
+//    return this;
+//  }
+//
+//  public Long getExpireDate() {
+//    return expireDate;
+//  }
+//
+//  public Organization setExpireDate(Long expireDate) {
+//    this.expireDate = expireDate;
+//    return this;
+//  }
 
   public Double getLongitude() {
     return longitude;
@@ -269,6 +282,23 @@ public class Organization {
     return this;
   }
 
+  public Boolean getDeactivated() {
+    return deactivated;
+  }
+
+  public Organization setDeactivated(Boolean deactivated) {
+    this.deactivated = deactivated;
+    return this;
+  }
+
+    public Long getDeactivatedAt() {
+    return deactivatedAt;
+  }
+
+  public Organization setDeactivatedAt(Long deactivatedAt) {
+    this.deactivatedAt = deactivatedAt;
+    return this;
+  }
 
   @Override
   public String toString() { return toJson().encodePrettily(); }

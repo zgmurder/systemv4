@@ -68,7 +68,7 @@ public class DictionaryRestAPIVerticle extends RestAPIVerticle {
     JsonObject object = context.getBodyAsJson();
 
     if (object == null || object.getString("name") == null || object.getInteger("order") == null) {
-      badRequest(context, new IllegalArgumentException("The parameters are not valid"));
+      badRequest(context, new IllegalArgumentException("Invalid parameters"));
     } else {
       getService(context).addOne(object, principal, resultHandlerNonEmpty(context));
     }

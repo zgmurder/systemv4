@@ -14,6 +14,8 @@
  * under the License.
  */
 
+/// <reference path="./crud_service-proxy.d.ts" />
+
 /** @module business-common-js/crud_service */
 !function (factory) {
   if (typeof require === 'function' && typeof module !== 'undefined') {
@@ -28,15 +30,14 @@
 }(function () {
 
   /**
- A service interface manage entities.
- <p>
- This service is an event bus service (aka. service proxy).
- </p>
+   A service interface manage entities.
+   <p>
+   This service is an event bus service (aka. service proxy).
+   </p>
 
- @class
+   @class
   */
   var CRUDService = function(eb, address) {
-
     var j_eb = eb;
     var j_address = address;
     var closed = false;
@@ -56,13 +57,13 @@
      @param resultHandler {function} the result handler will be called as soon as the initialization has been accomplished. The async result indicates whether the operation was successful or not. 
      @return {CRUDService}
      */
-    this.initializePersistence = function(resultHandler) {
+    this.initializePersistence =  function(resultHandler) {
       var __args = arguments;
       if (__args.length === 1 && typeof __args[0] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {}, {"action":"initializePersistence"}, function(err, result) { __args[0](err, result &&result.body); });
+        j_eb.send(j_address, {}, {"action":"initializePersistence"}, function(err, result) { __args[0](err, result && result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
@@ -76,13 +77,13 @@
      @param resultHandler {function} the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not. 
      @return {CRUDService}
      */
-    this.addOne = function(item, principal, resultHandler) {
+    this.addOne =  function(item, principal, resultHandler) {
       var __args = arguments;
       if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"item":__args[0], "principal":__args[1]}, {"action":"addOne"}, function(err, result) { __args[2](err, result &&result.body); });
+        j_eb.send(j_address, {"item":__args[0], "principal":__args[1]}, {"action":"addOne"}, function(err, result) { __args[2](err, result && result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
@@ -96,13 +97,13 @@
      @param resultHandler {function} the result handler will be called as soon as the item has been retrieved. The async result indicates whether the operation was successful or not. 
      @return {CRUDService}
      */
-    this.retrieveOne = function(id, principal, resultHandler) {
+    this.retrieveOne =  function(id, principal, resultHandler) {
       var __args = arguments;
       if (__args.length === 3 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"id":__args[0], "principal":__args[1]}, {"action":"retrieveOne"}, function(err, result) { __args[2](err, result &&result.body); });
+        j_eb.send(j_address, {"id":__args[0], "principal":__args[1]}, {"action":"retrieveOne"}, function(err, result) { __args[2](err, result && result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
@@ -115,13 +116,13 @@
      @param resultHandler {function} the result handler will be called as soon as the items have been retrieved. The async result indicates whether the operation was successful or not. 
      @return {CRUDService}
      */
-    this.retrieveAll = function(principal, resultHandler) {
+    this.retrieveAll =  function(principal, resultHandler) {
       var __args = arguments;
       if (__args.length === 2 && (typeof __args[0] === 'object' && __args[0] != null) && typeof __args[1] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"principal":__args[0]}, {"action":"retrieveAll"}, function(err, result) { __args[1](err, result &&result.body); });
+        j_eb.send(j_address, {"principal":__args[0]}, {"action":"retrieveAll"}, function(err, result) { __args[1](err, result && result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
@@ -135,13 +136,13 @@
      @param resultHandler {function} the result handler will be called as soon as the device count has been retrieved. The async result indicates whether the operation was successful or not. 
      @return {CRUDService}
      */
-    this.count = function(condition, principal, resultHandler) {
+    this.count =  function(condition, principal, resultHandler) {
       var __args = arguments;
       if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"condition":__args[0], "principal":__args[1]}, {"action":"count"}, function(err, result) { __args[2](err, result &&result.body); });
+        j_eb.send(j_address, {"condition":__args[0], "principal":__args[1]}, {"action":"count"}, function(err, result) { __args[2](err, result && result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
@@ -155,13 +156,13 @@
      @param resultHandler {function} the result handler will be called as soon as the devices has been retrieved. The async result indicates whether the operation was successful or not. 
      @return {CRUDService}
      */
-    this.retrieveManyByCondition = function(condition, principal, resultHandler) {
+    this.retrieveManyByCondition =  function(condition, principal, resultHandler) {
       var __args = arguments;
       if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"condition":__args[0], "principal":__args[1]}, {"action":"retrieveManyByCondition"}, function(err, result) { __args[2](err, result &&result.body); });
+        j_eb.send(j_address, {"condition":__args[0], "principal":__args[1]}, {"action":"retrieveManyByCondition"}, function(err, result) { __args[2](err, result && result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
@@ -176,13 +177,13 @@
      @param resultHandler {function} the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not. 
      @return {CRUDService}
      */
-    this.updateOne = function(id, item, principal, resultHandler) {
+    this.updateOne =  function(id, item, principal, resultHandler) {
       var __args = arguments;
       if (__args.length === 4 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && (typeof __args[2] === 'object' && __args[2] != null) && typeof __args[3] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"id":__args[0], "item":__args[1], "principal":__args[2]}, {"action":"updateOne"}, function(err, result) { __args[3](err, result &&result.body); });
+        j_eb.send(j_address, {"id":__args[0], "item":__args[1], "principal":__args[2]}, {"action":"updateOne"}, function(err, result) { __args[3](err, result && result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
@@ -196,13 +197,13 @@
      @param resultHandler {function} the result handler will be called as soon as the item has been removed. The async result indicates whether the operation was successful or not. 
      @return {CRUDService}
      */
-    this.deleteOne = function(id, principal, resultHandler) {
+    this.deleteOne =  function(id, principal, resultHandler) {
       var __args = arguments;
       if (__args.length === 3 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"id":__args[0], "principal":__args[1]}, {"action":"deleteOne"}, function(err, result) { __args[2](err, result &&result.body); });
+        j_eb.send(j_address, {"id":__args[0], "principal":__args[1]}, {"action":"deleteOne"}, function(err, result) { __args[2](err, result && result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };

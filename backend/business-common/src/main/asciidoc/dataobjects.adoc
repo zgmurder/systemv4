@@ -8,13 +8,13 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
 |===
 
 [[GunnerType]]
@@ -25,14 +25,14 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[gunTypes]]`gunTypes`|`Array of String`|-
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
+|[[gunTypes]]`@gunTypes`|`Array of String`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
 |===
 
 [[MilitaryRank]]
@@ -43,15 +43,15 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|[[rankLevel1]]`rankLevel1`|`String`|-
-|[[rankLevel2]]`rankLevel2`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
+|[[rankLevel1]]`@rankLevel1`|`String`|-
+|[[rankLevel2]]`@rankLevel2`|`String`|-
 |===
 
 [[MotorType]]
@@ -62,14 +62,14 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|[[unit]]`unit`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
+|[[unit]]`@unit`|`String`|-
 |===
 
 [[OrdnanceType]]
@@ -80,16 +80,16 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[bulletUnit]]`bulletUnit`|`String`|-
-|[[category]]`category`|`String`|-
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|[[weaponUnit]]`weaponUnit`|`String`|-
+|[[bulletUnit]]`@bulletUnit`|`String`|-
+|[[category]]`@category`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
+|[[weaponUnit]]`@weaponUnit`|`String`|-
 |===
 
 [[OrgCategory]]
@@ -100,20 +100,20 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[optionalMajors]]`optionalMajors`|`Array of String`|-
-|[[optionalServices]]`optionalServices`|`Array of String`|-
-|[[optionalTasks]]`optionalTasks`|`Array of link:dataobjects.html#TrainTask[TrainTask]`|-
-|[[order]]`order`|`Number (int)`|-
-|[[orgProperty]]`orgProperty`|`String`|-
-|[[orgType]]`orgType`|`String`|-
-|[[physicalLevel]]`physicalLevel`|`String`|-
-|[[troopCategory]]`troopCategory`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[optionalMajors]]`@optionalMajors`|`Array of String`|-
+|[[optionalServices]]`@optionalServices`|`Array of String`|-
+|[[optionalTasks]]`@optionalTasks`|`Array of link:dataobjects.html#TrainTask[TrainTask]`|-
+|[[order]]`@order`|`Number (int)`|-
+|[[orgProperty]]`@orgProperty`|`String`|-
+|[[orgType]]`@orgType`|`String`|-
+|[[physicalLevel]]`@physicalLevel`|`String`|-
+|[[troopCategory]]`@troopCategory`|`String`|-
 |===
 
 [[OrgProperty]]
@@ -124,14 +124,14 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[optionalMajors]]`optionalMajors`|`Array of String`|-
-|[[order]]`order`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[optionalMajors]]`@optionalMajors`|`Array of String`|-
+|[[order]]`@order`|`Number (int)`|-
 |===
 
 [[Organization]]
@@ -142,33 +142,33 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[address]]`address`|`String`|-
-|[[altitude]]`altitude`|`Number (Double)`|-
-|[[childrenIds]]`childrenIds`|`Array of String`|-
-|[[deleted]]`deleted`|`Boolean`|-
-|[[displayName]]`displayName`|`String`|-
-|[[expireDate]]`expireDate`|`Number (Long)`|-
-|[[id]]`id`|`String`|-
-|[[important]]`important`|`Boolean`|-
-|[[latitude]]`latitude`|`Number (Double)`|-
-|[[longitude]]`longitude`|`Number (Double)`|-
-|[[name]]`name`|`String`|-
-|[[orgCategory]]`orgCategory`|`String`|-
-|[[orgCode]]`orgCode`|`String`|-
-|[[orgMajors]]`orgMajors`|`Array of String`|-
-|[[orgProperty]]`orgProperty`|`String`|-
-|[[orgSequence]]`orgSequence`|`Number (int)`|-
-|[[orgType]]`orgType`|`String`|-
-|[[parentId]]`parentId`|`String`|-
-|[[parentIds]]`parentIds`|`Array of String`|-
-|[[planSodierCount]]`planSodierCount`|`Number (int)`|-
-|[[serviceType]]`serviceType`|`String`|-
-|[[specialMission]]`specialMission`|`String`|-
-|[[temp]]`temp`|`Boolean`|-
+|[[address]]`@address`|`String`|-
+|[[altitude]]`@altitude`|`Number (Double)`|-
+|[[childrenIds]]`@childrenIds`|`Array of String`|-
+|[[deactivated]]`@deactivated`|`Boolean`|-
+|[[deactivatedAt]]`@deactivatedAt`|`Number (Long)`|-
+|[[displayName]]`@displayName`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[important]]`@important`|`Boolean`|-
+|[[latitude]]`@latitude`|`Number (Double)`|-
+|[[longitude]]`@longitude`|`Number (Double)`|-
+|[[name]]`@name`|`String`|-
+|[[nodeCode]]`@nodeCode`|`Number (int)`|-
+|[[orgCategory]]`@orgCategory`|`String`|-
+|[[orgCode]]`@orgCode`|`String`|-
+|[[orgMajors]]`@orgMajors`|`Array of String`|-
+|[[orgProperty]]`@orgProperty`|`String`|-
+|[[orgSequence]]`@orgSequence`|`Number (int)`|-
+|[[orgType]]`@orgType`|`String`|-
+|[[parentId]]`@parentId`|`String`|-
+|[[parentIds]]`@parentIds`|`Array of String`|-
+|[[planSodierCount]]`@planSodierCount`|`Number (int)`|-
+|[[serviceType]]`@serviceType`|`String`|-
+|[[specialMission]]`@specialMission`|`String`|-
 |===
 
 [[PlaceType]]
@@ -179,13 +179,13 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
 |===
 
 [[Position]]
@@ -196,17 +196,17 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[commander]]`commander`|`Boolean`|-
-|[[id]]`id`|`String`|-
-|[[master]]`master`|`Boolean`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|[[orgCategory]]`orgCategory`|`String`|-
-|[[orgSequence]]`orgSequence`|`Number (int)`|-
+|[[commander]]`@commander`|`Boolean`|-
+|[[id]]`@id`|`String`|-
+|[[master]]`@master`|`Boolean`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
+|[[orgCategory]]`@orgCategory`|`String`|-
+|[[orgSequence]]`@orgSequence`|`Number (int)`|-
 |===
 
 [[SpecialMission]]
@@ -217,13 +217,13 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
 |===
 
 [[SportCategory]]
@@ -234,13 +234,13 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
 |===
 
 [[StageTime]]
@@ -251,12 +251,12 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[months]]`months`|`Number (Double)`|-
-|[[task]]`task`|`String`|-
+|[[months]]`@months`|`Number (Double)`|-
+|[[task]]`@task`|`String`|-
 |===
 
 [[SupporterMajor]]
@@ -267,13 +267,13 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
 |===
 
 [[TrainSection]]
@@ -284,17 +284,17 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[code]]`code`|`String`|-
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[orgCategories]]`orgCategories`|`Array of String`|-
-|[[orgTypes]]`orgTypes`|`Array of String`|-
-|[[personProperties]]`personProperties`|`Array of String`|-
-|[[standardName]]`standardName`|`String`|-
+|[[code]]`@code`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[orgCategories]]`@orgCategories`|`Array of String`|-
+|[[orgTypes]]`@orgTypes`|`Array of String`|-
+|[[personProperties]]`@personProperties`|`Array of String`|-
+|[[standardName]]`@standardName`|`String`|-
 |===
 
 [[TrainStageTime]]
@@ -305,15 +305,15 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[majors]]`majors`|`Array of String`|-
-|[[orgCategories]]`orgCategories`|`Array of String`|-
-|[[stageTimes]]`stageTimes`|`Array of link:dataobjects.html#StageTime[StageTime]`|-
-|[[standardName]]`standardName`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[majors]]`@majors`|`Array of String`|-
+|[[orgCategories]]`@orgCategories`|`Array of String`|-
+|[[stageTimes]]`@stageTimes`|`Array of link:dataobjects.html#StageTime[StageTime]`|-
+|[[standardName]]`@standardName`|`String`|-
 |===
 
 [[TrainStandard]]
@@ -324,15 +324,15 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[endTime]]`endTime`|`Number (Long)`|-
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[startTime]]`startTime`|`Number (Long)`|-
-|[[state]]`state`|`Number (int)`|-
+|[[endTime]]`@endTime`|`Number (Long)`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[startTime]]`@startTime`|`Number (Long)`|-
+|[[state]]`@state`|`Number (int)`|-
 |===
 
 [[TrainStep]]
@@ -343,16 +343,16 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|[[orgType]]`orgType`|`String`|-
-|[[priority]]`priority`|`Number (int)`|-
-|[[trainUnits]]`trainUnits`|`Array of Number (Integer)`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
+|[[orgType]]`@orgType`|`String`|-
+|[[priority]]`@priority`|`Number (int)`|-
+|[[trainUnits]]`@trainUnits`|`Array of Number (Integer)`|-
 |===
 
 [[TrainTask]]
@@ -363,12 +363,12 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[name]]`name`|`String`|-
-|[[optionalSubjects]]`optionalSubjects`|`Array of String`|-
+|[[name]]`@name`|`String`|-
+|[[optionalSubjects]]`@optionalSubjects`|`Array of String`|-
 |===
 
 [[TrainerLevel]]
@@ -379,14 +379,14 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
-|[[scoreReq]]`scoreReq`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
+|[[scoreReq]]`@scoreReq`|`Number (int)`|-
 |===
 
 [[WeatherType]]
@@ -397,12 +397,12 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[id]]`id`|`String`|-
-|[[name]]`name`|`String`|-
-|[[order]]`order`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[order]]`@order`|`Number (int)`|-
 |===
 

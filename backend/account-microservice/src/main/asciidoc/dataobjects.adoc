@@ -8,12 +8,12 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[actions]]`actions`|`Array of link:enums.html#Action[Action]`|-
-|[[schemaName]]`schemaName`|`String`|-
+|[[actions]]`@actions`|`Array of link:enums.html#Action[Action]`|-
+|[[schemaName]]`@schemaName`|`String`|-
 |===
 
 [[Role]]
@@ -24,19 +24,19 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[buildIn]]`buildIn`|`Boolean`|-
-|[[createdTime]]`createdTime`|`Number (Long)`|-
-|[[description]]`description`|`String`|-
-|[[displayName]]`displayName`|`String`|-
-|[[id]]`id`|`String`|-
-|[[level]]`level`|`Number (int)`|-
-|[[permissions]]`permissions`|`Array of link:dataobjects.html#Permission[Permission]`|-
-|[[roleName]]`roleName`|`String`|-
-|[[updatedTime]]`updatedTime`|`Number (Long)`|-
+|[[buildIn]]`@buildIn`|`Boolean`|-
+|[[createdTime]]`@createdTime`|`Number (Long)`|-
+|[[description]]`@description`|`String`|-
+|[[displayName]]`@displayName`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[level]]`@level`|`Number (int)`|-
+|[[permissions]]`@permissions`|`Array of link:dataobjects.html#Permission[Permission]`|-
+|[[roleName]]`@roleName`|`String`|-
+|[[updatedTime]]`@updatedTime`|`Number (Long)`|-
 |===
 
 [[User]]
@@ -47,25 +47,25 @@
 ++++
 '''
 
-[cols=">25%,^25%,50%"]
+[cols=">25%,25%,50%"]
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[buildIn]]`buildIn`|`Boolean`|-
-|[[createdTime]]`createdTime`|`Number (Long)`|-
-|[[description]]`description`|`String`|-
-|[[email]]`email`|`String`|-
-|[[firstName]]`firstName`|`String`|-
-|[[fullName]]`fullName`|`String`|-
-|[[id]]`id`|`String`|-
-|[[lastName]]`lastName`|`String`|-
-|[[organizationId]]`organizationId`|`String`|-
-|[[parentOrgIds]]`parentOrgIds`|`Array of String`|-
-|[[password]]`password`|`String`|-
-|[[phone]]`phone`|`String`|-
-|[[roleLevel]]`roleLevel`|`Number (int)`|-
-|[[roleName]]`roleName`|`String`|-
-|[[updatedTime]]`updatedTime`|`Number (Long)`|-
-|[[username]]`username`|`String`|-
+|[[buildIn]]`@buildIn`|`Boolean`|-
+|[[createdTime]]`@createdTime`|`Number (Long)`|-
+|[[description]]`@description`|`String`|-
+|[[email]]`@email`|`String`|-
+|[[firstName]]`@firstName`|`String`|-
+|[[fullName]]`@fullName`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[lastName]]`@lastName`|`String`|-
+|[[organizationId]]`@organizationId`|`String`|-
+|[[parentOrgIds]]`@parentOrgIds`|`Array of String`|-
+|[[password]]`@password`|`String`|-
+|[[phone]]`@phone`|`String`|-
+|[[roleLevel]]`@roleLevel`|`Number (int)`|-
+|[[roleName]]`@roleName`|`String`|-
+|[[updatedTime]]`@updatedTime`|`Number (Long)`|-
+|[[username]]`@username`|`String`|-
 |===
 
