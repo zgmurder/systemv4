@@ -4,6 +4,8 @@
 
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
+    <ModuleSelect style="flex:2" class="module-container" />
+
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
@@ -22,8 +24,14 @@
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <i class="el-icon-caret-bottom" /> -->
+          <el-tooltip :content="name" effect="dark" placement="bottom">
+            <span>{{ handleName }}</span>
+          <!-- <size-select class="international right-menu-item"/> -->
+          </el-tooltip>
           <i class="el-icon-caret-bottom" />
+
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
@@ -54,6 +62,7 @@ import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
 import Search from '@/components/HeaderSearch'
+import ModuleSelect from '@/components/ModuleSelect'
 
 export default {
   components: {
@@ -63,7 +72,8 @@ export default {
     Screenfull,
     SizeSelect,
     LangSelect,
-    Search
+    Search,
+    ModuleSelect
   },
   computed: {
     ...mapGetters([
@@ -71,7 +81,10 @@ export default {
       'name',
       'avatar',
       'device'
-    ])
+    ]),
+    handleName() {
+      return this.name.length > 5 ? `...${this.name.slice(this.name.length - 5)}` : this.name
+    }
   },
   methods: {
     toggleSideBar() {
@@ -88,26 +101,39 @@ export default {
 <style lang="scss" scoped>
 .navbar {
   height: 50px;
+  display: flex;
+  align-items: stretch;
+  line-height: 50px;
   overflow: hidden;
   position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
-
+  .module-container{
+    flex: 2;
+    display: flex;
+    justify-content: flex-end;
+    border-right: 1px dashed #E4E7ED;
+    // border-left: 1px dashed #E4E7ED;
+    margin-right: 50px;
+    padding-right: 58px;
+    /deep/ .el-tabs__nav-wrap::after{
+      height: 0;
+    }
+  }
   .hamburger-container {
-    line-height: 46px;
-    height: 100%;
-    float: left;
+    // line-height: 46px;
+    // height: 100%;
+    // float: left;
     cursor: pointer;
     transition: background .3s;
     -webkit-tap-highlight-color:transparent;
-
     &:hover {
       background: rgba(0, 0, 0, .025)
     }
   }
 
   .breadcrumb-container {
-    float: left;
+    // float: left;
   }
 
   .errLog-container {
@@ -116,9 +142,9 @@ export default {
   }
 
   .right-menu {
-    float: right;
-    height: 100%;
-    line-height: 50px;
+    // float: right;
+    // height: 100%;
+    // line-height: 50px;
 
     &:focus {
       outline: none;
@@ -144,26 +170,6 @@ export default {
 
     .avatar-container {
       margin-right: 30px;
-
-      .avatar-wrapper {
-        margin-top: 5px;
-        position: relative;
-
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
-
-        .el-icon-caret-bottom {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
-      }
     }
   }
 }

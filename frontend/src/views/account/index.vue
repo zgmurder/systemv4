@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <form-and-table url="/account/users" :columns="columns" :schema="schema" :no-handle="noHandle" @cell-mouse-enter="()=>false" />
+    <form-and-table url="/account/user" :columns="columns" :schema="schema" :no-handle="noHandle" @cell-mouse-enter="()=>false" />
   </div>
 </template>
 
@@ -8,6 +8,7 @@
 import formAndTable from '@/components/formAndTable'
 import { queryRoles } from '@/api/account'
 import { queryOrgs } from '@/api/org'
+
 export default {
   components: {
     formAndTable
@@ -51,7 +52,6 @@ export default {
           width: '100%',
           onChange: (item, obj) => {
             this.org = { ...obj }
-            console.log(this.org)
             const initArr = [obj.value, '123456', '123456', '']
             this.schema.forEach((item, index) => {
               if (index) item[item.vModel] = initArr[index - 1]
@@ -142,7 +142,6 @@ export default {
     beforeSubmit(target) {
       target.organizationId = this.org.id
       target.parentOrgIds = this.org.parentIds
-      console.log(target)
     },
     beforeEdit(target) {
       this.org = { ...(target.organization || {}) }

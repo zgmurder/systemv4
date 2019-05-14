@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 
-export function queryListAndTotal(url = '/account/users', { where = {}, option = {}} = {}) {
+export function queryListAndTotal(url, { where = {}, option = {}} = {}) {
+  url = url + 's'
   return Promise.all([
     request({
       url,

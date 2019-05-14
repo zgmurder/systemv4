@@ -30,6 +30,11 @@ router.beforeEach(async(to, from, next) => {
       // determine whether the user has obtained his permission roles through getInfo
       const hasRoles = store.getters.roleName
       if (hasRoles) {
+        console.log(to)
+        if (to.matched[0]) {
+          const name = (to.matched[0].meta || {}).belong
+          store.commit('permission/SET_MODULENAME', name)
+        }
         next()
       } else {
         try {
@@ -39,10 +44,14 @@ router.beforeEach(async(to, from, next) => {
           console.log(store.getters.permissions)
 
           // generate accessible routes map based on roles
+          // await store.dispatch('permission/getModules', roleName)
           const accessRoutes = await store.dispatch('permission/generateRoutes', roleName)
 
           // dynamically add accessible routes
+          // console.log(accessRoutes)
+          // console.log(store.getters.addRoutes, 111)
           router.addRoutes(accessRoutes)
+          // console.log(router)
 
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record

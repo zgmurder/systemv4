@@ -212,7 +212,7 @@ class MilitaryRank {
     private String id;
     private String name;            // 军衔名称
     private String rankLevel1;      // 军衔1级分类：区分义务兵、士官、军官
-    private String rankLevel2;      // 军衔2级分类：比如尉官、校官、将官等
+    private String rankLevel2;      // 军衔2级分类：比如义务兵、初级士官、中级士官、高级士官、尉官、校官、将官等
     private int order;              // 军衔等级排序码
 }
 ```

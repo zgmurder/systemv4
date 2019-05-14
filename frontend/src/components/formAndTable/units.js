@@ -15,3 +15,6 @@ export const cloneDeep = obj => {
   }
   return deepCopy(obj)
 }
+export const handleText = (text) => {
+  if (typeof text === 'boolean') return text ? '是' : ''
+}
