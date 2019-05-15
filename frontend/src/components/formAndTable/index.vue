@@ -1,6 +1,6 @@
 
 <template>
-  <div class="property">
+  <div class="form-and-table">
     <div ref="search" class="search">
       <el-input v-model="where[filterName]" size="mini" placeholder="请输入内容" clearable @input="handleSearch">
         <el-select slot="prepend" v-model="filterName" closed style="width:120px" placeholder="请选择">
@@ -36,13 +36,14 @@
       />
     </div>
     <el-dialog
-      :title="id?'修改数据':'添加数据'"
+      class="my-dialog"
       :append-to-body="true"
       :close-on-click-modal="false"
       :visible.sync="dialogVisible"
-      width="80%"
+      width="60%"
       @close="dialogIsClose"
     >
+      <div slot="title">{{ id?'修改数据':'添加数据' }}</div>
       <formSchema ref="formSchema" :schema="schema" :editing="!!id" @formFinish="formFinish" />
     </el-dialog>
     <!-- <div ref="search" class="search">
@@ -209,7 +210,17 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.my-dialog{
+  /deep/ .el-dialog__header{
+    background: #304156;
+    color:#fff;
+    padding: 15px;
+    .el-dialog__headerbtn{
+      top: 15px
+    }
+  }
+}
 .btn-and-page{
   display: flex;
   justify-content:space-between;
