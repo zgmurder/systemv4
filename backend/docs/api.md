@@ -362,3 +362,73 @@ Initial(0),
 Activated(1),
 Stopped(2);
 ```
+
+
+## 资源管理(resource)
+
+### 单位管理(Organization)
+```java
+class Organization {
+  private String id;
+  private String name;              // 单位短名称，手动录入
+  private String displayName;       // 单位完整名称(后端自动生成)
+  private int nodeCode;             // 单位同级排序码，手动录入
+  private String orgCode;           // 单位完整排序码，自动生成
+  private String parentId;          // 父单位ID，页面手动选择
+  private List<String> parentIds = new ArrayList<>();   // 上级单位ID列表，自动生成
+  private List<String> childrenIds = new ArrayList<>(); // 直属子单位ID列表,自动生成
+  private int orgSequence;          // 编制序列，手动选择
+  private String orgType;           // 单位类型，手动选择
+  private String orgCategory;       // 单位分类，手动选择
+  private String orgProperty;       // 单位属性，根据单位分类自动设置(前端)
+  private String serviceType;       // 勤务类型，根据单位分类进行获取后选择
+  private List<String> orgMajors;   // 专业类型，根据单位分类进行获取后选择
+  private Boolean important;        // 重要任务方向部队标志
+  private String specialMission;    // 重要任务方向部队类型
+  private int planSodierCount;      // 不填
+  private String address;           // 地址，手动录入
+  private Double longitude;   // 经度
+  private Double latitude;    // 维度
+  private Double altitude;    // 海拔高度
+
+  private Boolean deactivated;  // 停用标志，通过单独的停用按钮来触发
+  private Long deactivatedAt;   // 失效时间
+}
+```
+
+1. Add
+URL: POST http://127.0.0.1:8080/api/resource/organization
+BODY: json object
+
+2. Fetch Item
+URL: GET http://127.0.0.1:8080/api/resource/organization/[id or displayName]
+BODY: empty
+
+3. Query List
+URL: POST http://127.0.0.1:8080/api/resource/organizations
+BODY: MongoDB query condition
+{
+    "where": {...}
+    "option": {
+        "fields": [...],
+        "sort": {...}
+        "skip": 0,
+        "limit": 10
+    }
+}
+
+4. Update Item
+URL: PATCH http://127.0.0.1:8080/api/resource/organization/[id or displayName]
+BODY: json object
+
+5. Delete Item
+URL: DELETE http://127.0.0.1:8080/api/resource/organization/[id or displayName]
+BODY: empty
+
+6. 同级单位交换顺序
+URL: POST http://127.0.0.1:8080/api/resource/organization/swap/[id or displayName]
+BODY: { id: String }
+
+7. 停用或重用单位
+URL: POST http://127.0.0.1:8080/api/resource/organization/deactivate/[id or displayName]
+BODY: { deactivate: Boolean }
