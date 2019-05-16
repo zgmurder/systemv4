@@ -86,7 +86,7 @@ export default {
     }
   },
   async created() {
-    this.schemaOrgProperty.options = await queryList('dictionary/orgpropertys')
+    this.schemaOrgProperty.options = await queryList('dictionary/orgproperty')
     // console.log(this.schemaOrgProperty.options)
     this._schemaLength = this.schema.length
   },

@@ -35,6 +35,7 @@ const mutations = {
   },
   SET_ORGANIZATION: (state, organization) => {
     state.organization = organization
+    console.log(state.organization, 333)
   },
   SET_PERMISSIONS: (state, permissions) => {
     state.permissions = permissions
@@ -54,15 +55,16 @@ const actions = {
     const username = userInfo.username.trim()
     const { user, token } = await login({ username, password })
     setToken(token)
+
     commit('SET_TOKEN', token)
-    if (user.organizationId) {
-      user.organization = await getOrg(user.organizationId)
-    }
+    user.organization = await getOrg(user.organizationId)
+    console.log(user.organization, 222)
+
     setUser(JSON.stringify(user))
     return { user, token }
   },
 
-  saveToVuex({ commit, state }, user) {
+  saveToVuex({ commit }, user) {
     return new Promise((resolve) => {
       commit('SET_NAME', user.username)
       commit('SET_ROLENAME', user.roleName)
@@ -76,7 +78,6 @@ const actions = {
     this.dispatch('user/saveToVuex', {}).then(() => {
       removeUser()
       removeToken()
-      window.location.reload()
     })
   },
 

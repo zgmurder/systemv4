@@ -19,7 +19,7 @@ import './permission' // permission control
 import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
-
+import tools from './utils/tools'
 /**
  * If you don't want to use mock-server
  * you want to use mockjs for request interception
@@ -39,7 +39,7 @@ Object.keys(filters).forEach(key => {
 })
 
 Vue.config.productionTip = false
-
+Vue.prototype.$tools = tools
 new Vue({
   el: '#app',
   router,

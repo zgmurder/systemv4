@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { queryFirst } from './baseApi'
 
 export function login(data) {
   return request({
@@ -22,9 +23,18 @@ export function logout() {
     method: 'post'
   })
 }
-export function getOrg(id) {
-  return request({
-    url: `/army/organization/${id}`,
-    method: 'get'
+const getRootOrg = () => {
+  return queryFirst(`/resource/organizations`, {
+    where: {
+      'parentId': {
+        '$exists': false
+      }
+    }
   })
+}
+export function getOrg(id) {
+  return id ? request({
+    url: `/resource/organization/${id}`,
+    method: 'get'
+  }) : getRootOrg()
 }
