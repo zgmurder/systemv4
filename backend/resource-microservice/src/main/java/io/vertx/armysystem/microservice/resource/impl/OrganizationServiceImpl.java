@@ -461,9 +461,9 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
   private Future<Void> validateParams(Organization organization, Boolean forAdd) {
     Future<Void> future = Future.future();
 
-    Boolean orgSeqCheck;
-    Boolean orgTypeCheck;
     Boolean failed = false;
+
+    System.out.println("validateParams " + organization);
 
     if (forAdd) {
       failed = failed || organization.getName() == null || organization.getName().isEmpty();
@@ -471,14 +471,14 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
       failed = failed || !(Arrays.stream(OrgSequence.values())
           .anyMatch(os -> os.getValue() == organization.getOrgSequence()));
       failed = failed || !(Arrays.stream(OrgType.values())
-          .anyMatch(ot -> ot.getName() == organization.getOrgType()));
+          .anyMatch(ot -> ot.getName().equals(organization.getOrgType())));
     } else {
       failed = failed || !((organization.getOrgSequence() == 0) ||
           Arrays.stream(OrgSequence.values())
               .anyMatch(os -> os.getValue() == organization.getOrgSequence()));
       failed = failed || !((organization.getOrgType() == null) ||
           Arrays.stream(OrgType.values())
-          .anyMatch(ot -> ot.getName() == organization.getOrgType()));
+          .anyMatch(ot -> ot.getName().equals(organization.getOrgType())));
     }
 
 

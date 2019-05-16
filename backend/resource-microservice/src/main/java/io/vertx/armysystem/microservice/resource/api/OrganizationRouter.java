@@ -49,6 +49,8 @@ public class OrganizationRouter extends RouterBase {
   private void apiAddItem(RoutingContext context, JsonObject principal) {
     JsonObject object = context.getBodyAsJson();
 
+    System.out.println("OrganizationRouter apiAddItem " + object);
+
     if (object == null || object.getString("name") == null || object.getInteger("nodeCode") == 0) {
       verticle.badRequest(context, new IllegalArgumentException("Invalid parameters"));
     } else {
