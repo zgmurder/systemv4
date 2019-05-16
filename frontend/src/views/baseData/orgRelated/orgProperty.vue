@@ -16,13 +16,13 @@ export default {
   data() {
     return {
       columns: [
-        { prop: 'order', label: '排序', width: '50', noFilter: true },
+        { prop: 'order', label: '序号', width: '50', noFilter: true },
         { prop: 'name', label: '单位属性名称', width: '180' },
-        { prop: 'optionalMajors', label: '该单位可选专业' }],
+        { prop: 'optionalMajors', label: '该单位可选专业', handleValue: value => value && value.join('、') }],
       schema: [
         { fieldType: 'input', placeholder: '单位属性', label: '单位属性', vModel: 'name', required: true },
-        { fieldType: 'input-number', placeholder: '排序码', label: '排序码', vModel: 'order', order: 0 },
-        { fieldType: 'input', width: '100%', placeholder: '可选专业', label: '可选专业', vModel: 'optionalMajors' }
+        { fieldType: 'input', width: '100%', placeholder: '可选专业', label: '可选专业', vModel: 'optionalMajors' },
+        { fieldType: 'input-number', placeholder: '排序码', label: '排序码', vModel: 'order', order: 0 }
       ]
     }
   },
@@ -34,7 +34,8 @@ export default {
       target.optionalMajors = target.optionalMajors.toString()
     },
     dialogVisible(count = 0) {
-      this.schema[1].order = count + 1
+      const obj = this.schema.find(item => item.vModel === 'order')
+      obj.order = count + 1
     }
   }
 }

@@ -1,12 +1,15 @@
 
 <template>
-  <div class="property">
+  <div class="form-and-table">
     <div ref="search" class="search">
-      <el-input v-model="where[filterName]" size="mini" placeholder="请输入内容" clearable @input="handleSearch">
-        <el-select slot="prepend" v-model="filterName" closed style="width:120px" placeholder="请选择">
-          <el-option v-for="(item,index) in searchColumns" :key="index" :label="item.searchLabel || item.label" :value="item.prop" />
-        </el-select>
-      </el-input>
+      <div>
+        <el-input v-model="where[filterName]" size="mini" placeholder="请输入内容" clearable @input="handleSearch">
+          <el-select slot="prepend" v-model="filterName" closed style="width:120px" placeholder="请选择">
+            <el-option v-for="(item,index) in searchColumns" :key="index" :label="item.searchLabel || item.label" :value="item.prop" />
+          </el-select>
+        </el-input>
+      </div>
+      <el-button v-show="btnShow" class="btn" size="small" type="primary" icon="el-icon-plus" @click="()=>{dialogVisible = true,$emit('dialogVisible',total)}" />
     </div>
     <tableSchema
       :data="tableList"
@@ -22,8 +25,8 @@
       @filter-change="handleTableFilter"
 
        -->
-    <div :style="{'justify-content':btnShow?'space-between':'flex-end'}" class="btn-and-page">
-      <el-button v-show="btnShow" class="btn" type="primary" icon="el-icon-plus" circle @click="()=>{dialogVisible = true,$emit('dialogVisible',total)}" />
+    <!--  :style="{'justify-content':btnShow?'space-between':'flex-end'}" -->
+    <div class="btn-and-page">
       <el-pagination
         :current-page.sync="options.skip"
         :page-sizes="[10, 20, 50, 100]"
@@ -36,13 +39,14 @@
       />
     </div>
     <el-dialog
-      :title="id?'修改数据':'添加数据'"
+      class="my-dialog"
       :append-to-body="true"
       :close-on-click-modal="false"
       :visible.sync="dialogVisible"
-      width="80%"
+      width="60%"
       @close="dialogIsClose"
     >
+      <div slot="title">{{ id?'修改数据':'添加数据' }}</div>
       <formSchema ref="formSchema" :schema="schema" :editing="!!id" @formFinish="formFinish" />
     </el-dialog>
     <!-- <div ref="search" class="search">
@@ -209,20 +213,22 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .btn-and-page{
   display: flex;
-  justify-content:space-between;
+  justify-content:flex-end;
   padding:10px;
   }
 .search{
     // position:fixed;
     // top:0;
     // left:50%;
-    // display:flex;
-    // justify-content: end;
-    // padding: 10px;
-    float: right;
-    margin: 15px 0;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    background: #eee
+    // float: right;
 }
 </style>

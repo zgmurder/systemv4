@@ -1,26 +1,21 @@
 import request from '@/utils/request'
-
-export function queryListAndTotal(url, { where = {}, option = {}} = {}) {
-  url = url + 's'
-  return Promise.all([
-    request({
-      url,
-      method: 'post',
-      data: { where, option }
-    }),
-    request({
-      url: url + '/count',
-      method: 'post',
-      data: { where, option }
-    })
-  ]).then(([list, { count }]) => ({ list, total: count }))
-}
-export function queryList(url, { where = {}, option = {}} = {}) {
+export function queryList(url, { where = {}, option = {}} = {}, { isTotal = false, isFirst = false } = {}) {
+  url = isTotal ? url + 's/count' : url + 's'
+  option = isFirst ? { ...option, limit: 1 } : option
   return request({
     url,
     method: 'post',
     data: { where, option }
   })
+}
+export function queryListAndTotal() {
+  return Promise.all([
+    queryList(...arguments),
+    queryList(...arguments, { isTotal: true })
+  ]).then(([list, { count }]) => ({ list, total: count }))
+}
+export function queryFirst() {
+  return queryList(...arguments, { isFirst: true }).then(dataArr => dataArr[0])
 }
 
 export function deleteItem(url, id) {

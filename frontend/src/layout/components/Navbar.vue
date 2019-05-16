@@ -83,7 +83,8 @@ export default {
       'device'
     ]),
     handleName() {
-      return this.name.length > 5 ? `...${this.name.slice(this.name.length - 5)}` : this.name
+      const name = this.name || ''
+      return name.length > 5 ? `...${name.slice(name.length - 5)}` : name
     }
   },
   methods: {
@@ -92,7 +93,9 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      window.location.reload()
+
+      // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
 }

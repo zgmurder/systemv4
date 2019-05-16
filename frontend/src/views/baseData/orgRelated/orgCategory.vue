@@ -17,14 +17,14 @@ export default {
   data() {
     return {
       columns: [
-        { prop: 'order', label: '排序', width: '50', noFilter: true },
+        { prop: 'order', label: '序号', width: '50', noFilter: true },
         { prop: 'name', label: '单位名称', style: { color: '#67C23A' }},
-        { prop: 'orgType', label: '单位类型', style: { color: '#F56C6C' }},
-        { prop: 'orgProperty', label: '单位属性' },
-        { prop: 'troopCategory', label: '兵种类型' },
-        { prop: 'physicalLevel', label: '体能等级', style: { color: '#E6A23C' }},
-        { prop: 'optionalMajors', label: '可选专业' },
-        { prop: 'optionalServices', label: '勤务分类' },
+        { prop: 'orgType', label: '单位类型', width: '80', style: { color: '#F56C6C' }},
+        { prop: 'orgProperty', label: '单位属性', width: '80' },
+        { prop: 'troopCategory', label: '兵种类型', width: '80' },
+        { prop: 'physicalLevel', label: '体能等级', style: { color: '#E6A23C' }, width: '80' },
+        { prop: 'optionalMajors', label: '可选专业', handleValue: value => value && value.join('、') },
+        { prop: 'optionalServices', label: '勤务分类', handleValue: value => value && value.join('、') },
         { prop: 'optionalTasks',
           label: '任务种类',
           handleValue: (value) => value.map(item => item.optionalSubjects.length ? `${item.name}：${item.optionalSubjects.join('、')}` : item.name).join('；')
@@ -32,7 +32,6 @@ export default {
       ],
       schema: [
         { fieldType: 'input', placeholder: '单位名称', label: '单位名称', vModel: 'name', required: true },
-        { fieldType: 'input-number', placeholder: '排序码', label: '排序码', vModel: 'order', required: true, order: 0 },
         { fieldType: 'select', placeholder: '单位类型', label: '单位类型', vModel: 'orgType', orgType: '分队', required: true, options: Object.values(OrgType) },
         { fieldType: 'select', placeholder: '单位属性', label: '单位属性', vModel: 'orgProperty', filterable: true, required: true, orgProperty: '', options: [], onChange: (obj, value, found) => {
           this.schemaOptionalMajors.optionalMajors = []
@@ -45,8 +44,10 @@ export default {
         { fieldType: 'select', width: '100%', placeholder: '专业类型', label: '专业类型', vModel: 'optionalMajors', options: [], optionalMajors: [], multiple: true },
         { fieldType: 'select', placeholder: '军兵种类型', label: '兵种类型', vModel: 'troopCategory', troopCategory: '地面人员', required: true, options: Object.values(TroopCategory) },
         { fieldType: 'select', placeholder: '体能等级', label: '体能等级', vModel: 'physicalLevel', physicalLevel: '二类人员', required: true, options: Object.values(PhysicalLevel) },
+        { fieldType: 'input-number', placeholder: '排序码', label: '排序码', vModel: 'order', order: 0 },
         { fieldType: 'select', width: '100%', placeholder: '输入按回车结束', label: '勤务分类', vModel: 'optionalServices', optionalServices: [], filterable: true, allowCreate: true, multiple: true, noDataText: '输入可按回车结束' },
         { fieldType: 'select', width: '100%', placeholder: '输入按回车结束', label: '任务种类', vModel: 'optionalTasks', optionalTasks: [], filterable: true, allowCreate: true, multiple: true, noDataText: '输入可按回车结束' }
+
       ]
     }
   },
@@ -85,7 +86,7 @@ export default {
     }
   },
   async created() {
-    this.schemaOrgProperty.options = await queryList('dictionary/orgpropertys')
+    this.schemaOrgProperty.options = await queryList('dictionary/orgproperty')
     // console.log(this.schemaOrgProperty.options)
     this._schemaLength = this.schema.length
   },

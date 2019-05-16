@@ -14,18 +14,19 @@ export default {
   data() {
     return {
       columns: [
-        { prop: 'order', label: '排序', width: '50', noFilter: true },
+        { prop: 'order', label: '序号', width: '50', noFilter: true },
         { prop: 'name', label: '课目类型' }
       ],
       schema: [
-        { fieldType: 'input-number', placeholder: '排序码', label: '排序码', vModel: 'order', order: 0 },
-        { fieldType: 'input', placeholder: '课目类型', label: '课目类型', vModel: 'name', name: '', required: true }
+        { fieldType: 'input', placeholder: '课目类型', label: '课目类型', vModel: 'name', name: '', required: true },
+        { fieldType: 'input-number', placeholder: '排序码', label: '排序码', vModel: 'order', order: 0 }
       ]
     }
   },
   methods: {
     dialogVisible(count = 0) {
-      this.schema[0].order = count + 1
+      const obj = this.schema.find(item => item.vModel === 'order')
+      obj.order = count + 1
     }
   }
 }
