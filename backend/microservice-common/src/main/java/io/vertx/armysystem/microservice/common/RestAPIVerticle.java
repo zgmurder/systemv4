@@ -7,6 +7,8 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -28,6 +30,7 @@ import java.util.function.Function;
  * @author Derek Zheng
  */
 public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
+  private static final Logger logger = LoggerFactory.getLogger(RestAPIVerticle.class);
   protected JWTAuth authProvider;
 
   /**
@@ -41,8 +44,8 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
   protected Future<Void> createHttpServer(Router router, String host, int port) {
     Future<HttpServer> httpServerFuture = Future.future();
     vertx.createHttpServer()
-      .requestHandler(router::accept)
-      .listen(port, host, httpServerFuture.completer());
+      .requestHandler(router::handle)
+      .listen(port, host, httpServerFuture);
     return httpServerFuture.map(r -> null);
   }
 
@@ -116,15 +119,14 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
       Optional<String> token = Optional.ofNullable(context.request().getHeader("Authorization"));
       if (token.isPresent()) {
         String jwt = token.get();
-        System.out.println("token: " + token);
         if (jwt.toLowerCase().startsWith("bearer ")) jwt = jwt.substring("bearer ".length());
         // Auth
-        System.out.println("Received JWT=" + jwt);
+        logger.info("Received JWT=" + jwt);
         authProvider.authenticate(new JsonObject().put("jwt", jwt),
             ar ->{
               if (ar.succeeded() && ar.result() != null) {
                 JsonObject principal = ar.result().principal();
-                System.out.println("Authenticated principal=" + principal);
+                logger.info("Authenticated principal=" + principal);
 
                 biHandler.accept(context, new JsonObject().put("principal", principal));
               } else {
@@ -152,15 +154,14 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
       Optional<String> token = Optional.ofNullable(context.request().getHeader("Authorization"));
       if (token.isPresent()) {
         String jwt = token.get();
-        System.out.println("token: " + token);
         if (jwt.toLowerCase().startsWith("bearer ")) jwt = jwt.substring("bearer ".length());
         // Auth
-        System.out.println("Received JWT=" + jwt);
+        logger.info("Received JWT=" + jwt);
         authProvider.authenticate(new JsonObject().put("jwt", jwt),
             ar ->{
               if (ar.succeeded() && ar.result() != null) {
                 JsonObject principal = ar.result().principal();
-                System.out.println("Authenticated principal=" + principal);
+                logger.info("Authenticated principal=" + principal);
 
                 if (this.isAuthorized(principal, resource, action) || this.isAuthorized(principal, "*", action)) {
                   biHandler.accept(context, principal);
@@ -196,8 +197,8 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
 
   public JsonObject getFindCondition(RoutingContext context) {
     JsonObject condition = context.getBodyAsJson();
-    System.out.println("getFindCondition " + condition);
     if (condition == null) condition = new JsonObject();
+    logger.info("get query condition " + condition);
 
     JsonObject where = condition.getJsonObject("where");
     JsonObject option = condition.getJsonObject("option");
@@ -217,6 +218,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
   public <T> Handler<AsyncResult<T>> resultHandler(RoutingContext context, Handler<T> handler) {
     return res -> {
       if (res.succeeded()) {
+        logger.info("get result: " + res.result());
         handler.handle(res.result());
       } else {
         internalError(context, res.cause());
@@ -232,6 +234,8 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
   public <T> Handler<AsyncResult<T>> resultHandler(RoutingContext context) {
     return ar -> {
       if (ar.succeeded()) {
+        logger.info("get result: " + ar.result());
+
         T res = ar.result();
         context.response()
           .putHeader("content-type", "application/json")
@@ -257,8 +261,10 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
     return ar -> {
       if (ar.succeeded()) {
         T res = ar.result();
+        logger.info("get result: " + ar.result());
+
         if (res == null) {
-          serviceUnavailable(context, "invalid_result");
+          serviceUnavailable(context, "Invalid result");
         } else {
           context.response()
             .putHeader("content-type", "application/json")
@@ -284,6 +290,8 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
     return ar -> {
       if (ar.succeeded()) {
         T res = ar.result();
+        logger.info("get result: " + ar.result());
+
         if (res == null) {
           notFound(context);
         } else {
@@ -310,6 +318,8 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
     return ar -> {
       if (ar.succeeded()) {
         T res = ar.result();
+        logger.info("get result: " + ar.result());
+
         context.response()
           .end(res == null ? "" : res.toString());
       } else {
@@ -320,6 +330,8 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
   }
 
   public Handler<AsyncResult<Void>> resultVoidHandler(RoutingContext context, JsonObject result) {
+    logger.info("get result: " + result);
+
     return resultVoidHandler(context, result, 200);
   }
 
@@ -335,6 +347,8 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
   public Handler<AsyncResult<Void>> resultVoidHandler(RoutingContext context, JsonObject result, int status) {
     return ar -> {
       if (ar.succeeded()) {
+        logger.info("get result: " + result + " with status " + status);
+
         context.response()
           .setStatusCode(status == 0 ? 200 : status)
           .putHeader("content-type", "application/json")
@@ -349,6 +363,8 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
   public Handler<AsyncResult<Void>> resultVoidHandler(RoutingContext context, int status) {
     return ar -> {
       if (ar.succeeded()) {
+        logger.info("get status: " + status);
+
         context.response()
           .setStatusCode(status == 0 ? 200 : status)
           .putHeader("content-type", "application/json")
@@ -373,6 +389,8 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
   public Handler<AsyncResult<Void>> deleteResultHandler(RoutingContext context) {
     return res -> {
       if (res.succeeded()) {
+        logger.info("delete successfully");
+
         context.response().setStatusCode(204)
           .putHeader("content-type", "application/json")
           .end(new JsonObject().put("message", "delete_success").encodePrettily());
@@ -386,30 +404,40 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
   // helper method dealing with failure
 
   public void badRequest(RoutingContext context, Throwable ex) {
+    logger.error("badRequest: " + ex);
+
     context.response().setStatusCode(400)
       .putHeader("content-type", "application/json")
       .end(new JsonObject().put("error", ex.getMessage()).encodePrettily());
   }
 
   public void notFound(RoutingContext context) {
+    logger.error("notFound");
+
     context.response().setStatusCode(404)
       .putHeader("content-type", "application/json")
       .end(new JsonObject().put("message", "not found").encodePrettily());
   }
 
   public void internalError(RoutingContext context, Throwable ex) {
+    logger.error("badRequest: " + ex);
+
     context.response().setStatusCode(500)
       .putHeader("content-type", "application/json")
       .end(new JsonObject().put("error", ex.getMessage()).encodePrettily());
   }
 
   public void notImplemented(RoutingContext context) {
+    logger.error("notImplemented");
+
     context.response().setStatusCode(501)
       .putHeader("content-type", "application/json")
       .end(new JsonObject().put("message", "not implemented").encodePrettily());
   }
 
   public void badGateway(Throwable ex, RoutingContext context) {
+    logger.error("badGateway: " + ex);
+
     ex.printStackTrace();
     context.response()
       .setStatusCode(502)
@@ -420,28 +448,38 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
   }
 
   public void serviceUnavailable(RoutingContext context) {
+    logger.error("serviceUnavailable");
+
     context.fail(503);
   }
 
   public void serviceUnavailable(RoutingContext context, Throwable ex) {
+    logger.error("serviceUnavailable: " + ex);
+
     context.response().setStatusCode(503)
       .putHeader("content-type", "application/json")
       .end(new JsonObject().put("error", ex.getMessage()).encodePrettily());
   }
 
   public void serviceUnavailable(RoutingContext context, String cause) {
+    logger.error("serviceUnavailable: " + cause);
+
     context.response().setStatusCode(503)
       .putHeader("content-type", "application/json")
       .end(new JsonObject().put("error", cause).encodePrettily());
   }
 
   public void unauthorized(RoutingContext context, String cause) {
+    logger.error("unauthorized: " + cause);
+
     context.response().setStatusCode(401)
         .putHeader("content-type", "application/json")
         .end(new JsonObject().put("message", cause).encodePrettily());
   }
 
   public void forbidden(RoutingContext context, String cause) {
+    logger.error("forbidden: " + cause);
+
     context.response().setStatusCode(403)
         .putHeader("content-type", "application/json")
         .end(new JsonObject().put("message", cause).encodePrettily());

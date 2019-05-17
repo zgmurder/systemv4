@@ -9,20 +9,24 @@ import io.vertx.armysystem.microservice.dictionary.api.DictionaryRestAPIVerticle
 import io.vertx.armysystem.microservice.dictionary.impl.*;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.serviceproxy.ProxyHelper;
+import io.vertx.serviceproxy.ServiceBinder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class DictionaryVerticle extends BaseMicroserviceVerticle {
+  private static final Logger logger = LoggerFactory.getLogger(DictionaryVerticle.class);
   private List<CRUDService> services = new ArrayList<>();
 
   @Override
   public void start(Future<Void> future) throws Exception {
     super.start();
 
-    System.out.println("Starting DictionaryVerticle : " + config());
+    logger.info("Starting : " + config());
 
     // create the service instance
     CRUDService crudService = new GroupTrainMethodServiceImpl(vertx, config());
@@ -58,7 +62,9 @@ public class DictionaryVerticle extends BaseMicroserviceVerticle {
 
     // register the service proxy on event bus
     services.forEach(service ->
-      ProxyHelper.registerService(CRUDService.class, vertx, service, ((ServiceBase)service).getServiceAddress())
+      new ServiceBinder(vertx)
+          .setAddress(((ServiceBase)service).getServiceAddress())
+          .register(CRUDService.class, service)
     );
 
     // publish the service and REST endpoint in the discovery infrastructure
@@ -66,12 +72,12 @@ public class DictionaryVerticle extends BaseMicroserviceVerticle {
         .compose(o -> initAllDatabases())
         .compose(o -> publicServices())
         .compose(o -> deployRestVerticle())
-        .setHandler(future.completer());
+        .setHandler(future);
   }
 
   private Future<Void> initDatabase(CRUDService service) {
     Future<Void> initFuture = Future.future();
-    service.initializePersistence(initFuture.completer());
+    service.initializePersistence(initFuture);
     return initFuture;
   }
 
@@ -90,10 +96,9 @@ public class DictionaryVerticle extends BaseMicroserviceVerticle {
   private Future<Void> deployRestVerticle() {
     Future<String> future = Future.future();
     vertx.deployVerticle(new DictionaryRestAPIVerticle(services),
-        new DeploymentOptions().setConfig(config()),
-        future.completer());
+        new DeploymentOptions().setConfig(config()), future);
 
-    System.out.println("Started DictionaryVerticle...");
+    logger.info("Started");
     return future.map(r -> null);
   }
 }

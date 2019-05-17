@@ -7,6 +7,7 @@ import io.vertx.armysystem.business.common.enums.OrgType;
 import io.vertx.armysystem.business.common.resource.Organization;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
 import io.vertx.armysystem.microservice.resource.OrganizationService;
+import io.vertx.armysystem.microservice.resource.api.OrganizationRouter;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -14,6 +15,8 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.BulkOperation;
 import org.mvel2.ast.Or;
 
@@ -21,6 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class OrganizationServiceImpl extends MongoRepositoryWrapper implements OrganizationService, ServiceBase {
+  private static final Logger logger = LoggerFactory.getLogger(OrganizationRouter.class);
   private final Vertx vertx;
 
   public OrganizationServiceImpl(Vertx vertx, JsonObject config) {
@@ -79,16 +83,18 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
   public OrganizationService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
     Organization organization = new Organization(item);
 
+    logger.info("addOne " + organization);
+
     validateParams(organization, true)    // 参数检查
         .compose(o -> getParentOrg(organization.getParentId(), principal))
         .compose(parent -> {
           Future<JsonObject> future = Future.future();
 
-          System.out.println("OrganizationService addOne parent=" + parent);
+          logger.info("get parent " + parent);
 
           if (parent == null && organization.getParentId() != null) {
             // parentId not found
-            future.fail("Parent Organization not found");
+            future.fail("Not found");
           } else if (!checkPermission(parent, principal)) {
             future.fail("No permission");
           } else {
@@ -106,8 +112,6 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
 
           return future;
         }).compose(org -> {
-          System.out.println("OrganizationService addOne org=" + org);
-
           if (org.getJsonObject("parentObj") != null) {
             JsonObject parent = org.getJsonObject("parentObj");
             org.remove("parentObj");
@@ -122,7 +126,6 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
         }).compose(org -> {
           // 更新本单位的parentIds字段
           org.put("parentIds", makeParentIds(org));
-          System.out.println("OrganizationService addOne org2=" + org);
           return this.update(getCollectionName(), new JsonObject().put("_id", org.getString("id")),
               new JsonObject().put("parentIds", getParentIds(org)))
               .map(v -> org);
@@ -151,6 +154,8 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
   public OrganizationService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
     qCondition.filterByUserOrganizationV2(getCollectionName(), principal);
+    logger.info("count condition: " + qCondition);
+
     this.count(getCollectionName(), qCondition.getQuery())
         .setHandler(resultHandler);
 
@@ -166,6 +171,8 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
     }
 
     qCondition.filterByUserOrganizationV2(getCollectionName(), principal);
+    logger.info("retrieveManyByCondition condition: " + qCondition);
+
     this.findWithOptions(getCollectionName(), qCondition.getQuery(), qCondition.getOption())
         .map(list -> list.stream()
             .map(json -> new Organization(json).toJson())
@@ -185,6 +192,8 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
     item.remove("displayName");
     item.remove("deactivated");
     item.remove("deactivatedAt");
+
+    logger.info("updateOne id: " + id + " to: " + item);
 
     this.findOne(getCollectionName(), getCondition(id, principal).getQuery(), new JsonObject())
         .map(option -> option.map(Organization::new).orElse(null))
@@ -247,6 +256,8 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
   public OrganizationService deleteOne(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) {
     JsonObject query = getCondition(id, principal).getQuery();
 
+    logger.info("deleteOne id: " + id);
+
     this.findOne(getCollectionName(), query, new JsonObject())
         .map(option -> option.map(Organization::new).orElse(null))
         .compose(organization -> {
@@ -266,6 +277,8 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
   public OrganizationService swapPosition(String id, String otherId, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) {
     JsonObject query1 = getCondition(id, principal).getQuery();
     JsonObject query2 = getCondition(id, principal).getQuery();
+
+    logger.info("swapPosition " + id + "<->" + otherId);
 
     this.findOne(getCollectionName(), query1, new JsonObject())
         .map(option -> option.orElse(null))
@@ -309,6 +322,8 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
   @Override
   public OrganizationService deactivate(String id, Boolean deactivated, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) {
     JsonObject query = getCondition(id, principal).getQuery();
+
+    logger.info("deactivate " + id + " to " + deactivated);
 
     this.findOne(getCollectionName(), query, new JsonObject())
         .map(option -> option.map(Organization::new).orElse(null))
@@ -438,8 +453,6 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
       parentId = principal.getString("organizationId");
     }
 
-    System.out.println("getParentOrg " + parentId + " " + principal);
-
     if (parentId != null) {
       return this.findOne(getCollectionName(), new JsonObject().put("_id", parentId), new JsonObject())
           .otherwise(Optional.empty())
@@ -470,8 +483,6 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
     Future<Void> future = Future.future();
 
     Boolean failed = false;
-
-    System.out.println("validateParams " + organization);
 
     if (forAdd) {
       failed = failed || organization.getName() == null || organization.getName().isEmpty();

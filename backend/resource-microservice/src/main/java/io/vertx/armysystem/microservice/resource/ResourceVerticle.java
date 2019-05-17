@@ -7,16 +7,19 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.armysystem.microservice.common.BaseMicroserviceVerticle;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.serviceproxy.ServiceBinder;
 
 public class ResourceVerticle extends BaseMicroserviceVerticle {
+  private static final Logger logger = LoggerFactory.getLogger(ResourceVerticle.class);
   private OrganizationService organizationService;
 
   @Override
   public void start(Future<Void> future) throws Exception {
     super.start();
 
-    System.out.println("Starting ResourceVerticle : " + config());
+    logger.info("Starting : " + config());
 
     // create the service instance
     organizationService = new OrganizationServiceImpl(vertx, config());
@@ -34,22 +37,21 @@ public class ResourceVerticle extends BaseMicroserviceVerticle {
             ((ServiceBase)organizationService).getServiceAddress(),
             OrganizationService.class))
         .compose(servicePublished -> deployRestVerticle())
-        .setHandler(future.completer());
+        .setHandler(future);
   }
 
   private Future<Void> initOrganizationDatabase(OrganizationService service) {
     Future<Void> initFuture = Future.future();
-    service.initializePersistence(initFuture.completer());
+    service.initializePersistence(initFuture);
     return initFuture;
   }
 
   private Future<Void> deployRestVerticle() {
     Future<String> future = Future.future();
     vertx.deployVerticle(new ResourceRestAPIVerticle(organizationService),
-        new DeploymentOptions().setConfig(config()),
-        future.completer());
+        new DeploymentOptions().setConfig(config()), future);
 
-    System.out.println("Started ResourceVerticle...");
+    logger.info("Started");
     return future.map(r -> null);
   }
 }

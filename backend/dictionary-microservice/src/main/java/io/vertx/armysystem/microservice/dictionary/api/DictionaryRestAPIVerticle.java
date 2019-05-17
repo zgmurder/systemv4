@@ -7,6 +7,8 @@ import io.vertx.armysystem.microservice.common.RestAPIVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class DictionaryRestAPIVerticle extends RestAPIVerticle {
+  private static final Logger logger = LoggerFactory.getLogger(DictionaryRestAPIVerticle.class);
   private static final String SERVICE_NAME = "account-rest-api";
   private static final String PREFIX = "/";
 
@@ -28,8 +31,6 @@ public class DictionaryRestAPIVerticle extends RestAPIVerticle {
 
   @Override
   public void start(Future<Void> future) throws Exception {
-    System.out.println("Starting DictionaryRestAPIVerticle...");
-
     super.start();
     final Router router = Router.router(vertx);
     // body handler
@@ -56,18 +57,20 @@ public class DictionaryRestAPIVerticle extends RestAPIVerticle {
     String host = config().getString("http.address", "0.0.0.0");
     int port = config().getInteger("http.port", 8082);
 
-    System.out.println("port = " + port);
+    logger.info("Start dictionary api on port " + port);
 
     // create HTTP server and publish REST service
     createHttpServer(router, host, port)
         .compose(serverCreated -> publishHttpEndpoint(SERVICE_NAME, host, port))
-        .setHandler(future.completer());
+        .setHandler(future);
   }
 
   private void apiAddItem(RoutingContext context, JsonObject principal) {
     JsonObject object = context.getBodyAsJson();
 
-    if (object == null || object.getString("name") == null || object.getInteger("order") == null) {
+    logger.info("apiAddItem " + object);
+
+    if (object == null || !object.containsKey("name") || !object.containsKey("order")) {
       badRequest(context, new IllegalArgumentException("Invalid parameters"));
     } else {
       getService(context).addOne(object, principal, resultHandlerNonEmpty(context));
@@ -77,25 +80,27 @@ public class DictionaryRestAPIVerticle extends RestAPIVerticle {
   private void apiFetchItem(RoutingContext context, JsonObject principal) {
     String id = context.request().getParam("id");
 
+    logger.info("apiFetchItem " + id);
+
     getService(context).retrieveOne(id, principal, resultHandlerNonEmpty(context));
   }
 
   private void apiQueryItems(RoutingContext context, JsonObject principal) {
-    System.out.println("apiQueryItems " + context.getBodyAsJson());
+    logger.info("apiQueryItems " + context.getBodyAsJson());
 
     Future<List<JsonObject>> future = Future.future();
 
-    getService(context).retrieveManyByCondition(context.getBodyAsJson(), principal, future.completer());
+    getService(context).retrieveManyByCondition(context.getBodyAsJson(), principal, future);
 
     future.setHandler(resultHandler(context, Json::encodePrettily));
   }
 
   private void apiCountItems(RoutingContext context, JsonObject principal) {
-    System.out.println("apiCountItems " + context.getBodyAsJson());
+    logger.info("apiCountItems " + context.getBodyAsJson());
 
     Future<Long> future = Future.future();
 
-    getService(context).count(context.getBodyAsJson(), principal, future.completer());
+    getService(context).count(context.getBodyAsJson(), principal, future);
 
     future.map(c -> new JsonObject().put("count", c))
         .setHandler(resultHandlerNonEmpty(context));
@@ -104,11 +109,15 @@ public class DictionaryRestAPIVerticle extends RestAPIVerticle {
   private void apiUpdateItem(RoutingContext context, JsonObject principal) {
     String id = context.request().getParam("id");
 
+    logger.info("apiUpdateItem: id=" + id + " body=" + context.getBodyAsJson());
+
     getService(context).updateOne(id, context.getBodyAsJson(), principal, resultHandlerNonEmpty(context));
   }
 
   private void apiDeleteItem(RoutingContext context, JsonObject principal) {
     String id = context.request().getParam("id");
+
+    logger.info("apiDeleteItem " + id);
 
     getService(context).deleteOne(id, principal, deleteResultHandler(context));
   }
