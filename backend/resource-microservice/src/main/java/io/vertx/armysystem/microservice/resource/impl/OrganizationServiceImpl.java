@@ -84,6 +84,8 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
         .compose(parent -> {
           Future<JsonObject> future = Future.future();
 
+          System.out.println("OrganizationService addOne parent=" + parent);
+
           if (parent == null && organization.getParentId() != null) {
             // parentId not found
             future.fail("Parent Organization not found");
@@ -104,6 +106,8 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
 
           return future;
         }).compose(org -> {
+          System.out.println("OrganizationService addOne org=" + org);
+
           if (org.getJsonObject("parentObj") != null) {
             JsonObject parent = org.getJsonObject("parentObj");
             org.remove("parentObj");
@@ -118,8 +122,9 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
         }).compose(org -> {
           // 更新本单位的parentIds字段
           org.put("parentIds", makeParentIds(org));
+          System.out.println("OrganizationService addOne org2=" + org);
           return this.update(getCollectionName(), new JsonObject().put("_id", org.getString("id")),
-              new JsonObject().put("parentIds", makeParentIds(org)))
+              new JsonObject().put("parentIds", getParentIds(org)))
               .map(v -> org);
         }).setHandler(resultHandler);
 
@@ -246,9 +251,9 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
         .map(option -> option.map(Organization::new).orElse(null))
         .compose(organization -> {
           if (organization == null) {
-            return Future.failedFuture("No found");
+            return Future.failedFuture("Not found");
           } else if (!organization.getChildrenIds().isEmpty()){
-            return Future.failedFuture("Not allowed to delete organization with children");
+            return Future.failedFuture("Not allowed");
           } else {
             return this.removeById(getCollectionName(), organization.getId());
           }
@@ -433,15 +438,18 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
       parentId = principal.getString("organizationId");
     }
 
+    System.out.println("getParentOrg " + parentId + " " + principal);
+
     if (parentId != null) {
       return this.findOne(getCollectionName(), new JsonObject().put("_id", parentId), new JsonObject())
           .otherwise(Optional.empty())
           .map(option -> option.orElse(null));
     } else {
-      return this.findWithOptions(getCollectionName(),
-          new JsonObject().put("parentId", new JsonObject().put("$exists", false)), new JsonObject())
-          .otherwiseEmpty()
-          .map(list -> list.isEmpty() ? null : list.get(0));
+//      return this.findWithOptions(getCollectionName(),
+//          new JsonObject().put("parentId", new JsonObject().put("$exists", false)), new JsonObject())
+//          .otherwiseEmpty()
+//          .map(list -> list.isEmpty() ? null : list.get(0));
+      return Future.succeededFuture();
     }
   }
 
@@ -486,7 +494,7 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
         failed) {
       future.fail("Invalid parameter");
     } else {
-      future.succeeded();
+      future.complete();
     }
 
     return future;
