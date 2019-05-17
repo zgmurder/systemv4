@@ -51,7 +51,7 @@ public class OrganizationRouter extends RouterBase {
 
     System.out.println("OrganizationRouter apiAddItem " + object);
 
-    if (object == null || object.getString("name") == null || object.getInteger("nodeCode") == 0) {
+    if (object == null || !object.containsKey("name") || !object.containsKey("nodeCode") || object.getInteger("nodeCode") == 0) {
       verticle.badRequest(context, new IllegalArgumentException("Invalid parameters"));
     } else {
       organizationService.addOne(object, principal, verticle.resultHandlerNonEmpty(context));
@@ -101,7 +101,7 @@ public class OrganizationRouter extends RouterBase {
     String id = context.request().getParam("id");
     JsonObject object = context.getBodyAsJson();
 
-    if (object == null || object.getString("id") == null) {
+    if (object == null || !object.containsKey("id")) {
       verticle.badRequest(context, new IllegalArgumentException("Invalid parameters"));
     } else {
       organizationService.swapPosition(id, object.getString("id"), principal, verticle.resultHandler(context));
@@ -112,7 +112,7 @@ public class OrganizationRouter extends RouterBase {
     String id = context.request().getParam("id");
     JsonObject object = context.getBodyAsJson();
 
-    if (object == null || object.containsKey("deactivated")) {
+    if (object == null || !object.containsKey("deactivated")) {
       verticle.badRequest(context, new IllegalArgumentException("Invalid parameters"));
     } else {
       organizationService.deactivate(id, object.getBoolean("deactivated"), principal, verticle.resultHandler(context));
