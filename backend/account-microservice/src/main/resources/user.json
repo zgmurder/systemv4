@@ -3,11 +3,13 @@
     "username": "admin",
     "password": "admin123",
     "roleName": "Administrator",
+    "roleLevel": 1,
     "buildIn": true
   }, {
     "username": "reader",
     "password": "reader123",
     "roleName": "Reader",
+    "roleLevel": 10,
     "buildIn": true
   }]
 }

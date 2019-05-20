@@ -2,6 +2,7 @@
   "roles": [{
     "roleName": "Administrator",
     "displayName": "系统管理员",
+    "level": 1,
     "buildIn": true,
     "permissions": [{
       "schemaName": "*",
@@ -10,6 +11,7 @@
   }, {
     "roleName": "Manager",
     "displayName": "业务管理员",
+    "level": 2,
     "buildIn": true,
     "permissions": [{
       "schemaName": "User",
@@ -21,6 +23,7 @@
   }, {
     "roleName": "Operator",
     "displayName": "操作员",
+    "level": 5,
     "buildIn": true,
     "permissions": [{
       "schemaName": "User",
@@ -32,6 +35,7 @@
   }, {
     "roleName": "Reader",
     "displayName": "只读用户",
+    "level": 10,
     "buildIn": true,
     "permissions": [{
       "schemaName": "*",

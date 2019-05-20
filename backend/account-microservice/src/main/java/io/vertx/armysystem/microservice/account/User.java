@@ -1,5 +1,6 @@
 package io.vertx.armysystem.microservice.account;
 
+import io.vertx.armysystem.business.common.resource.Organization;
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
 

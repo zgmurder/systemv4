@@ -11,6 +11,8 @@ import io.vertx.armysystem.microservice.account.User;
 import io.vertx.armysystem.microservice.account.UserService;
 import io.vertx.armysystem.microservice.account.common.Functional;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.ext.jwt.JWTOptions;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
  * Implementation of {@link UserService}. Use MongoDB as the persistence.
  */
 public class UserServiceImpl extends MongoRepositoryWrapper implements UserService, ServiceBase {
+  private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
   private static final String FILTER_COLUMN_NAME = "parentOrgIds";
   private JWTAuth authProvider;
   private final CRUDService roleService;
@@ -58,7 +62,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
 
   @Override
   public UserService initializePersistence(Handler<AsyncResult<Void>> resultHandler) {
-    System.out.println("init user collection...");
+    logger.info("init user collection...");
 
     this.createCollection(getCollectionName())
         .otherwise(err -> null)
@@ -80,7 +84,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
         ar -> {
           if (ar.succeeded()) {
             JsonObject userData = new JsonObject(ar.result().toString());
-            System.out.println("Read user data: " + userData);
+            logger.info("Read user data: " + userData);
 
             JsonArray users = userData.getJsonArray("users");
             if (users != null) {
@@ -94,7 +98,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
             }
 
           } else {
-            System.out.println("Init user data failed: " + ar.cause());
+            logger.error("Init user data failed: " + ar.cause());
             future.fail(ar.cause());
           }
         });
@@ -105,7 +109,8 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
   @Override
   public UserService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
     User user = new User(item);
-    System.out.println("Entered addUser " + user.getUsername());
+    logger.info("add user " + user.getUsername());
+
     user.setBuildIn(false);
     JsonObject query = new JsonObject().put("username", user.getUsername());
 
@@ -121,6 +126,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
             } else {
               fillRoleLevel(user, principal)
                   .compose(u -> this.insertOne(getCollectionName(), u.toJson()))
+                  .compose(u -> fillOrganization(u))
                   .map(json -> json.putNull("password"))
                   .setHandler(resultHandler);
             }
@@ -137,6 +143,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
     this.findOne(getCollectionName(), getCondition(id, principal).getQuery(), new JsonObject())
         .map(option -> option.map(json -> json.putNull("password")))
         .map(option -> option.orElse(null))
+        .compose(u -> fillOrganization(u))
         .setHandler(resultHandler);
 
     return this;
@@ -164,16 +171,55 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
     QueryCondition qCondition = QueryCondition.parse(condition);
 
     if (qCondition.getOption().getJsonObject("sort") == null) {
-      qCondition.getOption().put("sort", new JsonObject().put("roleLevel", 1));
+      qCondition.getOption().put("sort", new JsonObject().put("roleLevel", 1).put("organization.orgCode", 1));
     }
 
     qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
-    this.findWithOptions(getCollectionName(), qCondition.getQuery(), qCondition.getOption())
-        .map(list -> list.stream()
-            .map(json -> json.putNull("password"))
-            .map(json -> new User(json).toJson())
-            .collect(Collectors.toList()))
-        .setHandler(resultHandler);
+    JsonArray pipeline = new JsonArray()
+        .add(new JsonObject().put("$lookup", new JsonObject()
+            .put("from", "Organization")
+            .put("localField", "organizationId")
+            .put("foreignField", "_id")
+            .put("as", "organization")))
+        .add(new JsonObject().put("$match", qCondition.getQuery()));
+    if (qCondition.getOption().containsKey("sort")) {
+      pipeline.add(new JsonObject().put("$sort", qCondition.getOption().getJsonObject("sort")));
+    }
+    if (qCondition.getOption().containsKey("skip")) {
+      pipeline.add(new JsonObject().put("$skip", qCondition.getOption().getInteger("skip")));
+    }
+    if (qCondition.getOption().containsKey("limit")) {
+      pipeline.add(new JsonObject().put("$limit", qCondition.getOption().getInteger("limit")));
+    }
+    if (qCondition.getOption().containsKey("fields")) {
+      JsonObject project = new JsonObject();
+      qCondition.getOption().getJsonArray("fields").getList()
+          .forEach(field -> project.put(field.toString(), 1));
+      pipeline.add(new JsonObject().put("$project", project));
+    }
+
+    List<JsonObject> results = new ArrayList<>();
+    Future<List<JsonObject>> future = Future.future();
+    this.aggregateWithOptions(getCollectionName(), pipeline, new JsonObject())
+        .handler(object -> results.add(object))
+        .endHandler(v -> {
+          logger.info("retrieve users: " + results);
+          future.complete(results);
+        })
+        .exceptionHandler(ex -> {
+          logger.error("retrieve users failed: " + ex);
+          future.fail(ex);
+        });
+    future.map(list -> list.stream()
+          .map(item -> {
+            if (item.containsKey("organization") && item.getJsonArray("organization").size() > 0) {
+              item.put("organization", item.getJsonArray("organization").getJsonObject(0));
+            } else {
+              item.remove("organization");
+            }
+            return item;
+          }).collect(Collectors.toList())
+    ).setHandler(resultHandler);
 
     return this;
   }
@@ -183,6 +229,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
     item.remove("id");
     item.remove("buildIn");
     item.remove("password");
+    item.remove("organization");
 
     User user = new User(item);
     this.findOne(getCollectionName(), getCondition(id, principal).getQuery(), new JsonObject())
@@ -258,10 +305,10 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
     }
 
     Future<JsonObject> future = Future.future();
-    roleService.retrieveOne(user.getRoleName(), principal, future.completer());
+    roleService.retrieveOne(user.getRoleName(), principal, future);
 
     return future.map(r -> {
-      if (r != null)
+      if (r != null && r.containsKey("level"))
         return user.setRoleLevel(r.getInteger("level"));
       else
         return user;
@@ -277,14 +324,21 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
         .map(option -> option.map(json -> json.putNull("password")))
         .map(option -> option.map(User::new).orElse(null))
         .compose(user -> this.fillPermissionsInUser(user))
+        .compose(json -> fillOrganization(json))
         .setHandler(ar -> {
           if (ar.succeeded()) {
             if (ar.result() != null) {
               JsonObject json = ar.result();
-              String token = generateAuthToken(json);
-              resultHandler.handle(Future.succeededFuture(new JsonObject()
-                  .put("user", json)
-                  .put("token", token)));
+              if (json.containsKey("organization") &&
+                  json.getJsonObject("organization").containsKey("deactivated") &&
+                  json.getJsonObject("organization").getBoolean("deactivated")) {
+                resultHandler.handle(Future.failedFuture("The user is deactivated."));
+              } else {
+                String token = generateAuthToken(json);
+                resultHandler.handle(Future.succeededFuture(new JsonObject()
+                    .put("user", json)
+                    .put("token", token)));
+              }
             } else {
               resultHandler.handle(Future.failedFuture("The username or password is invalid."));
             }
@@ -404,5 +458,15 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
         .filterByUserOrganizationV1(FILTER_COLUMN_NAME, principal);
 
     return condition;
+  }
+
+  private Future<JsonObject> fillOrganization(JsonObject object) {
+    if (object == null || !object.containsKey("organizationId")) {
+      return Future.succeededFuture(object);
+    } else {
+      return this.findOne("Organization",
+          new JsonObject().put("_id", object.getString("organizationId")), new JsonObject())
+          .map(option -> option.isPresent()?object.put("organization", option.get()):object);
+    }
   }
 }
