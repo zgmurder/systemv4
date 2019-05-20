@@ -200,7 +200,7 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
             // 如果修改单位名称，则自动更新全名称
             if (item.containsKey("name") && !organization.getName().equals(item.getString("name"))) {
               item.put("displayName",
-                  organization.getDisplayName().replace(item.getString("name"), organization.getName()));
+                  organization.getDisplayName().replace(organization.getName(), item.getString("name")));
             }
 
             if (item.containsKey("nodeCode") && organization.getNodeCode() != item.getInteger("nodeCode")) {
@@ -216,27 +216,39 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
           if (item.containsKey("displayName") || item.containsKey("orgCode")) {
             return this.findWithOptions(getCollectionName(),
                 new JsonObject().put("parentIds", organization.getId()),
-                new JsonObject().put("skip", 10000))
+                new JsonObject().put("limit", 10000))
                 .map(list -> list.stream().filter(org -> org.getString("id") != organization.getId())
-                    .map(org -> {
-                  JsonObject obj = new JsonObject();
-                  if (item.containsKey("displayName")) {
-                    obj.put("displayName",
-                        obj.getString("displayName")
-                            .replace(organization.getDisplayName(), item.getString("displayName")));
-                  }
+                      .map(org -> {
+                        JsonObject obj = new JsonObject();
+                        if (item.containsKey("displayName") && org.containsKey("displayName")) {
+                          obj.put("displayName",
+                              org.getString("displayName")
+                                  .replace(organization.getDisplayName(), item.getString("displayName")));
+                        }
 
-                  if (item.containsKey("orgCode")) {
-                    obj.put("orgCode",
-                        obj.getString("orgCode")
-                            .replace(organization.getOrgCode(), item.getString("orgCode")));
-                  }
-                  return new BulkOperation(new JsonObject()
-                      .put("type", "update")
-                      .put("filter", new JsonObject().put("_id", org.getString("id")))
-                      .put("document", obj));
-                }).collect(Collectors.toList()))
-            .compose(list -> this.bulkWrite(getCollectionName(), list))
+                        if (item.containsKey("orgCode") && org.containsKey("orgCode")) {
+                          obj.put("orgCode",
+                              org.getString("orgCode")
+                                  .replace(organization.getOrgCode(), item.getString("orgCode")));
+                        }
+                        obj.put("updatedTime", new Date().getTime());
+
+                        return new BulkOperation(new JsonObject()
+                            .put("type", "update")
+                            .put("filter", new JsonObject().put("_id", org.getString("id")))
+                            .put("document", new JsonObject().put("$set", obj))
+                            .put("upsert", false)
+                            .put("multi", false));
+                      }).collect(Collectors.toList())
+                )
+            .compose(list -> {
+              logger.info("before bulkwrite: " + list);
+              if (list == null || list.isEmpty()) {
+                return Future.succeededFuture();
+              } else {
+                return this.bulkWrite(getCollectionName(), list);
+              }
+            })
             .compose(list ->
               this.findOne(getCollectionName(), new JsonObject().put("_id", organization.getId()), new JsonObject())
                   .map(option -> option.orElse(null))
@@ -358,11 +370,14 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
           if (org.getString("id") == organization.getId()) {
             object.put("nodeCode", nodeCode);
           }
+          object.put("updatedTime", new Date().getTime());
 
           return new BulkOperation(new JsonObject()
               .put("type", "update")
               .put("filter", new JsonObject().put("_id", org.getString("id")))
-              .put("document", object));
+              .put("document", new JsonObject().put("$set", object))
+              .put("upsert", false)
+              .put("multi", false));
         }).collect(Collectors.toList()));
   }
 
