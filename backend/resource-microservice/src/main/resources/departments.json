@@ -1,0 +1,141 @@
+{
+  "orgData": [{
+    "matches": {
+      "orgType": "部队",
+      "orgSequence": 2
+    },
+    "departments": [{
+      "name": "指挥员",
+      "orgMajors": ["指挥员"],
+      "orgType": "首长机关",
+      "orgSequence": 2,
+      "orgProperty": "机关",
+      "nodeCode": 1
+    },{
+      "name": "参谋部",
+      "orgMajors": [],
+      "orgType": "首长机关",
+      "orgSequence": 2,
+      "orgProperty": "机关",
+      "nodeCode": 2
+    },{
+      "name": "政治工作部",
+      "orgMajors": [],
+      "orgType": "首长机关",
+      "orgSequence": 2,
+      "orgProperty": "机关",
+      "nodeCode": 3
+    },{
+      "name": "保障部",
+      "orgMajors": [],
+      "orgType": "首长机关",
+      "orgSequence": 2,
+      "orgProperty": "机关",
+      "nodeCode": 4
+    }]
+  }, {
+    "matches": {
+      "orgType": "部队",
+      "orgSequence": 3
+    },
+    "departments": [{
+      "name": "指挥员",
+      "orgMajors": ["指挥员"],
+      "orgType": "首长机关",
+      "orgSequence": 3,
+      "orgProperty": "机关",
+      "nodeCode": 1
+    },{
+      "name": "参谋部",
+      "orgMajors": [],
+      "orgType": "首长机关",
+      "orgSequence": 3,
+      "orgProperty": "机关",
+      "nodeCode": 2
+    },{
+      "name": "政治工作部",
+      "orgMajors": [],
+      "orgType": "首长机关",
+      "orgSequence": 3,
+      "orgProperty": "机关",
+      "nodeCode": 3
+    },{
+      "name": "保障部",
+      "orgMajors": [],
+      "orgType": "首长机关",
+      "orgSequence": 3,
+      "orgProperty": "机关",
+      "nodeCode": 4
+    }]
+  }, {
+    "matches": {
+      "orgType": "部队",
+      "orgSequence": 4
+    },
+    "departments": [{
+      "name": "指挥员",
+      "orgMajors": ["指挥员"],
+      "orgType": "首长机关",
+      "orgSequence": 4,
+      "orgProperty": "机关",
+      "nodeCode": 1
+    },{
+      "name": "参谋部",
+      "orgMajors": [],
+      "orgType": "首长机关",
+      "orgSequence": 4,
+      "orgProperty": "机关",
+      "nodeCode": 2
+    },{
+      "name": "政治工作处",
+      "orgMajors": [],
+      "orgType": "首长机关",
+      "orgSequence": 4,
+      "orgProperty": "机关",
+      "nodeCode": 3
+    },{
+      "name": "保障处",
+      "orgMajors": [],
+      "orgType": "首长机关",
+      "orgSequence": 4,
+      "orgProperty": "机关",
+      "nodeCode": 4
+    }]
+  }, {
+    "matches": {
+      "orgType": "分队",
+      "orgSequence": 5
+    },
+    "departments": [{
+      "name": "指挥员",
+      "orgMajors": [],
+      "orgType": "部门",
+      "orgSequence": 5,
+      "nodeCode": 1
+    }, {
+      "name": "大队部",
+      "orgMajors": [],
+      "orgType": "部门",
+      "orgSequence": 5,
+      "nodeCode": 2
+    }]
+  }, {
+    "matches": {
+      "orgType": "分队",
+      "orgSequence": 6
+    },
+    "departments": [{
+      "name": "指挥员",
+      "orgMajors": [],
+      "orgType": "部门",
+      "orgSequence": 6,
+      "nodeCode": 1
+    }, {
+      "name": "中队部",
+      "orgMajors": [],
+      "orgType": "部门",
+      "orgSequence": 6,
+      "nodeCode": 2
+    }]
+  }]
+}

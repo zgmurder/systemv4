@@ -376,7 +376,7 @@ class Organization {
   private String orgCode;           // 单位完整排序码，自动生成
   private String parentId;          // 父单位ID，页面手动选择
   private List<String> parentIds = new ArrayList<>();   // 上级单位ID列表，自动生成
-  private List<String> childrenIds = new ArrayList<>(); // 直属子单位ID列表,自动生成
+  private int childCount;           // 直属子单位数量,自动生成
   private int orgSequence;          // 编制序列，手动选择
   private String orgType;           // 单位类型，手动选择
   private String orgCategory;       // 单位分类，手动选择

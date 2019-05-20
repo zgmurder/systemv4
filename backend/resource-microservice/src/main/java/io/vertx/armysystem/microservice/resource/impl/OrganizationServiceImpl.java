@@ -5,6 +5,7 @@ import io.vertx.armysystem.business.common.ServiceBase;
 import io.vertx.armysystem.business.common.enums.OrgSequence;
 import io.vertx.armysystem.business.common.enums.OrgType;
 import io.vertx.armysystem.business.common.resource.Organization;
+import io.vertx.armysystem.microservice.common.functional.Functional;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
 import io.vertx.armysystem.microservice.resource.OrganizationService;
 import io.vertx.armysystem.microservice.resource.api.OrganizationRouter;
@@ -98,37 +99,23 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
           } else if (!checkPermission(parent, principal)) {
             future.fail("No permission");
           } else {
+            organization.setId(UUID.randomUUID().toString());
             organization.setDeactivated(false);
             // 设置单位长名称
             organization.setDisplayName(makeDisplayName(parent, organization));
             // 设置本单位的parentIds
             organization.setParentIds(getParentIds(parent));
+            organization.getParentIds().add(organization.getId());
             // 设置单位orgCode
             organization.setOrgCode(makeOrgCode(parent, organization));
 
-            return this.insertOne(getCollectionName(), organization.toJson())
-                .map(org -> org.put("parentObj", parent));
+            JsonObject jsonObject = organization.toJson();
+            jsonObject.remove("childCount");
+            return this.insertOne(getCollectionName(), jsonObject)
+                .map(org -> org.put("childCount", 0));
           }
 
           return future;
-        }).compose(org -> {
-          if (org.getJsonObject("parentObj") != null) {
-            JsonObject parent = org.getJsonObject("parentObj");
-            org.remove("parentObj");
-
-            // 更新父单位的childrenIds字段
-            return this.update(getCollectionName(), new JsonObject().put("_id", parent.getString("id")),
-                new JsonObject().put("childrenIds", makeChildrenIds(parent, org)))
-                .map(v -> org);
-          } else {
-            return Future.succeededFuture(org);
-          }
-        }).compose(org -> {
-          // 更新本单位的parentIds字段
-          org.put("parentIds", makeParentIds(org));
-          return this.update(getCollectionName(), new JsonObject().put("_id", org.getString("id")),
-              new JsonObject().put("parentIds", getParentIds(org)))
-              .map(v -> org);
         }).setHandler(resultHandler);
 
     return this;
@@ -138,6 +125,7 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
   public OrganizationService retrieveOne(String id, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
     this.findOne(getCollectionName(), getCondition(id, principal).getQuery(), new JsonObject())
         .map(option -> option.orElse(null))
+        .compose(item -> fillChildCount(item))
         .setHandler(resultHandler);
 
     return this;
@@ -177,6 +165,16 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
         .map(list -> list.stream()
             .map(json -> new Organization(json).toJson())
             .collect(Collectors.toList()))
+        .compose(list -> {
+          // 通过parentId查子节点时需要填充childCount字段
+          if (!list.isEmpty() && qCondition.getQuery().containsKey("parentId")) {
+            return Functional.allOfFutures(list.stream()
+                .map(object -> fillChildCount(object))
+                .collect(Collectors.toList()));
+          } else {
+            return Future.succeededFuture(list);
+          }
+        })
         .setHandler(resultHandler);
 
     return this;
@@ -187,7 +185,7 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
     item.remove("id");
     item.remove("parentId");
     item.remove("parentIds");
-    item.remove("childrenIds");
+    item.remove("childCount");
     item.remove("orgCode");
     item.remove("displayName");
     item.remove("deactivated");
@@ -247,7 +245,9 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
             return this.findOne(getCollectionName(), new JsonObject().put("_id", organization.getId()), new JsonObject())
                 .map(option -> option.orElse(null));
           }
-        }).setHandler(resultHandler);
+        })
+        .compose(o -> fillChildCount(o))
+        .setHandler(resultHandler);
 
     return this;
   }
@@ -259,14 +259,14 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
     logger.info("deleteOne id: " + id);
 
     this.findOne(getCollectionName(), query, new JsonObject())
-        .map(option -> option.map(Organization::new).orElse(null))
+        .compose(o -> fillChildCount(o.get()))
         .compose(organization -> {
           if (organization == null) {
             return Future.failedFuture("Not found");
-          } else if (!organization.getChildrenIds().isEmpty()){
+          } else if (organization.getInteger("childCount")>0){
             return Future.failedFuture("Not allowed");
           } else {
-            return this.removeById(getCollectionName(), organization.getId());
+            return this.removeById(getCollectionName(), organization.getString("id"));
           }
         }).setHandler(resultHandler);
 
@@ -401,19 +401,6 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
     return parentIds;
   }
 
-  private List<String> makeChildrenIds(JsonObject parent, JsonObject org) {
-    List<String> childrenIds = new ArrayList<>();
-    if (parent != null && parent.containsKey("childrenIds")) {
-      childrenIds = parent.getJsonArray("childrenIds").getList();
-    }
-    if (org != null) {
-      childrenIds.add(org.getString("id"));
-    }
-
-
-    return childrenIds;
-  }
-
   // 自动设置单位全名称
   private String makeDisplayName(JsonObject parent, Organization organization) {
     if (parent != null) {
@@ -509,5 +496,14 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
     }
 
     return future;
+  }
+
+  private Future<JsonObject> fillChildCount(JsonObject object) {
+    if (object != null) {
+      return this.count(getCollectionName(), new JsonObject().put("parentId", object.getString("id")))
+          .map(count -> object.put("childCount", count));
+    } else {
+      return Future.succeededFuture(null);
+    }
   }
 }

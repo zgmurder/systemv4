@@ -54,7 +54,7 @@ public class APIGatewayVerticle extends RestAPIVerticle {
 
     // create http server
     vertx.createHttpServer(httpServerOptions)
-        .requestHandler(router::accept)
+        .requestHandler(router::handle)
         .listen(port, host, ar -> {
           if (ar.succeeded()) {
             publishApiGateway(host, port);
@@ -77,8 +77,6 @@ public class APIGatewayVerticle extends RestAPIVerticle {
           List<Record> recordList = ar.result();
           // get relative path and retrieve prefix to dispatch client
           String path = context.request().uri();
-
-          System.out.println("dispatchRequests: recordList=" + recordList);
 
           if (path.length() <= initialOffset) {
             notFound(context);
@@ -166,7 +164,7 @@ public class APIGatewayVerticle extends RestAPIVerticle {
   private Future<List<Record>> getAllEndpoints() {
     Future<List<Record>> future = Future.future();
     discovery.getRecords(record -> record.getType().equals(HttpEndpoint.TYPE),
-        future.completer());
+        future);
     return future;
   }
 

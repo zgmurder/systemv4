@@ -408,7 +408,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
 
     context.response().setStatusCode(400)
       .putHeader("content-type", "application/json")
-      .end(new JsonObject().put("error", ex.getMessage()).encodePrettily());
+      .end(new JsonObject().put("message", ex.getMessage()).encodePrettily());
   }
 
   public void notFound(RoutingContext context) {
@@ -424,7 +424,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
 
     context.response().setStatusCode(500)
       .putHeader("content-type", "application/json")
-      .end(new JsonObject().put("error", ex.getMessage()).encodePrettily());
+      .end(new JsonObject().put("message", ex.getMessage()).encodePrettily());
   }
 
   public void notImplemented(RoutingContext context) {
@@ -442,9 +442,10 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
     context.response()
       .setStatusCode(502)
       .putHeader("content-type", "application/json")
-      .end(new JsonObject().put("error", "bad gateway")
-        //.put("message", ex.getMessage())
-        .encodePrettily());
+      .end(new JsonObject()
+//          .put("message", "bad gateway")
+          .put("message", ex.getMessage())
+          .encodePrettily());
   }
 
   public void serviceUnavailable(RoutingContext context) {
@@ -458,7 +459,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
 
     context.response().setStatusCode(503)
       .putHeader("content-type", "application/json")
-      .end(new JsonObject().put("error", ex.getMessage()).encodePrettily());
+      .end(new JsonObject().put("message", ex.getMessage()).encodePrettily());
   }
 
   public void serviceUnavailable(RoutingContext context, String cause) {
@@ -466,7 +467,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
 
     context.response().setStatusCode(503)
       .putHeader("content-type", "application/json")
-      .end(new JsonObject().put("error", cause).encodePrettily());
+      .end(new JsonObject().put("message", cause).encodePrettily());
   }
 
   public void unauthorized(RoutingContext context, String cause) {

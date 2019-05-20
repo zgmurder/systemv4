@@ -148,7 +148,7 @@
 ^|Name | Type ^| Description
 |[[address]]`@address`|`String`|-
 |[[altitude]]`@altitude`|`Number (Double)`|-
-|[[childrenIds]]`@childrenIds`|`Array of String`|-
+|[[childCount]]`@childCount`|`Number (int)`|-
 |[[deactivated]]`@deactivated`|`Boolean`|-
 |[[deactivatedAt]]`@deactivatedAt`|`Number (Long)`|-
 |[[displayName]]`@displayName`|`String`|-

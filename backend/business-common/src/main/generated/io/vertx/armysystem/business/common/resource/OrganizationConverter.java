@@ -24,14 +24,9 @@ public class OrganizationConverter {
             obj.setAltitude(((Number)member.getValue()).doubleValue());
           }
           break;
-        case "childrenIds":
-          if (member.getValue() instanceof JsonArray) {
-            java.util.ArrayList<java.lang.String> list =  new java.util.ArrayList<>();
-            ((Iterable<Object>)member.getValue()).forEach( item -> {
-              if (item instanceof String)
-                list.add((String)item);
-            });
-            obj.setChildrenIds(list);
+        case "childCount":
+          if (member.getValue() instanceof Number) {
+            obj.setChildCount(((Number)member.getValue()).intValue());
           }
           break;
         case "deactivated":
@@ -159,11 +154,7 @@ public class OrganizationConverter {
     if (obj.getAltitude() != null) {
       json.put("altitude", obj.getAltitude());
     }
-    if (obj.getChildrenIds() != null) {
-      JsonArray array = new JsonArray();
-      obj.getChildrenIds().forEach(item -> array.add(item));
-      json.put("childrenIds", array);
-    }
+    json.put("childCount", obj.getChildCount());
     if (obj.getDeactivated() != null) {
       json.put("deactivated", obj.getDeactivated());
     }

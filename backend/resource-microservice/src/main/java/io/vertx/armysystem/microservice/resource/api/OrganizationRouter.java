@@ -2,11 +2,15 @@ package io.vertx.armysystem.microservice.resource.api;
 
 import io.vertx.armysystem.business.common.Action;
 import io.vertx.armysystem.business.common.ServiceBase;
+import io.vertx.armysystem.business.common.enums.OrgType;
+import io.vertx.armysystem.business.common.resource.Organization;
 import io.vertx.armysystem.microservice.common.RestAPIVerticle;
 import io.vertx.armysystem.microservice.common.RouterBase;
+import io.vertx.armysystem.microservice.common.functional.Functional;
 import io.vertx.armysystem.microservice.resource.OrganizationService;
 import io.vertx.core.Context;
 import io.vertx.core.Future;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
@@ -15,6 +19,8 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class OrganizationRouter extends RouterBase {
   private static final Logger logger = LoggerFactory.getLogger(OrganizationRouter.class);
@@ -57,7 +63,10 @@ public class OrganizationRouter extends RouterBase {
     if (object == null || !object.containsKey("name") || !object.containsKey("nodeCode") || object.getInteger("nodeCode") == 0) {
       verticle.badRequest(context, new IllegalArgumentException("Invalid parameters"));
     } else {
-      organizationService.addOne(object, principal, verticle.resultHandlerNonEmpty(context));
+      Future<JsonObject> future = Future.future();
+      organizationService.addOne(object, principal, future);
+      future.compose(root -> addDepartmentsAuto(root, principal))
+      .setHandler(verticle.resultHandlerNonEmpty(context));
     }
   }
 
@@ -130,5 +139,72 @@ public class OrganizationRouter extends RouterBase {
     } else {
       organizationService.deactivate(id, object.getBoolean("deactivated"), principal, verticle.resultHandler(context));
     }
+  }
+
+  private Future<JsonObject> addDepartmentsAuto(JsonObject org, JsonObject principal) {
+    Organization organization = new Organization(org);
+
+    Future<Buffer> readFuture = Future.future();
+    verticle.getVertx().fileSystem().readFile("departments.json", readFuture);
+    return readFuture.compose(buffer -> {
+      JsonObject json = new JsonObject(buffer.toString());
+
+      Optional<JsonObject> matchItem = json.getJsonArray("orgData").stream()
+          .map(item -> (JsonObject)item)
+          .filter(item -> {
+            if (item.containsKey("matches") && item.containsKey("departments")) {
+              JsonObject matches = item.getJsonObject("matches");
+              if (matches.containsKey("orgType") && matches.containsKey("orgSequence")) {
+                return matches.getString("orgType").equals(organization.getOrgType()) &&
+                    matches.getInteger("orgSequence") == organization.getOrgSequence();
+              }
+            }
+
+            return false;
+          }).findFirst();
+
+      logger.info("addDepartmentsAuto match " + matchItem);
+
+      if (matchItem.isPresent()) {
+        List<Future<JsonObject>> futures = matchItem.get().getJsonArray("departments")
+            .stream().map(depart -> {
+              Organization newDepart = new Organization((JsonObject)depart);
+              String orgCategory = organization.getOrgCategory();
+              String orgProperty = organization.getOrgProperty();
+              if (organization.getOrgType().equals(OrgType.Troop.getName())) {
+                if (orgCategory != null)
+                  orgCategory = orgCategory + OrgType.LeaderOffice.getName();
+                if (orgProperty != null)
+                  orgProperty = newDepart.getOrgProperty();
+              }
+
+              newDepart.setParentId(organization.getId())
+                  .setOrgCategory(orgCategory)
+                  .setOrgProperty(orgProperty)
+                  .setServiceType(organization.getServiceType())
+                  .setImportant(organization.getImportant())
+                  .setSpecialMission(organization.getSpecialMission())
+                  .setAddress(organization.getAddress())
+                  .setLongitude(organization.getLongitude())
+                  .setLatitude(organization.getLatitude())
+                  .setAltitude(organization.getAltitude());
+
+              Future<JsonObject> future = Future.future();
+              organizationService.addOne(newDepart.toJson(), principal, future);
+              return future;
+            }).collect(Collectors.toList());
+
+        return Functional.allOfFutures(futures);
+      } else {
+        return Future.succeededFuture();
+      }
+    }).otherwiseEmpty()
+        .compose(list -> {
+          if (list == null || list.isEmpty()) {
+            return Future.succeededFuture(org);
+          } else {
+            return Future.succeededFuture(org.put("childCount", list.size()));
+          }
+        });
   }
 }

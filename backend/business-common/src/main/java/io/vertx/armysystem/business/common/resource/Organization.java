@@ -21,7 +21,8 @@ public class Organization {
   private String parentId;
 //  private String divisionId;
   private List<String> parentIds = new ArrayList<>();
-  private List<String> childrenIds = new ArrayList<>();
+//  private List<String> childrenIds = new ArrayList<>();
+  private int childCount;
   private int orgSequence;
   private String orgType;
   private String orgCategory;
@@ -129,12 +130,21 @@ public class Organization {
     return this;
   }
 
-  public List<String> getChildrenIds() {
-    return childrenIds;
+//  public List<String> getChildrenIds() {
+//    return childrenIds;
+//  }
+//
+//  public Organization setChildrenIds(List<String> childrenIds) {
+//    this.childrenIds = childrenIds;
+//    return this;
+//  }
+
+  public int getChildCount() {
+    return childCount;
   }
 
-  public Organization setChildrenIds(List<String> childrenIds) {
-    this.childrenIds = childrenIds;
+  public Organization setChildCount(int childCount) {
+    this.childCount = childCount;
     return this;
   }
 

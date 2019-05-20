@@ -10,6 +10,7 @@ import io.vertx.ext.mongo.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class MongoRepositoryWrapper {
@@ -64,15 +65,18 @@ public class MongoRepositoryWrapper {
     if (document.getString("id") != null)
       document.put("_id", document.getString("id"));
     if (document.getString("_id") == null) {
-      document.put("createdTime", new Date().getTime());
+      document.put("_id", UUID.randomUUID().toString());
     }
+    document.put("createdTime", new Date().getTime());
     document.put("updatedTime", new Date().getTime());
 
     client.insert(collection, document,
         ar -> {
           if (ar.succeeded()) {
-            document.remove("_id");
-            future.complete(document.put("id", ar.result()));
+            if (ar.result() != null) {
+              document.put("id", ar.result());
+            }
+            future.complete(document);
           }
           else
             future.fail(ar.cause());
