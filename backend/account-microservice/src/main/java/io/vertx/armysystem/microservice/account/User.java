@@ -20,7 +20,6 @@ public class User {
   private String roleName;
   private int roleLevel;
   private String organizationId;
-  private List<String> parentOrgIds;
 
   private String phone;
   private String email;
@@ -97,15 +96,6 @@ public class User {
 
   public User setOrganizationId(String organizationId) {
     this.organizationId = organizationId;
-    return this;
-  }
-
-  public List<String> getParentOrgIds() {
-    return parentOrgIds;
-  }
-
-  public User setParentOrgIds(List<String> parentOrgIds) {
-    this.parentOrgIds = parentOrgIds;
     return this;
   }
 

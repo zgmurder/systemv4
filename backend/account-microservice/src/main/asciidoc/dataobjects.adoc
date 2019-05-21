@@ -60,7 +60,6 @@
 |[[id]]`@id`|`String`|-
 |[[lastName]]`@lastName`|`String`|-
 |[[organizationId]]`@organizationId`|`String`|-
-|[[parentOrgIds]]`@parentOrgIds`|`Array of String`|-
 |[[password]]`@password`|`String`|-
 |[[phone]]`@phone`|`String`|-
 |[[roleLevel]]`@roleLevel`|`Number (int)`|-

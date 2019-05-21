@@ -56,16 +56,6 @@ public class UserConverter {
             obj.setOrganizationId((String)member.getValue());
           }
           break;
-        case "parentOrgIds":
-          if (member.getValue() instanceof JsonArray) {
-            java.util.ArrayList<java.lang.String> list =  new java.util.ArrayList<>();
-            ((Iterable<Object>)member.getValue()).forEach( item -> {
-              if (item instanceof String)
-                list.add((String)item);
-            });
-            obj.setParentOrgIds(list);
-          }
-          break;
         case "password":
           if (member.getValue() instanceof String) {
             obj.setPassword((String)member.getValue());
@@ -129,11 +119,6 @@ public class UserConverter {
     }
     if (obj.getOrganizationId() != null) {
       json.put("organizationId", obj.getOrganizationId());
-    }
-    if (obj.getParentOrgIds() != null) {
-      JsonArray array = new JsonArray();
-      obj.getParentOrgIds().forEach(item -> array.add(item));
-      json.put("parentOrgIds", array);
     }
     if (obj.getPassword() != null) {
       json.put("password", obj.getPassword());

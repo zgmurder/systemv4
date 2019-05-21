@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl extends MongoRepositoryWrapper implements UserService, ServiceBase {
   private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-  private static final String FILTER_COLUMN_NAME = "parentOrgIds";
+  private static final String FILTER_COLUMN_NAME = "organization.parentIds";
   private JWTAuth authProvider;
   private final CRUDService roleService;
   private final Vertx vertx;
@@ -175,6 +175,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
     }
 
     qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
+    logger.info("query condition: " + qCondition);
     JsonArray pipeline = new JsonArray()
         .add(new JsonObject().put("$lookup", new JsonObject()
             .put("from", "Organization")
