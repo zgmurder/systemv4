@@ -171,7 +171,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
     QueryCondition qCondition = QueryCondition.parse(condition);
 
     if (qCondition.getOption().getJsonObject("sort") == null) {
-      qCondition.getOption().put("sort", new JsonObject().put("roleLevel", 1).put("organization.orgCode", 1));
+      qCondition.getOption().put("sort", new JsonObject().put("organization.orgCode", 1).put("roleLevel", 1));
     }
 
     qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
