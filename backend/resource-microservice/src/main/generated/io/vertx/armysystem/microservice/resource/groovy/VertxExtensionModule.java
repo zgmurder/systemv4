@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 public class VertxExtensionModule extends ExtensionModule {
-  private static final String extensionClasses = "io.vertx.armysystem.microservice.resource.groovy.OrganizationService_GroovyExtension";
+  private static final String extensionClasses = "io.vertx.armysystem.microservice.resource.groovy.OrganizationService_GroovyExtension, io.vertx.armysystem.microservice.resource.groovy.SoldierService_GroovyExtension";
   private static final String staticExtensionClasses = "";
   private final ExtensionModule delegate;  public VertxExtensionModule() {
     super("io.vertx.armysystem.microservice.resource", "3.5.0");

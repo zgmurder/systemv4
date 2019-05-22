@@ -1,5 +1,28 @@
 = Cheatsheets
 
+[[AdvancedPersonInfo]]
+== AdvancedPersonInfo
+
+++++
+ AdvancedPersonInfo data object
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[bloodType]]`@bloodType`|`String`|-
+|[[currentCity]]`@currentCity`|`String`|-
+|[[fromCity]]`@fromCity`|`String`|-
+|[[graduatedAt]]`@graduatedAt`|`String`|-
+|[[graduatedMajor]]`@graduatedMajor`|`String`|-
+|[[graduatedSchool]]`@graduatedSchool`|`String`|-
+|[[highestDegree]]`@highestDegree`|`String`|-
+|[[nationality]]`@nationality`|`String`|-
+|[[phoneNum]]`@phoneNum`|`String`|-
+|===
+
 [[GroupTrainMethod]]
 == GroupTrainMethod
 
@@ -149,6 +172,7 @@
 |[[address]]`@address`|`String`|-
 |[[altitude]]`@altitude`|`Number (Double)`|-
 |[[childCount]]`@childCount`|`Number (int)`|-
+|[[createdTime]]`@createdTime`|`Number (Long)`|-
 |[[deactivated]]`@deactivated`|`Boolean`|-
 |[[deactivatedAt]]`@deactivatedAt`|`Number (Long)`|-
 |[[displayName]]`@displayName`|`String`|-
@@ -169,6 +193,7 @@
 |[[planSodierCount]]`@planSodierCount`|`Number (int)`|-
 |[[serviceType]]`@serviceType`|`String`|-
 |[[specialMission]]`@specialMission`|`String`|-
+|[[updatedTime]]`@updatedTime`|`Number (Long)`|-
 |===
 
 [[PlaceType]]
@@ -207,6 +232,73 @@
 |[[order]]`@order`|`Number (int)`|-
 |[[orgCategory]]`@orgCategory`|`String`|-
 |[[orgSequence]]`@orgSequence`|`Number (int)`|-
+|===
+
+[[Soldier]]
+== Soldier
+
+++++
+ Soldier data object
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[advanced]]`@advanced`|`link:dataobjects.html#AdvancedPersonInfo[AdvancedPersonInfo]`|-
+|[[birthday]]`@birthday`|`Number (Long)`|-
+|[[cardId]]`@cardId`|`String`|-
+|[[civilServant]]`@civilServant`|`Boolean`|-
+|[[createdTime]]`@createdTime`|`Number (Long)`|-
+|[[dischargedAt]]`@dischargedAt`|`Number (Long)`|-
+|[[enlistedAt]]`@enlistedAt`|`Number (Long)`|-
+|[[gender]]`@gender`|`String`|-
+|[[gunnerType]]`@gunnerType`|`String`|-
+|[[headUrl]]`@headUrl`|`String`|-
+|[[height]]`@height`|`Number (Double)`|-
+|[[id]]`@id`|`String`|-
+|[[inserviceStatus]]`@inserviceStatus`|`Number (int)`|-
+|[[joinedAt]]`@joinedAt`|`Number (Long)`|-
+|[[leftAt]]`@leftAt`|`Number (Long)`|-
+|[[majorType]]`@majorType`|`Array of String`|-
+|[[name]]`@name`|`String`|-
+|[[organizationId]]`@organizationId`|`String`|-
+|[[personProperty]]`@personProperty`|`String`|-
+|[[physicalLevel]]`@physicalLevel`|`String`|-
+|[[politicalStatus]]`@politicalStatus`|`String`|-
+|[[positionId]]`@positionId`|`String`|-
+|[[rankId]]`@rankId`|`String`|-
+|[[soldierCategory]]`@soldierCategory`|`String`|-
+|[[specialForce]]`@specialForce`|`Boolean`|-
+|[[specialForceType]]`@specialForceType`|`String`|-
+|[[supporter]]`@supporter`|`Boolean`|-
+|[[troopCategory]]`@troopCategory`|`String`|-
+|[[updatedTime]]`@updatedTime`|`Number (Long)`|-
+|[[weight]]`@weight`|`Number (Double)`|-
+|===
+
+[[SoldierArchive]]
+== SoldierArchive
+
+++++
+ SoldierArchive data object
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[action]]`@action`|`String`|-
+|[[cardId]]`@cardId`|`String`|-
+|[[createdTime]]`@createdTime`|`Number (Long)`|-
+|[[description]]`@description`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[name]]`@name`|`String`|-
+|[[organizationId]]`@organizationId`|`String`|-
+|[[position]]`@position`|`String`|-
+|[[rank]]`@rank`|`String`|-
 |===
 
 [[SpecialMission]]

@@ -40,9 +40,8 @@ public class Organization {
   private Boolean deactivated;  // 失效标志
   private Long deactivatedAt;   // 失效时间
 
-//  private Boolean deleted;
-//  private Boolean temp;       // 临时单位，需要设置过期日期
-//  private Long expireDate;
+  private Long createdTime;
+  private Long updatedTime;
 
   public Organization() {
     // Empty constructor
@@ -247,24 +246,6 @@ public class Organization {
     return this;
   }
 
-//  public Boolean getTemp() {
-//    return temp;
-//  }
-//
-//  public Organization setTemp(Boolean temp) {
-//    this.temp = temp;
-//    return this;
-//  }
-//
-//  public Long getExpireDate() {
-//    return expireDate;
-//  }
-//
-//  public Organization setExpireDate(Long expireDate) {
-//    this.expireDate = expireDate;
-//    return this;
-//  }
-
   public Double getLongitude() {
     return longitude;
   }
@@ -307,6 +288,24 @@ public class Organization {
 
   public Organization setDeactivatedAt(Long deactivatedAt) {
     this.deactivatedAt = deactivatedAt;
+    return this;
+  }
+
+  public Long getCreatedTime() {
+    return createdTime;
+  }
+
+  public Organization setCreatedTime(Long createdTime) {
+    this.createdTime = createdTime;
+    return this;
+  }
+
+  public Long getUpdatedTime() {
+    return updatedTime;
+  }
+
+  public Organization setUpdatedTime(Long updatedTime) {
+    this.updatedTime = updatedTime;
     return this;
   }
 

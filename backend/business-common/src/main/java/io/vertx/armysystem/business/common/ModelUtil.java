@@ -12,24 +12,18 @@ public final class ModelUtil {
 
   public ModelUtil() {}
 
-  public static Future<JsonObject> fillOrganization(MongoRepositoryWrapper mongo, JsonObject model) {
-    if (model.containsKey("organizationId")) {
-      return mongo.findOne("Organization", new JsonObject().put("_id", model.getString("organizationId")), new JsonObject())
-          .map(o -> {
-            if (o.isPresent()) {
-              model.put("parentOrgIds", o.get().getJsonArray("parentIds"));
-              model.put("organization", o.get());
-            }
-
-            return model;
-          });
+  public static Future<JsonObject> fillOrganization(MongoRepositoryWrapper mongo, JsonObject object) {
+    if (object == null || !object.containsKey("organizationId")) {
+      return Future.succeededFuture(object);
     } else {
-      return Future.succeededFuture(model);
+      return mongo.findOne("Organization",
+          new JsonObject().put("_id", object.getString("organizationId")), new JsonObject())
+          .map(option -> option.isPresent()?object.put("organization", option.get()):object);
     }
   }
 
-  public static Future<Void> validateOrganization(JsonObject principal, JsonObject model) {
-    Future<Void> future = Future.future();
+  public static Future<JsonObject> validateOrganization(JsonObject principal, JsonObject model) {
+    Future<JsonObject> future = Future.future();
 
     String userOrgId = principal.getString("organizationId");
     if (userOrgId == null) {
@@ -37,14 +31,13 @@ public final class ModelUtil {
     } else {
       String organizationId = model.getString("organizationId");
       List<String> parentOrgIds = new ArrayList<>();
-      if (model.getJsonArray("parentOrgIds") != null) {
-        parentOrgIds = model.getJsonArray("parentOrgIds").getList();
-      } else if (model.getJsonArray("parentIds") != null) {
-        parentOrgIds = model.getJsonArray("parentIds").getList();
+      if (model.containsKey("organization") &&
+          model.getJsonObject("organization").containsKey("parentIds")) {
+        parentOrgIds = model.getJsonObject("organization").getJsonArray("parentIds").getList();
       }
 
       if (parentOrgIds.contains(userOrgId) || userOrgId == organizationId) {
-        future.complete();
+        future.complete(model);
       } else {
         future.fail("Unauthorized");
       }

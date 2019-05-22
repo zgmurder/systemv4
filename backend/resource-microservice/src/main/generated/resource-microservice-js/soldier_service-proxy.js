@@ -14,18 +14,18 @@
  * under the License.
  */
 
-/// <reference path="./organization_service-proxy.d.ts" />
+/// <reference path="./soldier_service-proxy.d.ts" />
 
-/** @module resource-microservice-js/organization_service */
+/** @module resource-microservice-js/soldier_service */
 !function (factory) {
   if (typeof require === 'function' && typeof module !== 'undefined') {
     factory();
   } else if (typeof define === 'function' && define.amd) {
     // AMD loader
-    define('resource-microservice-js/organization_service-proxy', [], factory);
+    define('resource-microservice-js/soldier_service-proxy', [], factory);
   } else {
     // plain old include
-    OrganizationService = factory();
+    SoldierService = factory();
   }
 }(function () {
 
@@ -37,7 +37,7 @@
 
    @class
   */
-  var OrganizationService = function(eb, address) {
+  var SoldierService = function(eb, address) {
     var j_eb = eb;
     var j_address = address;
     var closed = false;
@@ -55,7 +55,7 @@
 
      @public
      @param resultHandler {function} the result handler will be called as soon as the initialization has been accomplished. The async result indicates whether the operation was successful or not. 
-     @return {OrganizationService}
+     @return {SoldierService}
      */
     this.initializePersistence =  function(resultHandler) {
       var __args = arguments;
@@ -75,7 +75,7 @@
      @param item {Object} an entity that we want to add 
      @param principal {Object} 
      @param resultHandler {function} the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not. 
-     @return {OrganizationService}
+     @return {SoldierService}
      */
     this.addOne =  function(item, principal, resultHandler) {
       var __args = arguments;
@@ -95,7 +95,7 @@
      @param id {string} item id 
      @param principal {Object} 
      @param resultHandler {function} the result handler will be called as soon as the item has been retrieved. The async result indicates whether the operation was successful or not. 
-     @return {OrganizationService}
+     @return {SoldierService}
      */
     this.retrieveOne =  function(id, principal, resultHandler) {
       var __args = arguments;
@@ -114,7 +114,7 @@
      @public
      @param principal {Object} 
      @param resultHandler {function} the result handler will be called as soon as the items have been retrieved. The async result indicates whether the operation was successful or not. 
-     @return {OrganizationService}
+     @return {SoldierService}
      */
     this.retrieveAll =  function(principal, resultHandler) {
       var __args = arguments;
@@ -134,7 +134,7 @@
      @param condition {Object} query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents 
      @param principal {Object} 
      @param resultHandler {function} the result handler will be called as soon as the device count has been retrieved. The async result indicates whether the operation was successful or not. 
-     @return {OrganizationService}
+     @return {SoldierService}
      */
     this.count =  function(condition, principal, resultHandler) {
       var __args = arguments;
@@ -154,7 +154,7 @@
      @param condition {Object} query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents 
      @param principal {Object} 
      @param resultHandler {function} the result handler will be called as soon as the devices has been retrieved. The async result indicates whether the operation was successful or not. 
-     @return {OrganizationService}
+     @return {SoldierService}
      */
     this.retrieveManyByCondition =  function(condition, principal, resultHandler) {
       var __args = arguments;
@@ -175,7 +175,7 @@
      @param item {Object} an entity that we want to update 
      @param principal {Object} 
      @param resultHandler {function} the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not. 
-     @return {OrganizationService}
+     @return {SoldierService}
      */
     this.updateOne =  function(id, item, principal, resultHandler) {
       var __args = arguments;
@@ -195,7 +195,7 @@
      @param id {string} the item id 
      @param principal {Object} 
      @param resultHandler {function} the result handler will be called as soon as the item has been removed. The async result indicates whether the operation was successful or not. 
-     @return {OrganizationService}
+     @return {SoldierService}
      */
     this.deleteOne =  function(id, principal, resultHandler) {
       var __args = arguments;
@@ -209,43 +209,42 @@
     };
 
     /**
-     swap the position of two organizations
+     change the soldier's position or rank or organization, etc.
 
      @public
      @param id {string} the item id 
-     @param otherId {string} the other item id 
+     @param item {Object} change object 
      @param principal {Object} 
-     @param resultHandler {function} the result handler will be called as soon as two organization's sequence has been swapped. The async result indicates whether the operation was successful or not. 
-     @return {OrganizationService}
+     @param resultHandler {function} the result handler will be called as soon as change completed. The async result indicates whether the operation was successful or not. 
+     @return {SoldierService}
      */
-    this.swapPosition =  function(id, otherId, principal, resultHandler) {
+    this.change =  function(id, item, principal, resultHandler) {
       var __args = arguments;
-      if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && (typeof __args[2] === 'object' && __args[2] != null) && typeof __args[3] === 'function') {
+      if (__args.length === 4 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && (typeof __args[2] === 'object' && __args[2] != null) && typeof __args[3] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"id":__args[0], "otherId":__args[1], "principal":__args[2]}, {"action":"swapPosition"}, function(err, result) { __args[3](err, result && result.body); });
+        j_eb.send(j_address, {"id":__args[0], "item":__args[1], "principal":__args[2]}, {"action":"change"}, function(err, result) { __args[3](err, result && result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
 
     /**
-     deactivate organization
+     retrieve soldier's change archives.
 
      @public
-     @param id {string} the item id 
-     @param deactivated {boolean} true for deactivate, false for activate 
+     @param cardId {string} the soldier's cardId 
      @param principal {Object} 
-     @param resultHandler {function} the result handler will be called as soon as the organization has been deactivated. The async result indicates whether the operation was successful or not. 
-     @return {OrganizationService}
+     @param resultHandler {function} the result handler will be called as soon as archives are queried. The async result indicates whether the operation was successful or not. 
+     @return {SoldierService}
      */
-    this.deactivate =  function(id, deactivated, principal, resultHandler) {
+    this.retrieveArchives =  function(cardId, principal, resultHandler) {
       var __args = arguments;
-      if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] ==='boolean' && (typeof __args[2] === 'object' && __args[2] != null) && typeof __args[3] === 'function') {
+      if (__args.length === 3 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
         if (closed) {
           throw new Error('Proxy is closed');
         }
-        j_eb.send(j_address, {"id":__args[0], "deactivated":__args[1], "principal":__args[2]}, {"action":"deactivate"}, function(err, result) { __args[3](err, result && result.body); });
+        j_eb.send(j_address, {"cardId":__args[0], "principal":__args[1]}, {"action":"retrieveArchives"}, function(err, result) { __args[2](err, result && result.body); });
         return that;
       } else throw new TypeError('function invoked with invalid arguments');
     };
@@ -254,11 +253,11 @@
 
   if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {
-      exports = module.exports = OrganizationService;
+      exports = module.exports = SoldierService;
     } else {
-      exports.OrganizationService = OrganizationService;
+      exports.SoldierService = SoldierService;
     }
   } else {
-    return OrganizationService;
+    return SoldierService;
   }
 });

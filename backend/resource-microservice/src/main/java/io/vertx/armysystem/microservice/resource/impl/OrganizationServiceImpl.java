@@ -35,12 +35,12 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
 
   @Override
   public String getServiceName() {
-    return "dictionary-Organization-eb-service";
+    return "resource-organization-eb-service";
   }
 
   @Override
   public String getServiceAddress() {
-    return "service.dictionary.Organization";
+    return "service.resource.organization";
   }
 
   @Override

@@ -19,7 +19,7 @@ import java.util.List;
  */
 @VertxGen
 @ProxyGen
-public interface OrganizationService {
+public interface SoldierService {
 
   /**
    * Initialize the persistence.
@@ -28,7 +28,7 @@ public interface OrganizationService {
    *                      whether the operation was successful or not.
    */
   @Fluent
-  OrganizationService initializePersistence(Handler<AsyncResult<Void>> resultHandler);
+  SoldierService initializePersistence(Handler<AsyncResult<Void>> resultHandler);
 
   /**
    * Add an item to the persistence.
@@ -38,7 +38,7 @@ public interface OrganizationService {
    *                      whether the operation was successful or not.
    */
   @Fluent
-  OrganizationService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler);
+  SoldierService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler);
 
   /**
    * Retrieve the item with certain `id`.
@@ -48,7 +48,7 @@ public interface OrganizationService {
    *                      whether the operation was successful or not.
    */
   @Fluent
-  OrganizationService retrieveOne(String id, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler);
+  SoldierService retrieveOne(String id, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler);
 
   /**
    * Retrieve all items.
@@ -57,7 +57,7 @@ public interface OrganizationService {
    *                      whether the operation was successful or not.
    */
   @Fluent
-  OrganizationService retrieveAll(JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler);
+  SoldierService retrieveAll(JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler);
 
   /**
    * Retrieve item count with query conditions.
@@ -67,7 +67,7 @@ public interface OrganizationService {
    *                      whether the operation was successful or not.
    */
   @Fluent
-  OrganizationService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler);
+  SoldierService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler);
 
   /**
    * Retrieve items by page with query conditions.
@@ -77,7 +77,7 @@ public interface OrganizationService {
    *                      whether the operation was successful or not.
    */
   @Fluent
-  OrganizationService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler);
+  SoldierService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler);
 
   /**
    * Update an item info.
@@ -88,7 +88,7 @@ public interface OrganizationService {
    *                      whether the operation was successful or not.
    */
   @Fluent
-  OrganizationService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler);
+  SoldierService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler);
 
   /**
    * Delete an item from the persistence
@@ -98,27 +98,26 @@ public interface OrganizationService {
    *                      whether the operation was successful or not.
    */
   @Fluent
-  OrganizationService deleteOne(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler);
+  SoldierService deleteOne(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler);
 
   /**
-   * swap the position of two organizations
+   * change the soldier's position or rank or organization, etc.
    *
    * @param id            the item id
-   * @param otherId       the other item id
-   * @param resultHandler the result handler will be called as soon as two organization's sequence has been swapped. The async result indicates
+   * @param item          change object
+   * @param resultHandler the result handler will be called as soon as change completed. The async result indicates
    *                      whether the operation was successful or not.
    */
   @Fluent
-  OrganizationService swapPosition(String id, String otherId, JsonObject principal, Handler<AsyncResult<Void>> resultHandler);
+  SoldierService change(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler);
 
   /**
-   * deactivate organization
+   * retrieve soldier's change archives.
    *
-   * @param id            the item id
-   * @param deactivated   true for deactivate, false for activate
-   * @param resultHandler the result handler will be called as soon as the organization has been deactivated. The async result indicates
+   * @param cardId        the soldier's cardId
+   * @param resultHandler the result handler will be called as soon as archives are queried. The async result indicates
    *                      whether the operation was successful or not.
    */
   @Fluent
-  OrganizationService deactivate(String id, Boolean deactivated, JsonObject principal, Handler<AsyncResult<Void>> resultHandler);
+  SoldierService retrieveArchives(String cardId, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler);
 }

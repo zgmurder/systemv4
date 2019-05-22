@@ -14,12 +14,12 @@
  * under the License.
  */
 
-/** @module resource-microservice-js/organization_service */
+/** @module resource-microservice-js/soldier_service */
 var utils = require('vertx-js/util/utils');
 
 var io = Packages.io;
 var JsonObject = io.vertx.core.json.JsonObject;
-var JOrganizationService = Java.type('io.vertx.armysystem.microservice.resource.OrganizationService');
+var JSoldierService = Java.type('io.vertx.armysystem.microservice.resource.SoldierService');
 
 /**
  A service interface manage entities.
@@ -29,9 +29,9 @@ var JOrganizationService = Java.type('io.vertx.armysystem.microservice.resource.
 
  @class
 */
-var OrganizationService = function(j_val) {
+var SoldierService = function(j_val) {
 
-  var j_organizationService = j_val;
+  var j_soldierService = j_val;
   var that = this;
 
   var __super_initializePersistence = this.initializePersistence;
@@ -42,19 +42,19 @@ var OrganizationService = function(j_val) {
   var __super_retrieveManyByCondition = this.retrieveManyByCondition;
   var __super_updateOne = this.updateOne;
   var __super_deleteOne = this.deleteOne;
-  var __super_swapPosition = this.swapPosition;
-  var __super_deactivate = this.deactivate;
+  var __super_change = this.change;
+  var __super_retrieveArchives = this.retrieveArchives;
   /**
    Initialize the persistence.
 
    @public
    @param resultHandler {function} the result handler will be called as soon as the initialization has been accomplished. The async result indicates whether the operation was successful or not. 
-   @return {OrganizationService}
+   @return {SoldierService}
    */
   this.initializePersistence =  function(resultHandler) {
     var __args = arguments;
     if (__args.length === 1 && typeof __args[0] === 'function') {
-      j_organizationService["initializePersistence(io.vertx.core.Handler)"](function(ar) {
+      j_soldierService["initializePersistence(io.vertx.core.Handler)"](function(ar) {
         if (ar.succeeded()) {
           __args[0](null, null);
         } else {
@@ -75,12 +75,12 @@ var OrganizationService = function(j_val) {
    @param item {Object} an entity that we want to add 
    @param principal {Object} 
    @param resultHandler {function} the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not. 
-   @return {OrganizationService}
+   @return {SoldierService}
    */
   this.addOne =  function(item, principal, resultHandler) {
     var __args = arguments;
     if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
-      j_organizationService["addOne(io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(__args[0]), utils.convParamJsonObject(__args[1]), function(ar) {
+      j_soldierService["addOne(io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(__args[0]), utils.convParamJsonObject(__args[1]), function(ar) {
         if (ar.succeeded()) {
           __args[2](utils.convReturnJson(ar.result()), null);
         } else {
@@ -101,12 +101,12 @@ var OrganizationService = function(j_val) {
    @param id {string} item id 
    @param principal {Object} 
    @param resultHandler {function} the result handler will be called as soon as the item has been retrieved. The async result indicates whether the operation was successful or not. 
-   @return {OrganizationService}
+   @return {SoldierService}
    */
   this.retrieveOne =  function(id, principal, resultHandler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
-      j_organizationService["retrieveOne(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](__args[0], utils.convParamJsonObject(__args[1]), function(ar) {
+      j_soldierService["retrieveOne(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](__args[0], utils.convParamJsonObject(__args[1]), function(ar) {
         if (ar.succeeded()) {
           __args[2](utils.convReturnJson(ar.result()), null);
         } else {
@@ -126,12 +126,12 @@ var OrganizationService = function(j_val) {
    @public
    @param principal {Object} 
    @param resultHandler {function} the result handler will be called as soon as the items have been retrieved. The async result indicates whether the operation was successful or not. 
-   @return {OrganizationService}
+   @return {SoldierService}
    */
   this.retrieveAll =  function(principal, resultHandler) {
     var __args = arguments;
     if (__args.length === 2 && (typeof __args[0] === 'object' && __args[0] != null) && typeof __args[1] === 'function') {
-      j_organizationService["retrieveAll(io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(__args[0]), function(ar) {
+      j_soldierService["retrieveAll(io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(__args[0]), function(ar) {
         if (ar.succeeded()) {
           __args[1](utils.convReturnListSetJson(ar.result()), null);
         } else {
@@ -152,12 +152,12 @@ var OrganizationService = function(j_val) {
    @param condition {Object} query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents 
    @param principal {Object} 
    @param resultHandler {function} the result handler will be called as soon as the device count has been retrieved. The async result indicates whether the operation was successful or not. 
-   @return {OrganizationService}
+   @return {SoldierService}
    */
   this.count =  function(condition, principal, resultHandler) {
     var __args = arguments;
     if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
-      j_organizationService["count(io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(__args[0]), utils.convParamJsonObject(__args[1]), function(ar) {
+      j_soldierService["count(io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(__args[0]), utils.convParamJsonObject(__args[1]), function(ar) {
         if (ar.succeeded()) {
           __args[2](utils.convReturnLong(ar.result()), null);
         } else {
@@ -178,12 +178,12 @@ var OrganizationService = function(j_val) {
    @param condition {Object} query conditions, include where and findOptions. Refer to https://vertx.io/docs/vertx-mongo-client/java/#_finding_documents 
    @param principal {Object} 
    @param resultHandler {function} the result handler will be called as soon as the devices has been retrieved. The async result indicates whether the operation was successful or not. 
-   @return {OrganizationService}
+   @return {SoldierService}
    */
   this.retrieveManyByCondition =  function(condition, principal, resultHandler) {
     var __args = arguments;
     if (__args.length === 3 && (typeof __args[0] === 'object' && __args[0] != null) && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
-      j_organizationService["retrieveManyByCondition(io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(__args[0]), utils.convParamJsonObject(__args[1]), function(ar) {
+      j_soldierService["retrieveManyByCondition(io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](utils.convParamJsonObject(__args[0]), utils.convParamJsonObject(__args[1]), function(ar) {
         if (ar.succeeded()) {
           __args[2](utils.convReturnListSetJson(ar.result()), null);
         } else {
@@ -205,12 +205,12 @@ var OrganizationService = function(j_val) {
    @param item {Object} an entity that we want to update 
    @param principal {Object} 
    @param resultHandler {function} the result handler will be called as soon as the item has been added. The async result indicates whether the operation was successful or not. 
-   @return {OrganizationService}
+   @return {SoldierService}
    */
   this.updateOne =  function(id, item, principal, resultHandler) {
     var __args = arguments;
     if (__args.length === 4 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && (typeof __args[2] === 'object' && __args[2] != null) && typeof __args[3] === 'function') {
-      j_organizationService["updateOne(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](__args[0], utils.convParamJsonObject(__args[1]), utils.convParamJsonObject(__args[2]), function(ar) {
+      j_soldierService["updateOne(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](__args[0], utils.convParamJsonObject(__args[1]), utils.convParamJsonObject(__args[2]), function(ar) {
         if (ar.succeeded()) {
           __args[3](utils.convReturnJson(ar.result()), null);
         } else {
@@ -231,12 +231,12 @@ var OrganizationService = function(j_val) {
    @param id {string} the item id 
    @param principal {Object} 
    @param resultHandler {function} the result handler will be called as soon as the item has been removed. The async result indicates whether the operation was successful or not. 
-   @return {OrganizationService}
+   @return {SoldierService}
    */
   this.deleteOne =  function(id, principal, resultHandler) {
     var __args = arguments;
     if (__args.length === 3 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
-      j_organizationService["deleteOne(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](__args[0], utils.convParamJsonObject(__args[1]), function(ar) {
+      j_soldierService["deleteOne(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](__args[0], utils.convParamJsonObject(__args[1]), function(ar) {
         if (ar.succeeded()) {
           __args[2](null, null);
         } else {
@@ -251,55 +251,54 @@ var OrganizationService = function(j_val) {
   };
 
   /**
-   swap the position of two organizations
+   change the soldier's position or rank or organization, etc.
 
    @public
    @param id {string} the item id 
-   @param otherId {string} the other item id 
+   @param item {Object} change object 
    @param principal {Object} 
-   @param resultHandler {function} the result handler will be called as soon as two organization's sequence has been swapped. The async result indicates whether the operation was successful or not. 
-   @return {OrganizationService}
+   @param resultHandler {function} the result handler will be called as soon as change completed. The async result indicates whether the operation was successful or not. 
+   @return {SoldierService}
    */
-  this.swapPosition =  function(id, otherId, principal, resultHandler) {
+  this.change =  function(id, item, principal, resultHandler) {
     var __args = arguments;
-    if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] === 'string' && (typeof __args[2] === 'object' && __args[2] != null) && typeof __args[3] === 'function') {
-      j_organizationService["swapPosition(java.lang.String,java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](__args[0], __args[1], utils.convParamJsonObject(__args[2]), function(ar) {
+    if (__args.length === 4 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && (typeof __args[2] === 'object' && __args[2] != null) && typeof __args[3] === 'function') {
+      j_soldierService["change(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](__args[0], utils.convParamJsonObject(__args[1]), utils.convParamJsonObject(__args[2]), function(ar) {
         if (ar.succeeded()) {
-          __args[3](null, null);
+          __args[3](utils.convReturnJson(ar.result()), null);
         } else {
           __args[3](null, ar.cause());
         }
       }) ;
       return that;
-    } else if (typeof __super_swapPosition != 'undefined') {
-      return __super_swapPosition.apply(this, __args);
+    } else if (typeof __super_change != 'undefined') {
+      return __super_change.apply(this, __args);
     }
     else throw new TypeError('function invoked with invalid arguments');
   };
 
   /**
-   deactivate organization
+   retrieve soldier's change archives.
 
    @public
-   @param id {string} the item id 
-   @param deactivated {boolean} true for deactivate, false for activate 
+   @param cardId {string} the soldier's cardId 
    @param principal {Object} 
-   @param resultHandler {function} the result handler will be called as soon as the organization has been deactivated. The async result indicates whether the operation was successful or not. 
-   @return {OrganizationService}
+   @param resultHandler {function} the result handler will be called as soon as archives are queried. The async result indicates whether the operation was successful or not. 
+   @return {SoldierService}
    */
-  this.deactivate =  function(id, deactivated, principal, resultHandler) {
+  this.retrieveArchives =  function(cardId, principal, resultHandler) {
     var __args = arguments;
-    if (__args.length === 4 && typeof __args[0] === 'string' && typeof __args[1] ==='boolean' && (typeof __args[2] === 'object' && __args[2] != null) && typeof __args[3] === 'function') {
-      j_organizationService["deactivate(java.lang.String,java.lang.Boolean,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](__args[0], __args[1], utils.convParamJsonObject(__args[2]), function(ar) {
+    if (__args.length === 3 && typeof __args[0] === 'string' && (typeof __args[1] === 'object' && __args[1] != null) && typeof __args[2] === 'function') {
+      j_soldierService["retrieveArchives(java.lang.String,io.vertx.core.json.JsonObject,io.vertx.core.Handler)"](__args[0], utils.convParamJsonObject(__args[1]), function(ar) {
         if (ar.succeeded()) {
-          __args[3](null, null);
+          __args[2](utils.convReturnListSetJson(ar.result()), null);
         } else {
-          __args[3](null, ar.cause());
+          __args[2](null, ar.cause());
         }
       }) ;
       return that;
-    } else if (typeof __super_deactivate != 'undefined') {
-      return __super_deactivate.apply(this, __args);
+    } else if (typeof __super_retrieveArchives != 'undefined') {
+      return __super_retrieveArchives.apply(this, __args);
     }
     else throw new TypeError('function invoked with invalid arguments');
   };
@@ -307,23 +306,23 @@ var OrganizationService = function(j_val) {
   // A reference to the underlying Java delegate
   // NOTE! This is an internal API and must not be used in user code.
   // If you rely on this property your code is likely to break if we change it / remove it without warning.
-  this._jdel = j_organizationService;
+  this._jdel = j_soldierService;
 };
 
-OrganizationService._jclass = utils.getJavaClass("io.vertx.armysystem.microservice.resource.OrganizationService");
-OrganizationService._jtype = {accept: function(obj) {
-    return OrganizationService._jclass.isInstance(obj._jdel);
+SoldierService._jclass = utils.getJavaClass("io.vertx.armysystem.microservice.resource.SoldierService");
+SoldierService._jtype = {accept: function(obj) {
+    return SoldierService._jclass.isInstance(obj._jdel);
   },wrap: function(jdel) {
-    var obj = Object.create(OrganizationService.prototype, {});
-    OrganizationService.apply(obj, arguments);
+    var obj = Object.create(SoldierService.prototype, {});
+    SoldierService.apply(obj, arguments);
     return obj;
   },
   unwrap: function(obj) {
     return obj._jdel;
   }
 };
-OrganizationService._create = function(jdel) {var obj = Object.create(OrganizationService.prototype, {});
-  OrganizationService.apply(obj, arguments);
+SoldierService._create = function(jdel) {var obj = Object.create(SoldierService.prototype, {});
+  SoldierService.apply(obj, arguments);
   return obj;
 }
-module.exports = OrganizationService;
+module.exports = SoldierService;

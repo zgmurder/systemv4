@@ -29,6 +29,11 @@ public class OrganizationConverter {
             obj.setChildCount(((Number)member.getValue()).intValue());
           }
           break;
+        case "createdTime":
+          if (member.getValue() instanceof Number) {
+            obj.setCreatedTime(((Number)member.getValue()).longValue());
+          }
+          break;
         case "deactivated":
           if (member.getValue() instanceof Boolean) {
             obj.setDeactivated((Boolean)member.getValue());
@@ -139,6 +144,11 @@ public class OrganizationConverter {
             obj.setSpecialMission((String)member.getValue());
           }
           break;
+        case "updatedTime":
+          if (member.getValue() instanceof Number) {
+            obj.setUpdatedTime(((Number)member.getValue()).longValue());
+          }
+          break;
       }
     }
   }
@@ -155,6 +165,9 @@ public class OrganizationConverter {
       json.put("altitude", obj.getAltitude());
     }
     json.put("childCount", obj.getChildCount());
+    if (obj.getCreatedTime() != null) {
+      json.put("createdTime", obj.getCreatedTime());
+    }
     if (obj.getDeactivated() != null) {
       json.put("deactivated", obj.getDeactivated());
     }
@@ -212,6 +225,9 @@ public class OrganizationConverter {
     }
     if (obj.getSpecialMission() != null) {
       json.put("specialMission", obj.getSpecialMission());
+    }
+    if (obj.getUpdatedTime() != null) {
+      json.put("updatedTime", obj.getUpdatedTime());
     }
   }
 }

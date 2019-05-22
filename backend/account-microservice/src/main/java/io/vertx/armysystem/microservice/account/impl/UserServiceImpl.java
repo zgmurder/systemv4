@@ -114,7 +114,8 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
     user.setBuildIn(false);
     JsonObject query = new JsonObject().put("username", user.getUsername());
 
-    ModelUtil.validateOrganization(principal, user.toJson())
+    ModelUtil.fillOrganization(this, item)
+        .compose(u -> ModelUtil.validateOrganization(principal, u))
         .compose(r -> validatePermissions(principal, user.getRoleName()))
         .compose(r -> this.findOne(getCollectionName(), query, new JsonObject()))
         .map(option -> option.map(User::new).orElse(null))
@@ -126,7 +127,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
             } else {
               fillRoleLevel(user, principal)
                   .compose(u -> this.insertOne(getCollectionName(), u.toJson()))
-                  .compose(u -> fillOrganization(u))
+                  .compose(u -> ModelUtil.fillOrganization(this, u))
                   .map(json -> json.putNull("password"))
                   .setHandler(resultHandler);
             }
@@ -143,7 +144,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
     this.findOne(getCollectionName(), getCondition(id, principal).getQuery(), new JsonObject())
         .map(option -> option.map(json -> json.putNull("password")))
         .map(option -> option.orElse(null))
-        .compose(u -> fillOrganization(u))
+        .compose(u -> ModelUtil.fillOrganization(this, u))
         .setHandler(resultHandler);
 
     return this;
@@ -325,7 +326,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
         .map(option -> option.map(json -> json.putNull("password")))
         .map(option -> option.map(User::new).orElse(null))
         .compose(user -> this.fillPermissionsInUser(user))
-        .compose(json -> fillOrganization(json))
+        .compose(json -> ModelUtil.fillOrganization(this, json))
         .setHandler(ar -> {
           if (ar.succeeded()) {
             if (ar.result() != null) {
@@ -459,15 +460,5 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
         .filterByUserOrganizationV1(FILTER_COLUMN_NAME, principal);
 
     return condition;
-  }
-
-  private Future<JsonObject> fillOrganization(JsonObject object) {
-    if (object == null || !object.containsKey("organizationId")) {
-      return Future.succeededFuture(object);
-    } else {
-      return this.findOne("Organization",
-          new JsonObject().put("_id", object.getString("organizationId")), new JsonObject())
-          .map(option -> option.isPresent()?object.put("organization", option.get()):object);
-    }
   }
 }

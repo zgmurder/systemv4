@@ -45,7 +45,6 @@ class User {
   private String roleName;
   private int roleLevel;   // auto
   private String organizationId;
-  private List<String> parentOrgIds; // auto
 
   private String phone;
   private String email;
