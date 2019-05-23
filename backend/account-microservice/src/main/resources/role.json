@@ -17,6 +17,12 @@
       "schemaName": "User",
       "actions": ["Read", "Create", "Update", "Delete"]
     }, {
+      "schemaName": "Organization",
+      "actions": ["Read", "Create", "Update", "Delete"]
+    }, {
+      "schemaName": "Soldier",
+      "actions": ["Read", "Create", "Update", "Delete"]
+    }, {
       "schemaName": "*",
       "actions": ["Read"]
     }]

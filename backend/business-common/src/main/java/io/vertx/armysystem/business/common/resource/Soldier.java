@@ -36,10 +36,10 @@ public class Soldier {
 
   private String soldierCategory;           // 人员类别(必填)，区分指挥警官/技术警官/文职人员/士官/义务兵
   private Boolean isSupporter;              // 保障人员标志(必填)
-  private String personProperty;            // 人员属性(自动生成), 区分分队\警官\保障人员\正式队员\预备队员\新兵
+  private String personProperty;            // 人员属性(自动生成), 区分分队\警官\保障人员\预备队员\新兵\新训干部骨干
   private Boolean isCivilServant;           // 是否为文职人员(自动生成)
   private Boolean isSpecialForce;           // 是否为特战队员，所属单位属性为特战时为true, 其它为false (自动生成)
-  private String specialForceType;              // 作战队员或者预备队员，对特战分队有效，所属单位为特战属性时，由用户选择。(选填)
+  private String specialForceType;          // 作战队员或者预备队员，对特战分队有效，所属单位为特战属性时，由用户选择。(选填)
 
   private String gunnerType;                // 枪手类型(选填)
   private List<String> majorType;           // 专业类型(选填)，可选项根据单位分类获取可选专业

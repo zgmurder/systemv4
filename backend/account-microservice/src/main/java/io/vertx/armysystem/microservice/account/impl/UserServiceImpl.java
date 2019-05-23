@@ -122,7 +122,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
         .setHandler(ar -> {
           if (ar.succeeded()) {
             if (ar.result() != null) {
-              String failureMessage = "User already exists : " + user.getUsername();
+              String failureMessage = "User already exists with name " + user.getUsername();
               resultHandler.handle(Future.failedFuture(failureMessage));
             } else {
               fillRoleLevel(user, principal)
