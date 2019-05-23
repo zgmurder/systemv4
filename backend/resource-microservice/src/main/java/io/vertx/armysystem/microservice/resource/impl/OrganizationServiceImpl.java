@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class OrganizationServiceImpl extends MongoRepositoryWrapper implements OrganizationService, ServiceBase {
+  private static final String FILTER_COLUMN_NAME = "parentIds";
   private static final Logger logger = LoggerFactory.getLogger(OrganizationRouter.class);
   private final Vertx vertx;
 
@@ -158,7 +159,7 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
       qCondition.getOption().put("sort", new JsonObject().put("orgCode", 1));
     }
 
-    qCondition.filterByUserOrganizationV2(getCollectionName(), principal);
+    qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
     logger.info("retrieveManyByCondition condition: " + qCondition);
 
     this.findWithOptions(getCollectionName(), qCondition.getQuery(), qCondition.getOption())
