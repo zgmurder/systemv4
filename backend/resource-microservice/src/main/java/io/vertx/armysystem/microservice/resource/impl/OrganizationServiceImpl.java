@@ -142,7 +142,7 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
   @Override
   public OrganizationService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
-    qCondition.filterByUserOrganizationV2(getCollectionName(), principal);
+    qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
     logger.info("count condition: " + qCondition);
 
     this.count(getCollectionName(), qCondition.getQuery())
@@ -390,7 +390,7 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
         .add(new JsonObject().put("displayName", id)));
 
     QueryCondition condition = new QueryCondition(query, new JsonObject())
-        .filterByUserOrganizationV1("parentIds", principal);
+        .filterByUserOrganizationV1(FILTER_COLUMN_NAME, principal);
 
     return condition;
   }
@@ -400,19 +400,6 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
     if (obj != null && obj.containsKey("parentIds")) {
       parentIds = obj.getJsonArray("parentIds").getList();
     }
-
-    return parentIds;
-  }
-
-  private List<String> makeParentIds(JsonObject parent) {
-    List<String> parentIds = new ArrayList<>();
-    if (parent != null && parent.containsKey("parentIds")) {
-      parentIds = parent.getJsonArray("parentIds").getList();
-    }
-    if (parent != null) {
-      parentIds.add(parent.getString("id"));
-    }
-
 
     return parentIds;
   }
@@ -461,10 +448,6 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
           .otherwise(Optional.empty())
           .map(option -> option.orElse(null));
     } else {
-//      return this.findWithOptions(getCollectionName(),
-//          new JsonObject().put("parentId", new JsonObject().put("$exists", false)), new JsonObject())
-//          .otherwiseEmpty()
-//          .map(list -> list.isEmpty() ? null : list.get(0));
       return Future.succeededFuture();
     }
   }
