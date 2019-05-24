@@ -166,16 +166,9 @@ public class OrganizationServiceImpl extends MongoRepositoryWrapper implements O
         .map(list -> list.stream()
             .map(json -> new Organization(json).toJson())
             .collect(Collectors.toList()))
-        .compose(list -> {
-          // 通过parentId查子节点时需要填充childCount字段
-          if (!list.isEmpty() && qCondition.getQuery().containsKey("parentId")) {
-            return Functional.allOfFutures(list.stream()
+        .compose(list -> Functional.allOfFutures(list.stream()
                 .map(object -> fillChildCount(object))
-                .collect(Collectors.toList()));
-          } else {
-            return Future.succeededFuture(list);
-          }
-        })
+                .collect(Collectors.toList())))
         .setHandler(resultHandler);
 
     return this;
