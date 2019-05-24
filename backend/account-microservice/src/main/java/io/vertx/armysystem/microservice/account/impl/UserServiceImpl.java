@@ -159,10 +159,43 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
 
   @Override
   public UserService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler) {
+//    QueryCondition qCondition = QueryCondition.parse(condition);
+//    qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
+//    this.count(getCollectionName(), qCondition.getQuery())
+//        .setHandler(resultHandler);
+
     QueryCondition qCondition = QueryCondition.parse(condition);
+
     qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
-    this.count(getCollectionName(), qCondition.getQuery())
-        .setHandler(resultHandler);
+    logger.info("count condition: " + qCondition);
+    JsonArray pipeline = new JsonArray()
+        .add(new JsonObject().put("$lookup", new JsonObject()
+            .put("from", "Organization")
+            .put("localField", "organizationId")
+            .put("foreignField", "_id")
+            .put("as", "organization")))
+        .add(new JsonObject().put("$match", qCondition.getQuery()))
+        .add(new JsonObject().put("$count", "count"));
+
+    List<JsonObject> results = new ArrayList<>();
+    Future<List<JsonObject>> future = Future.future();
+    this.aggregateWithOptions(getCollectionName(), pipeline, new JsonObject())
+        .handler(object -> results.add(object))
+        .endHandler(v -> {
+          logger.info("count users: " + results);
+          future.complete(results);
+        })
+        .exceptionHandler(ex -> {
+          logger.error("count users failed: " + ex);
+          future.fail(ex);
+        });
+    future.map(list -> {
+          if (list.isEmpty()) {
+            return 0L;
+          } else {
+            return list.get(0).getLong("count");
+          }
+        }).setHandler(resultHandler);
 
     return this;
   }
