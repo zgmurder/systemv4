@@ -54,9 +54,19 @@ public class SoldierArchiveConverter {
             obj.setPosition((String)member.getValue());
           }
           break;
+        case "positionId":
+          if (member.getValue() instanceof String) {
+            obj.setPositionId((String)member.getValue());
+          }
+          break;
         case "rank":
           if (member.getValue() instanceof String) {
             obj.setRank((String)member.getValue());
+          }
+          break;
+        case "rankId":
+          if (member.getValue() instanceof String) {
+            obj.setRankId((String)member.getValue());
           }
           break;
       }
@@ -92,8 +102,14 @@ public class SoldierArchiveConverter {
     if (obj.getPosition() != null) {
       json.put("position", obj.getPosition());
     }
+    if (obj.getPositionId() != null) {
+      json.put("positionId", obj.getPositionId());
+    }
     if (obj.getRank() != null) {
       json.put("rank", obj.getRank());
+    }
+    if (obj.getRankId() != null) {
+      json.put("rankId", obj.getRankId());
     }
   }
 }

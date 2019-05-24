@@ -159,43 +159,12 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
 
   @Override
   public UserService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler) {
-//    QueryCondition qCondition = QueryCondition.parse(condition);
-//    qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
-//    this.count(getCollectionName(), qCondition.getQuery())
-//        .setHandler(resultHandler);
-
     QueryCondition qCondition = QueryCondition.parse(condition);
 
     qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
-    logger.info("count condition: " + qCondition);
-    JsonArray pipeline = new JsonArray()
-        .add(new JsonObject().put("$lookup", new JsonObject()
-            .put("from", "Organization")
-            .put("localField", "organizationId")
-            .put("foreignField", "_id")
-            .put("as", "organization")))
-        .add(new JsonObject().put("$match", qCondition.getQuery()))
-        .add(new JsonObject().put("$count", "count"));
-
-    List<JsonObject> results = new ArrayList<>();
-    Future<List<JsonObject>> future = Future.future();
-    this.aggregateWithOptions(getCollectionName(), pipeline, new JsonObject())
-        .handler(object -> results.add(object))
-        .endHandler(v -> {
-          logger.info("count users: " + results);
-          future.complete(results);
-        })
-        .exceptionHandler(ex -> {
-          logger.error("count users failed: " + ex);
-          future.fail(ex);
-        });
-    future.map(list -> {
-          if (list.isEmpty()) {
-            return 0L;
-          } else {
-            return list.get(0).getLong("count");
-          }
-        }).setHandler(resultHandler);
+    logger.info("count user condition: " + qCondition);
+    ModelUtil.countByWithOrganization(this, getCollectionName(), qCondition)
+        .setHandler(resultHandler);
 
     return this;
   }
@@ -281,7 +250,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
 
               io.vertx.armysystem.microservice.common.functional.Functional.allOfFutures(futures)
                   .compose(r -> fillRoleLevel(user, principal))
-                  .compose(r -> this.update(getCollectionName(), new JsonObject().put("_id", id), user.toJson()))
+                  .compose(r -> this.update(getCollectionName(), new JsonObject().put("_id", ar.result().getId()), user.toJson()))
                   .setHandler(ar2 -> {
                     if (ar2.succeeded()) {
                       this.retrieveOne(user.getId(), principal, resultHandler);
@@ -290,7 +259,7 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
                     }
                   });
             } else {
-              resultHandler.handle(Future.failedFuture("The user does not exist"));
+              resultHandler.handle(Future.failedFuture("Not found"));
             }
           } else {
             resultHandler.handle(Future.failedFuture(ar.cause()));

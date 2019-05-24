@@ -156,7 +156,7 @@ public class MongoRepositoryWrapper {
     return future;
   }
 
-  protected ReadStream<JsonObject> aggregateWithOptions(String collection, final JsonArray pipeline, JsonObject options) {
+  public ReadStream<JsonObject> aggregateWithOptions(String collection, final JsonArray pipeline, JsonObject options) {
     return client.aggregateWithOptions(collection, pipeline, new AggregateOptions(options));
   }
 

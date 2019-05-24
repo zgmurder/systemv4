@@ -15,7 +15,9 @@ public class SoldierArchive {
   private String cardId;
   private String action;          // 具体参考SoldierAction
   private String organizationId;
+  private String positionId;
   private String position;
+  private String rankId;
   private String rank;
   private String description;
   private Long createdTime;
@@ -79,12 +81,30 @@ public class SoldierArchive {
     return this;
   }
 
+  public String getPositionId() {
+    return positionId;
+  }
+
+  public SoldierArchive setPositionId(String positionId) {
+    this.positionId = positionId;
+    return this;
+  }
+
   public String getPosition() {
     return position;
   }
 
   public SoldierArchive setPosition(String position) {
     this.position = position;
+    return this;
+  }
+
+  public String getRankId() {
+    return rankId;
+  }
+
+  public SoldierArchive setRankId(String rankId) {
+    this.rankId = rankId;
     return this;
   }
 

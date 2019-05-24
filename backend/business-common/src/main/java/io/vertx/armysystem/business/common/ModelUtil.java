@@ -3,6 +3,7 @@ package io.vertx.armysystem.business.common;
 import io.vertx.armysystem.business.common.resource.Organization;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
 import io.vertx.core.Future;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 import java.util.ArrayList;
@@ -44,5 +45,34 @@ public final class ModelUtil {
     }
 
     return future;
+  }
+
+  public static Future<Long> countByWithOrganization(MongoRepositoryWrapper mongo, String collection, QueryCondition qCondition) {
+    JsonArray pipeline = new JsonArray()
+        .add(new JsonObject().put("$lookup", new JsonObject()
+            .put("from", "Organization")
+            .put("localField", "organizationId")
+            .put("foreignField", "_id")
+            .put("as", "organization")))
+        .add(new JsonObject().put("$match", qCondition.getQuery()))
+        .add(new JsonObject().put("$count", "count"));
+
+    List<JsonObject> results = new ArrayList<>();
+    Future<List<JsonObject>> future = Future.future();
+    mongo.aggregateWithOptions(collection, pipeline, new JsonObject())
+        .handler(object -> results.add(object))
+        .endHandler(v -> {
+          future.complete(results);
+        })
+        .exceptionHandler(ex -> {
+          future.fail(ex);
+        });
+    return future.map(list -> {
+      if (list.isEmpty()) {
+        return 0L;
+      } else {
+        return list.get(0).getLong("count");
+      }
+    });
   }
 }

@@ -298,7 +298,9 @@
 |[[name]]`@name`|`String`|-
 |[[organizationId]]`@organizationId`|`String`|-
 |[[position]]`@position`|`String`|-
+|[[positionId]]`@positionId`|`String`|-
 |[[rank]]`@rank`|`String`|-
+|[[rankId]]`@rankId`|`String`|-
 |===
 
 [[SpecialMission]]
