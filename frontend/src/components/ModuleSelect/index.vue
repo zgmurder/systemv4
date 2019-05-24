@@ -41,6 +41,9 @@ export default {
     handleClick(vm) {
       setModuleName(vm.name)
       this.$store.commit('permission/SET_MODULENAME', vm.name)
+      const obj = this.mapModules.find(item => item.value === vm.name)
+      const path = obj.path || obj.value
+      this.$router.push('/' + path)
     }
   }
 

@@ -1,14 +1,13 @@
 <template>
   <div class="app-container">
-    <form-and-table url="/account/user" :columns="columns" :schema="schema" :no-handle="noHandle" @cell-mouse-enter="()=>false" />
+    <form-and-table url="/account/user" :before-click-add="beforeClickAdd" :columns="columns" :schema="schema" :no-handle="noHandle" @cell-mouse-enter="()=>false" />
   </div>
 </template>
 
 <script>
 import formAndTable from '@/components/formAndTable'
-import { queryRoles } from '@/api/account'
-import { queryOrgs } from '@/api/org'
-
+// import { queryRoles } from '@/api/account'
+import { queryOrgs, queryList } from '@/api/baseApi'
 export default {
   components: {
     formAndTable
@@ -26,12 +25,12 @@ export default {
         if (row.username === this.$store.getters.username) {
           return true
         }
-        const found = this.schemaRoleName.options.find(item => item.roleName === row.roleName)
+        const found = this.roleList.find(item => item.roleName === row.roleName)
         const permissions = found.permissions.reduce((prev, curr) => {
           const arr = curr.actions.map(item => `${curr.schemaName}:${item}`)
           return prev.concat(arr)
         }, [])
-        const ownPermissions = this.$store.getters.permissions
+        const ownPermissions = this.$store.getters.permissions || []
         const is = permissions.every(item => {
           const str = item.replace(/[\w\W]*:/g, '*:')
           // || ownPermissions.includes(item.replace(/\d?=:/))
@@ -43,8 +42,8 @@ export default {
         {
           fieldType: 'autocomplete',
           fetchSuggestions: this.querySearch,
-          placeholder: '单位名称',
-          label: '单位名称',
+          placeholder: '选择单位',
+          label: '选择单位',
           vModel: 'organizationId',
           organizationId: '',
           required: true,
@@ -101,7 +100,8 @@ export default {
           optValue: 'roleName',
           options: []
         }
-      ]
+      ],
+      roleList: []
     }
   },
   computed: {
@@ -116,8 +116,9 @@ export default {
     }
   },
   created() {
-    queryRoles().then(list => {
-      this.schemaRoleName.options = list
+    queryList('/account/role').then(list => {
+      this.roleList = list
+      this.schemaRoleName.options = list.filter(item => item.roleName !== 'Administrator')
     })
   },
   methods: {
@@ -125,14 +126,18 @@ export default {
       console.log(111)
     },
     async querySearch(queryString = '', cb) {
-      // let str
-      // const { orgSequence, displayName } = this.$store.getters.organization
-      // if (orgSequence < 2) str = queryString
-      // else {
-      //   if (displayName.includes(queryString)) str = displayName
-      //   else str = displayName + queryString
-      // }
-      const result = await queryOrgs()
+      let { displayName } = this.$store.getters.organization
+      if (queryString && queryString.includes(displayName)) {
+        displayName = queryString
+      }
+      const result = await queryOrgs({
+        $or: [{ 'orgType': '分队' }, { 'orgType': '部队' }],
+        sort: { orgSequence: 1 },
+        limit: 20,
+        displayName: {
+          '$regex': displayName
+        }
+      })
       const arr = result.map(item => ({
         value: item.displayName,
         ...item
@@ -141,17 +146,25 @@ export default {
     },
     beforeSubmit(target) {
       target.organizationId = this.org.id
-      target.parentOrgIds = this.org.parentIds
+      // target.parentOrgIds = this.org.parentIds
     },
     beforeEdit(target) {
       this.org = { ...(target.organization || {}) }
       target.organizationId = target.organization && target.organization.displayName
     },
     handleRole(roleName) {
-      const found = this.schemaRoleName.options.find(item => item.roleName === roleName)
+      const found = this.roleList.find(item => item.roleName === roleName)
       return found.displayName + '（' + found.permissions.reduce((prev, curr) => {
         return `${prev}${curr.schemaName}：${curr.actions.join('、')}；`
       }, '') + '）'
+    },
+    beforeClickAdd() {
+      if (this.$tools.isEmpty(this.$store.getters.organization)) {
+        this.$message.warning('请选添加单位')
+        return true
+      } else {
+        return false
+      }
     }
   }
 }

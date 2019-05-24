@@ -5,6 +5,9 @@
         <router-view :key="key" />
       </keep-alive>
     </transition>
+    <!-- <keep-alive :include="cachedViews">
+      <router-view :key="key" />
+    </keep-alive> -->
   </section>
 </template>
 

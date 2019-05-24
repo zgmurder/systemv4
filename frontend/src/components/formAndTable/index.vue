@@ -9,7 +9,7 @@
           </el-select>
         </el-input>
       </div>
-      <el-button v-show="btnShow" class="btn" size="small" type="primary" icon="el-icon-plus" @click="()=>{dialogVisible = true,$emit('dialogVisible',total)}" />
+      <el-button v-show="btnShow" class="btn" size="small" type="primary" icon="el-icon-plus" @click="handleAddBtn" />
     </div>
     <tableSchema
       :data="tableList"
@@ -93,6 +93,10 @@ export default {
       required: true,
       type: String,
       default: ''
+    },
+    beforeClickAdd: {
+      type: Function,
+      default: () => {}
     }
 
   },
@@ -189,13 +193,13 @@ export default {
         type: 'warning'
       }).catch(() => false)
       if (!isOk) return
-      await deleteItem(this.url, row.id)
+      await deleteItem(this.url, row.id || row._id)
       this.$message({ showClose: true, type: 'success', message: '删除成功' })
       this.fetchTableList()
     },
     editItem(row) {
       this.dialogVisible = true
-      this.id = row.id
+      this.id = row.id || row._id
       const target = cloneDeep(row)
       this.$parent.beforeEdit && this.$parent.beforeEdit(target)
       setTimeout(() => {
@@ -209,6 +213,13 @@ export default {
     },
     handleTableFilter(value) {
       console.log(value)
+    },
+    handleAddBtn() {
+      console.log(this.beforeClickAdd())
+
+      if (this.beforeClickAdd()) return
+      this.dialogVisible = true
+      this.$emit('dialogVisible', this.total)
     }
   }
 }

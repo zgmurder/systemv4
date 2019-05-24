@@ -39,12 +39,12 @@ router.beforeEach(async(to, from, next) => {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-          const { roleName } = await store.dispatch('user/saveToVuex', user)
+          await store.dispatch('user/saveToVuex', user)
           console.log(store.getters.permissions)
 
           // generate accessible routes map based on roles
           // await store.dispatch('permission/getModules', roleName)
-          const accessRoutes = await store.dispatch('permission/generateRoutes', roleName)
+          const accessRoutes = await store.dispatch('permission/generateRoutes', user.roleName)
 
           // dynamically add accessible routes
           // console.log(accessRoutes)

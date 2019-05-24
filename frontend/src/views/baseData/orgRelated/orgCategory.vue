@@ -112,7 +112,8 @@ export default {
       this.schemaOptionalMajors.options = []
     },
     dialogVisible(count = 0) {
-      this.schema[1].order = count + 1
+      const obj = this.schema.find(item => item.vModel === 'order')
+      obj.order = count + 1
     }
   }
 }

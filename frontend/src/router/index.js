@@ -13,6 +13,7 @@ import Layout from '@/layout'
 // import nestedRouter from './modules/nested'
 import baseDataRouter from './modules/baseData'
 import orgManageRouter from './modules/orgManage'
+import accountRouter from './modules/account'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -128,6 +129,7 @@ export const asyncRouterMap = [
   },
   ...baseDataRouter,
   ...orgManageRouter,
+  ...accountRouter
   // componentsRouter,
   // chartsRouter
   // {
@@ -172,40 +174,6 @@ export const asyncRouterMap = [
   //   ]
   // },
 
-  {
-    path: '/icon',
-    component: Layout,
-    belong: ['train'],
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/icons/index'),
-        name: 'Icons',
-        meta: {
-          title: 'icons',
-          icon: 'icon',
-          noCache: true
-        }
-      }
-    ]
-  },
-  {
-    path: '/account',
-    component: Layout,
-    belong: ['account'],
-    meta: {
-      belong: 'account'
-    },
-    children: [{
-      path: 'index',
-      name: 'account',
-      component: () => import('@/views/account/index'),
-      meta: {
-        title: 'account',
-        icon: 'form'
-      }
-    }]
-  }
   // {
   //   path: '/equipment',
   //   component: Layout,
