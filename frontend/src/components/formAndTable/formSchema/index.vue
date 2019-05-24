@@ -174,7 +174,7 @@ export default {
       return typeof item === 'object' ? (optLabel ? item[optLabel] : item.name) : item
     },
     handleControl(controlBy) {
-      if (!controlBy || this.$tools.isEmpty(controlBy)) return true
+      if (!controlBy || isEmpty(controlBy)) return true
       const found = this.schema.find(item => item.vModel === controlBy.name)
       return found ? (controlBy.handle && controlBy.handle(found[found.vModel])) : true
     }

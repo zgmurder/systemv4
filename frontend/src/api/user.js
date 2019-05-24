@@ -23,18 +23,12 @@ export function logout() {
     method: 'post'
   })
 }
-const getRootOrg = () => {
-  return queryFirst(`/resource/organizations`, {
+export function getRootOrg() {
+  return queryFirst(`/resource/organization`, {
     where: {
       'parentId': {
         '$exists': false
       }
     }
   })
-}
-export function getOrg(id) {
-  return id ? request({
-    url: `/resource/organization/${id}`,
-    method: 'get'
-  }) : getRootOrg()
 }

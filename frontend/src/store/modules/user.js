@@ -1,6 +1,8 @@
-import { login, getOrg } from '@/api/user'
-import { getToken, setToken, removeToken, setUser, removeUser } from '@/utils/auth'
+import { login, getRootOrg } from '@/api/user'
+import { fetchItem } from '@/api/baseApi'
+import { getToken, setToken, removeToken, setUser, getUser, removeUser } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+
 // import { mapModules } from '@/const'
 
 const state = {
@@ -35,7 +37,6 @@ const mutations = {
   },
   SET_ORGANIZATION: (state, organization) => {
     state.organization = organization
-    console.log(state.organization, 333)
   },
   SET_PERMISSIONS: (state, permissions) => {
     state.permissions = permissions
@@ -55,23 +56,34 @@ const actions = {
     const username = userInfo.username.trim()
     const { user, token } = await login({ username, password })
     setToken(token)
-
     commit('SET_TOKEN', token)
-    user.organization = await getOrg(user.organizationId)
-    console.log(user.organization, 222)
-
+    // user.organization = await getOrg(user.organizationId)
     setUser(JSON.stringify(user))
     return { user, token }
   },
 
-  saveToVuex({ commit }, user) {
-    return new Promise((resolve) => {
-      commit('SET_NAME', user.username)
-      commit('SET_ROLENAME', user.roleName)
-      commit('SET_PERMISSIONS', user.permissions)
-      commit('SET_ORGANIZATION', user.organization)
-      resolve(user)
-    })
+  async saveToVuex({ commit }, user) {
+    // return fetchItem('resource/organization')
+    // return new Promise((resolve) => {
+
+    //   resolve(user)
+    // })
+    commit('SET_NAME', user.username)
+    commit('SET_ROLENAME', user.roleName)
+    commit('SET_PERMISSIONS', user.permissions)
+    if (user.organizationId) {
+      const org = await fetchItem('resource/organization', user.organizationId)
+      commit('SET_ORGANIZATION', org)
+    } else {
+      const org = await getRootOrg()
+      commit('SET_ORGANIZATION', org)
+    }
+  },
+  changeOrg({ commit }, org) {
+    const user = JSON.parse(getUser())
+    user.organization = org
+    commit('SET_ORGANIZATION', org)
+    setUser(JSON.stringify(user))
   },
   // 登出
   logout() {

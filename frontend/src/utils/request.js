@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui' // MessageBox,
 import store from '@/store'
-// import { getToken } from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -15,7 +15,7 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-    if (store.getters.token) {
+    if (getToken()) {
       // let each request carry token --['X-Token'] as a custom key.
       // please modify it according to the actual situation.
       config.headers['Authorization'] = 'Bearer ' + store.getters.token

@@ -40,3 +40,16 @@ export function updateItem(url, obj) {
     data
   })
 }
+export function fetchItem(url, id) {
+  return request({
+    url: `${url}/${id}`,
+    method: 'GET'
+  })
+}
+export function stopOrg(id, deactivated) {
+  return request({
+    url: 'resource/organization/deactivate/' + id,
+    method: 'post',
+    data: { deactivated }
+  })
+}
