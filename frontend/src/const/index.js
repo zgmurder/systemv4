@@ -2,12 +2,14 @@ export const mapModules = [
   {
     roles: null,
     name: '训练工作',
-    value: 'train'
+    value: 'train',
+    path: 'dashboard'
   },
   {
     roles: null,
     name: '单位管理',
-    value: 'organization'
+    value: 'organization',
+    path: 'orgManage'
   },
   {
     roles: null,
@@ -22,7 +24,8 @@ export const mapModules = [
   {
     roles: ['Administrator'],
     name: '基础数据',
-    value: 'basedata'
+    value: 'basedata',
+    path: 'orgRelated'
   }
 ]
 // 定义常用的返回值

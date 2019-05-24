@@ -271,10 +271,14 @@ export default {
           this.schemaObj.orgCategorySchema.options = []
         } else {
           const obj = this.schemaObj.orgCategorySchema
+          obj.disabled = newValue === '部门'
+          if (obj.disabled) {
+            obj.orgCategory = obj.orgCategory || this.currOrg.orgCategory
+          }
           obj.options = await queryList('dictionary/orgcategory', {
             where: { orgType: newValue }
           })
-          if (this.id) {
+          if (this.id && !obj.disabled) {
             const [optionalMajors, optionalServices] = [[], []]
             obj.orgCategory = obj.options.find(item => item.name === obj.orgCategory) || { optionalMajors, optionalServices }
             this.schemaObj.orgMajorsSchema.options = obj.orgCategory.optionalMajors
@@ -297,7 +301,7 @@ export default {
       return (
         <span class='custom-tree-node'>
           <span>
-            <span>{data.name}</span>
+            <span>{data.nodeCode} {data.name}</span>
             <el-tag type='success' size='mini' class='tag'> {OrgSequences.find(item => item.type === data.orgSequence).name}</ el-tag>
             <el-tag type='info' size='mini' class='tag'> {data.orgCategory} </el-tag>
             <el-tag type='warning' size='mini' class='tag'> {data.orgType} </el-tag>
@@ -310,14 +314,18 @@ export default {
             <el-button size='mini' type='danger' disabled={!!data.childCount} on-click={e => {
               e.stopPropagation()
               this.deleteOrg(data, node, store)
-            }} plain>删除</el-button>
+            }} plain title={!!data.childCount && '存在下级单位无法操作'}>删除</el-button>
             <el-button size='mini' type='success' on-click={e => {
               e.stopPropagation()
               this.handeEdit(data, node)
             }} plain> 查看编辑 </el-button>
             <el-button size='mini' type='primary' on-click={e => {
-              e.stopPropagation()
-              this.handeAdd(data, node)
+              if (node.expanded)e.stopPropagation()
+              setTimeout(() => {
+                this.handeAdd(data, node)
+              }, 100)
+              // e.stopPropagation()
+              // if (!node.isLeaf && !node.expanded)node.expanded = true
             }} plain> 添加下级单位 </el-button>
           </span>
         </span>
@@ -334,13 +342,15 @@ export default {
       this.currNode = node
       this.formDialogVisible = true
       const found = this.schema.find(item => item.vModel === 'nodeCode')
-      found.nodeCode = org.childCount + 1
       this.schemaObj.orgMajorsSchema.options = []
       this.schemaObj.serviceTypeSchema.options = []
       // 防止初始值被污染
       setTimeout(() => {
         this.schemaObj.parentNameSchema.parentName = this.currOrg.name
         this.schemaObj.displayNameSchema.displayName = this.currOrg.name
+      })
+      this.$nextTick(() => {
+        found.nodeCode = node.childNodes.length + 1
       })
     },
     handeEdit(data, node) {
@@ -398,6 +408,8 @@ export default {
         if (children.length) {
           node.childNodes = []
           node.doCreateChildren(children)
+          // node.expanded = true
+          node.isLeaf = false
           this.$message.success('操作成功')
           this.formDialogVisible = false
         } else {
@@ -409,9 +421,10 @@ export default {
       if (this.$tools.isObject(formData.orgCategory)) {
         formData.orgCategory = formData.orgCategory.name
       }
-      const isNotRoot = this.$tools.isEmpty(this.currOrg)
+      const isNotRoot = this.$tools.isEmpty(this.$store.getters.organization)
       if (isNotRoot) {
         saveItem(this.url, formData).then(obj => {
+          if (!obj) return
           this.$store.dispatch('user/changeOrg', obj)
           this.$message({ showClose: true, type: 'success', message: '根单位添加成功' })
           this.formDialogVisible = false
@@ -420,11 +433,13 @@ export default {
         if (this.id) {
           formData.id = this.id
           updateItem(this.url, formData).then(res => {
+            if (!res) return
             this.updateChildren(this.currNode.parent)
           })
         } else {
           formData.parentId = this.currOrg.id
           saveItem(this.url, formData).then(res => {
+            if (!res) return
             this.updateChildren(this.currNode)
           })
         }

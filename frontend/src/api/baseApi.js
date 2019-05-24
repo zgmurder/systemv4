@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+// import { getUser } from '@/utils/auth'
 export function queryList(url, { where = {}, option = {}} = {}, { isTotal = false, isFirst = false } = {}) {
   url = isTotal ? url + 's/count' : url + 's'
   option = isFirst ? { ...option, limit: 1 } : option
@@ -8,6 +9,7 @@ export function queryList(url, { where = {}, option = {}} = {}, { isTotal = fals
     data: { where, option }
   })
 }
+
 export function queryListAndTotal() {
   return Promise.all([
     queryList(...arguments),
@@ -51,5 +53,12 @@ export function stopOrg(id, deactivated) {
     url: 'resource/organization/deactivate/' + id,
     method: 'post',
     data: { deactivated }
+  })
+}
+export function queryOrgs(obj) {
+  const { sort, limit, ...where } = obj
+  return queryList('resource/organization', {
+    where,
+    option: { sort, limit }
   })
 }

@@ -39,11 +39,11 @@
               {{ $t('navbar.dashboard') }}
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
+          <!-- <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
             <el-dropdown-item>
               {{ $t('navbar.github') }}
             </el-dropdown-item>
-          </a>
+          </a> -->
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>
           </el-dropdown-item>
@@ -93,7 +93,7 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('user/logout')
-      window.location.reload()
+      // window.location.reload()
 
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }

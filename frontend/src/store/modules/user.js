@@ -90,6 +90,7 @@ const actions = {
     this.dispatch('user/saveToVuex', {}).then(() => {
       removeUser()
       removeToken()
+      window.location.reload()
     })
   },
 
