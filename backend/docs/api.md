@@ -474,6 +474,17 @@ class Soldier {
   private Long createdTime;
   private Long updatedTime;
 }
+class AdvancedPersonInfo {
+  private String phoneNum;        // 联系电话
+  private String bloodType;       // 血型
+  private String nationality;     // 国籍，默认中国
+  private String fromCity;        // 籍贯
+  private String currentCity;     // 户口所在地
+  private String highestDegree;   // 最高学历
+  private String graduatedSchool; // 毕业院校
+  private String graduatedMajor;  // 毕业专业
+  private String graduatedAt;     // 毕业日期
+}
 ```
 
 1. Add
