@@ -50,9 +50,9 @@ public class OrganizationRouter extends RouterBase {
     router.delete(PREFIX+base.getCollectionName().toLowerCase()+"/:id")
         .handler(context -> verticle.requireAuth(context, base.getPermission(), Action.Delete.toString(), this::apiDeleteItem));
     router.post(PREFIX+base.getCollectionName().toLowerCase()+"/swap/:id")
-        .handler(context -> verticle.requireAuth(context, base.getPermission(), Action.Delete.toString(), this::apiSwap));
+        .handler(context -> verticle.requireAuth(context, base.getPermission(), Action.Update.toString(), this::apiSwap));
     router.post(PREFIX+base.getCollectionName().toLowerCase()+"/deactivate/:id")
-        .handler(context -> verticle.requireAuth(context, base.getPermission(), Action.Delete.toString(), this::apiDeactivate));
+        .handler(context -> verticle.requireAuth(context, base.getPermission(), Action.Update.toString(), this::apiDeactivate));
   }
 
   private void apiAddItem(RoutingContext context, JsonObject principal) {

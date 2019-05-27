@@ -2,6 +2,7 @@ package io.vertx.armysystem.microservice.resource.api;
 
 import io.vertx.armysystem.microservice.common.RestAPIVerticle;
 import io.vertx.armysystem.microservice.resource.OrganizationService;
+import io.vertx.armysystem.microservice.resource.SoldierService;
 import io.vertx.core.Future;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -14,11 +15,14 @@ public class ResourceRestAPIVerticle extends RestAPIVerticle {
   private static final String SERVICE_NAME = "resource-rest-api";
 
   private OrganizationRouter organizationRouter;
+  private SoldierRouter soldierRouter;
 
-  public ResourceRestAPIVerticle(OrganizationService organizationService) {
+  public ResourceRestAPIVerticle(OrganizationService organizationService,
+                                 SoldierService soldierService) {
     super();
 
     this.organizationRouter = new OrganizationRouter(this, context, organizationService);
+    this.soldierRouter = new SoldierRouter(this, context, soldierService);
   }
 
   @Override
@@ -31,6 +35,7 @@ public class ResourceRestAPIVerticle extends RestAPIVerticle {
     enableCorsSupport(router);
 
     organizationRouter.route(router);
+    soldierRouter.route(router);
 
     String host = config().getString("http.address", "0.0.0.0");
     int port = config().getInteger("http.port", 8082);
