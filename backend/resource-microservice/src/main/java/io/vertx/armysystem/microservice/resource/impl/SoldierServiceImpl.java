@@ -94,12 +94,14 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
   public SoldierService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
     Soldier soldier = new Soldier(item);
 
-    logger.info("addOne " + soldier);
+    logger.info("addOne original item " + item);
     ModelUtil.fillOrganization(this, item)
         .compose(o -> ModelUtil.validateOrganization(principal, o))
         .compose(o -> validateParams(o, true))
         .compose(o -> fillAutoParams(o, true))
         .compose(o -> {
+          logger.info("addOne with soldier " + o);
+
           if (o.containsKey("cardId") && !o.getString("cardId").isEmpty()){
             return this.findOne(getCollectionName(), new JsonObject()
                 .put("cardId", o.getString("cardId"))
@@ -453,7 +455,7 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
     Boolean failed = false;
 
     if (forAdd) {
-      soldier.remove("id");
+//      soldier.remove("id");
       JsonObject organization = soldier.getJsonObject("organization");
       failed = failed || organization == null;
       failed = failed || !soldier.containsKey("name") || soldier.getString("name").isEmpty();
@@ -466,7 +468,7 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
       failed = failed || !soldier.containsKey("soldierCategory") || soldier.getString("soldierCategory").isEmpty();
 
       // 新兵单位录入人员时，可能还未分配士兵证
-      if (!organization.getString("orgProperty").equals("新兵")) {
+      if (organization != null && !organization.getString("orgProperty").equals("新兵")) {
         failed = failed || !soldier.containsKey("cardId") || soldier.getString("cardId").isEmpty();
       }
     } else {
