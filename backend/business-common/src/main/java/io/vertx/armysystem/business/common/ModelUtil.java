@@ -28,7 +28,7 @@ public final class ModelUtil {
 
     String userOrgId = principal.getString("organizationId");
     if (userOrgId == null) {
-      future.complete();
+      future.complete(model);
     } else {
       String organizationId = model.getString("organizationId");
       List<String> parentOrgIds = new ArrayList<>();
