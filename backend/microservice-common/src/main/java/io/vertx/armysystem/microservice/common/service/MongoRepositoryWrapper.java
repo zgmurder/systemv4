@@ -69,6 +69,7 @@ public class MongoRepositoryWrapper {
     }
     document.put("createdTime", new Date().getTime());
     document.put("updatedTime", new Date().getTime());
+    document.remove("id");
 
     client.insert(collection, document,
         ar -> {

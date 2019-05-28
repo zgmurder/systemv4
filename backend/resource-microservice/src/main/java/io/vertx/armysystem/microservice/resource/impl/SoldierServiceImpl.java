@@ -493,7 +493,7 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
     soldier.put("isCivilServant", false);
     soldier.put("isSpecialForce", false);
     String personProperty = PersonProperty.UnitForce.getName();
-    switch (SoldierCategory.valueOf(soldier.getString("soldierCategory"))) {
+    switch (SoldierCategory.fromString(soldier.getString("soldierCategory"))) {
       case Officer:
         if (isNewRecruit)
           personProperty = PersonProperty.RecruitOfficer.getName();

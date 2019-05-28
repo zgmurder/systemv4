@@ -16,4 +16,15 @@ public enum SoldierCategory {
   public String getName() {
     return name;
   }
+
+  public static SoldierCategory fromString(String text) {
+    if (text != null) {
+      for (SoldierCategory b : SoldierCategory.values()) {
+        if (text.equalsIgnoreCase(b.name)) {
+          return b;
+        }
+      }
+    }
+    return null;
+  }
 }
