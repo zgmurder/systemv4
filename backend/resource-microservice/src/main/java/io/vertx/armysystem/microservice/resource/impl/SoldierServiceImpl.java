@@ -468,7 +468,7 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
       failed = failed || !soldier.containsKey("soldierCategory") || soldier.getString("soldierCategory").isEmpty();
 
       // 新兵单位录入人员时，可能还未分配士兵证
-      if (organization != null && !organization.getString("orgProperty").equals("新兵")) {
+      if (organization != null && organization.containsKey("orgProperty") && !organization.getString("orgProperty").equals("新兵")) {
         failed = failed || !soldier.containsKey("cardId") || soldier.getString("cardId").isEmpty();
       }
     } else {
