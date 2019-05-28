@@ -75,6 +75,7 @@ public class MongoRepositoryWrapper {
           if (ar.succeeded()) {
             if (ar.result() != null) {
               document.put("id", ar.result());
+              document.remove("_id");
             }
             future.complete(document);
           }

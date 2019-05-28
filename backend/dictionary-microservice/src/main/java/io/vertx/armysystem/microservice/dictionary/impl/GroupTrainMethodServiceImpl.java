@@ -51,7 +51,7 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
             new JsonObject().put("name", 1), new JsonObject().put("unique", true)))
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("order", 1), new JsonObject().put("unique", true)))
+            new JsonObject().put("order", 1), new JsonObject()))
         .otherwise(err -> null)
         .setHandler(resultHandler);
 
