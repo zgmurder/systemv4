@@ -486,7 +486,12 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
 
   private Future<JsonObject> fillAutoParams(JsonObject soldier, Boolean forAdd) {
     JsonObject organization = soldier.getJsonObject("organization");
-    Boolean isNewRecruit = organization.getString("orgProperty").equals("新兵");
+    Boolean isNewRecruit = false;
+
+    if (organization.containsKey("orgProperty")) {
+      isNewRecruit = organization.getString("orgProperty").equals("新兵");
+    }
+
     soldier.put("joinedAt", new Date().getTime());
     soldier.put("inserviceStatus", InserviceStatus.InService.getValue());
 
