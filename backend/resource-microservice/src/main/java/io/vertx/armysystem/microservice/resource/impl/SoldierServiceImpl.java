@@ -130,7 +130,9 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
               .setRank(o.getString("rank"))
               .setDescription("");
 
-          if (o.getJsonObject("organization").getString("orgProperty").equals("新兵")) {
+          if (o.containsKey("organization") &&
+              o.getJsonObject("organization").containsKey("orgProperty") &&
+              o.getJsonObject("organization").getString("orgProperty").equals("新兵")) {
             archive.setAction(SoldierAction.NewRecruit.getName());
           } else {
             archive.setAction(SoldierAction.InitialRegister.getName());
