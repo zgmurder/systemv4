@@ -526,7 +526,7 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
         break;
     }
 
-    if (soldier.getBoolean("isSupporter")) {
+    if (soldier.containsKey("isSupporter") && soldier.getBoolean("isSupporter")) {
       personProperty = PersonProperty.Supporter.getName();
     }
     soldier.put("personProperty", personProperty);
@@ -558,12 +558,12 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
     if (soldier == null) return Future.succeededFuture();
 
     if (soldier.containsKey("positionId") && soldier.containsKey("organization")) {
-      return this.findOne("Position",
-          new JsonObject().put("$or", new JsonArray()
-              .add(new JsonObject().put("orgSequence", soldier.getJsonObject("organization").getInteger("orgSequence"))
-                  .put("_id", soldier.getString("positionId")))
-              .add(new JsonObject().put("orgCategory", soldier.getJsonObject("organization").getInteger("orgCategory"))
-                  .put("_id", soldier.getString("positionId")))),
+      return this.findOne("Position", new JsonObject().put("_id", soldier.getString("positionId")),
+//          new JsonObject().put("$or", new JsonArray()
+//              .add(new JsonObject().put("orgSequence", soldier.getJsonObject("organization").getInteger("orgSequence"))
+//                  .put("_id", soldier.getString("positionId")))
+//              .add(new JsonObject().put("orgCategory", soldier.getJsonObject("organization").getString("orgCategory"))
+//                  .put("_id", soldier.getString("positionId")))),
           new JsonObject())
           .map(option -> {
             if (option.isPresent()) {
@@ -579,7 +579,7 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
   private Future<JsonObject> fillRank(JsonObject soldier) {
     if (soldier == null) return Future.succeededFuture();
 
-    if (soldier.containsKey("positionId")) {
+    if (soldier.containsKey("rankId")) {
       return this.findOne("MilitaryRank",
           new JsonObject().put("_id", soldier.getString("rankId")), new JsonObject())
           .map(option -> {
