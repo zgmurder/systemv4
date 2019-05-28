@@ -48,7 +48,7 @@ public class PositionServiceImpl extends MongoRepositoryWrapper implements CRUDS
     this.createCollection(getCollectionName())
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("name", 1), new JsonObject().put("unique", true)))
+            new JsonObject().put("name", 1), new JsonObject()))
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
             new JsonObject().put("order", 1), new JsonObject()))
