@@ -488,6 +488,8 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
     JsonObject organization = soldier.getJsonObject("organization");
     Boolean isNewRecruit = false;
 
+    logger.info("fillAutoParams: " + soldier);
+
     if (organization.containsKey("orgProperty")) {
       isNewRecruit = organization.getString("orgProperty").equals("新兵");
     }
