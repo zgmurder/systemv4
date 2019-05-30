@@ -32,6 +32,7 @@ public class Soldier {
   private Long enlistedAt;                  // 入伍日期(必填)
   private Long dischargedAt;                // 退伍日期，退伍时自动填入 (无需用户输入)
   private String positionId;                // 职务（必填）; 从Position表获取可选列表
+  private Long positionAt;                  // 任职日期
   private String rankId;                    // 军衔等级(必填)，可选项从军衔等级表MilitaryRank获取可选列表
 
   private String soldierCategory;           // 人员类别(必填)，区分指挥警官/技术警官/文职人员/士官/义务兵
@@ -213,6 +214,15 @@ public class Soldier {
 
   public Soldier setPositionId(String positionId) {
     this.positionId = positionId;
+    return this;
+  }
+
+  public Long getPositionAt() {
+    return positionAt;
+  }
+
+  public Soldier setPositionAt(Long positionAt) {
+    this.positionAt = positionAt;
     return this;
   }
 
