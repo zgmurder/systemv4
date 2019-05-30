@@ -333,7 +333,7 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
                       return Future.succeededFuture(option);
                     } else {
                       return this.remove(ARCHIVE_COLLECTION, new JsonObject().put("cardId", cardId))
-                          .map(o -> option);
+                          .map(o -> option).otherwiseEmpty();
                     }
                   });
             } else {
