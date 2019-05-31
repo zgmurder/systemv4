@@ -23,6 +23,8 @@ export default {
     gunnerType: '枪手类型',
     orgManage: '单位管理',
     orgList: '单位列表',
+    soldierManage: '人员管理',
+    soldier: '人员列表',
     documentation: '文档',
     guide: '引导页',
     permission: '权限测试页',

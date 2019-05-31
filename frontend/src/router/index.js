@@ -42,6 +42,7 @@ import accountRouter from './modules/account'
  * all roles can be accessed
  */
 export const constantRouterMap = [
+
   {
     path: '/redirect',
     component: Layout,
@@ -112,20 +113,42 @@ export const constantRouterMap = [
  */
 export const asyncRouterMap = [
   {
-    path: '',
+    path: '/',
     component: Layout,
     redirect: 'dashboard',
     meta: {
       belong: 'train'
     },
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', noCache: true, affix: true }
+    children: [{
+      path: 'dashboard',
+      component: () => import('@/views/dashboard/index'),
+      name: 'Dashboard',
+      meta: {
+        title: 'dashboard',
+        icon: 'dashboard',
+        noCache: true,
+        affix: true
       }
-    ]
+    }]
+  },
+  {
+    path: '/icon',
+    component: Layout,
+    meta: {
+      // title: 'icon',
+      icon: 'icon',
+      belong: 'train'
+    },
+    children: [{
+      path: 'index',
+      component: () => import('@/views/icons/index'),
+      name: 'Icons',
+      meta: {
+        title: 'icons',
+        icon: 'icon',
+        noCache: true
+      }
+    }]
   },
   ...baseDataRouter,
   ...orgManageRouter,

@@ -321,9 +321,7 @@ export default {
             }} plain> 查看编辑 </el-button>
             <el-button size='mini' type='primary' on-click={e => {
               if (node.expanded)e.stopPropagation()
-              setTimeout(() => {
-                this.handeAdd(data, node)
-              }, 100)
+              this.handeAdd(data, node)
               // e.stopPropagation()
               // if (!node.isLeaf && !node.expanded)node.expanded = true
             }} plain> 添加下级单位 </el-button>
@@ -405,8 +403,10 @@ export default {
           '$exists': false
         }
       }}).then(children => {
+        console.log(children)
+
         if (children.length) {
-          node.childNodes = []
+          node.childNodes.length = 0
           node.doCreateChildren(children)
           // node.expanded = true
           node.isLeaf = false
@@ -440,6 +440,9 @@ export default {
           formData.parentId = this.currOrg.id
           saveItem(this.url, formData).then(res => {
             if (!res) return
+            console.log(res)
+
+            if (res.id === this.$store.getters.organization.id) this.$store.dispatch('user/changeOrg', res)
             this.updateChildren(this.currNode)
           })
         }

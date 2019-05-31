@@ -8,7 +8,7 @@
     <slot name="title" />
     <el-form-item
       v-for="(field, index) in schema"
-      v-show="handleControl(field.controlBy)"
+      v-show="handleControl(field.controlBy) && !field.hidden"
       :key="index"
       :label="field.label"
       :required="field.required"
@@ -91,8 +91,12 @@
 
 <script>
 import { isEmpty } from '../units'
+import ElDivider1 from '@/components/Divider/main'
 export default {
   name: 'ComForm',
+  components: {
+    ElDivider1
+  },
   props: {
     schema: {
       type: Array,

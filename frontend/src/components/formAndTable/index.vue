@@ -11,6 +11,7 @@
       </div>
       <el-button v-show="btnShow" class="btn" size="small" type="primary" icon="el-icon-plus" @click="handleAddBtn" />
     </div>
+
     <tableSchema
       :data="tableList"
       v-bind="$attrs"
@@ -20,7 +21,7 @@
       @deleteItem="deleteItem"
       @editItem="editItem"
       v-on="$listeners"
-    />
+    ><slot slot="moreHandle" slot-scope="{data}" :data="data" name="moreHandle" /></tableSchema>
     <!--
       @filter-change="handleTableFilter"
 
@@ -71,6 +72,11 @@ export default {
     tableSchema,
     formSchema
   },
+  provide: function(params) {
+    return {
+      parentSlots: this.$slots
+    }
+  },
   props: {
     columns: {
       type: Array,
@@ -81,10 +87,10 @@ export default {
       // required: true
       default: () => []
     },
-    // handler: {
-    //   type: Object,
-    //   required: true
-    // },
+    hasTree: {
+      type: Boolean,
+      required: false
+    },
     btnShow: {
       type: Boolean,
       default: true
@@ -147,6 +153,7 @@ export default {
       const { limit, skip } = this.options
       const num = (skip - 1) * limit
       const where = cloneDeep(this.where)
+      Object.assign(where, this.$attrs.where || {})
       if (where[this.filterName]) {
         where[this.filterName] = {
           '$regex': where[this.filterName]
@@ -175,13 +182,14 @@ export default {
     async formFinish(formData) {
       this.$parent.beforeSubmit && this.$parent.beforeSubmit(formData)
       // const url = this.url.slice(0, this.url.length - 1)
+      let isOk
       if (this.id) {
         formData.id = this.id
-        await updateItem(this.url, formData)
+        isOk = await updateItem(this.url, formData)
       } else {
-        await saveItem(this.url, formData)
+        isOk = await saveItem(this.url, formData)
       }
-
+      if (!isOk) return
       this.dialogVisible = false
       this.$message({ showClose: true, type: 'success', message: this.id ? '修改成功' : '添加成功' })
       this.fetchTableList()
@@ -215,8 +223,6 @@ export default {
       console.log(value)
     },
     handleAddBtn() {
-      console.log(this.beforeClickAdd())
-
       if (this.beforeClickAdd()) return
       this.dialogVisible = true
       this.$emit('dialogVisible', this.total)
@@ -238,7 +244,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 10px;
+    height: 44px;
     background: #eee
     // float: right;
 }

@@ -27,7 +27,7 @@
           <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
           <i class="el-icon-caret-bottom" /> -->
           <el-tooltip :content="name" effect="dark" placement="bottom">
-            <span>{{ handleName }}</span>
+            <span style="font-size:14px">{{ handleName }}</span>
           <!-- <size-select class="international right-menu-item"/> -->
           </el-tooltip>
           <i class="el-icon-caret-bottom" />

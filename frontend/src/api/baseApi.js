@@ -62,3 +62,11 @@ export function queryOrgs(obj) {
     option: { sort, limit }
   })
 }
+export const queryLowerOrgs = (parentId, option = {}) => {
+  const where = { parentId, deactivated: false }
+  option.nodepart && (where['$or'] = [{ 'orgType': '分队' }, { 'orgType': '部队' }])
+  option.allorg && (delete where.deactivated)
+  return queryList('resource/organization', {
+    where
+  })
+}
