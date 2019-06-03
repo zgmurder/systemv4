@@ -64,7 +64,7 @@ export default {
 </script>
 <style lang="scss">
 .el-tree-node__content{
-  height: 3rem;
+  height: 44px;
   border: 1px solid #f0f0f0;
   border-top: none;
 }

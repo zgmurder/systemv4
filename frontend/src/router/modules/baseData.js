@@ -11,7 +11,8 @@ const baseDataRouter = [
     meta: {
       title: 'orgRelated',
       icon: 'chart',
-      belong: 'basedata'
+      belong: 'basedata',
+      roles: ['Administrator']
     },
     children: [
       {
@@ -42,25 +43,7 @@ const baseDataRouter = [
       }
     ]
   },
-  {
-    path: '/icon',
-    component: Layout,
-    meta: {
-      // title: 'icon',
-      icon: 'icon',
-      belong: 'basedata'
-    },
-    children: [{
-      path: 'index',
-      component: () => import('@/views/icons/index'),
-      name: 'Icons',
-      meta: {
-        title: 'icons',
-        icon: 'icon',
-        noCache: true
-      }
-    }]
-  },
+
   {
     path: '/personRelated',
     component: Layout,

@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
-    <form-and-table url="/account/user" :before-click-add="beforeClickAdd" :columns="columns" :schema="schema" :no-handle="noHandle" @cell-mouse-enter="()=>false" />
+    <formAndTableAndTree :nodepart="true" url="/account/user" has-tree :before-click-add="beforeClickAdd" :columns="columns" :schema="schema" :no-handle="noHandle" @cell-mouse-enter="()=>false" />
   </div>
 </template>
 
 <script>
-import formAndTable from '@/components/formAndTable'
+import formAndTableAndTree from '@/components/formAndTable/indexAndTree'
 // import { queryRoles } from '@/api/account'
 import { queryOrgs, queryList } from '@/api/baseApi'
 export default {
   components: {
-    formAndTable
+    formAndTableAndTree
   },
   data() {
     return {
@@ -146,6 +146,8 @@ export default {
     },
     beforeSubmit(target) {
       target.organizationId = this.org.id
+      console.log(target)
+
       // target.parentOrgIds = this.org.parentIds
     },
     beforeEdit(target) {

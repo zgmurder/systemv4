@@ -23,6 +23,27 @@ const baseDataRouter = [
         }
       }
     ]
+  },
+  {
+    path: '/soldierManage',
+    component: Layout,
+    name: 'soldierManage',
+    redirect: '/soldierManage/soldier',
+    meta: {
+      title: 'soldierManage',
+      icon: 'chart',
+      belong: 'organization'
+    },
+    children: [
+      {
+        path: 'soldier',
+        component: () => import('@/views/orgManage/soldier'),
+        name: 'soldier',
+        meta: {
+          title: 'soldier'
+        }
+      }
+    ]
   }
 
 ]

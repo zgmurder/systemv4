@@ -26,7 +26,7 @@
       </el-table-column>
 
       <!-- v-if="!noHandle" -->
-      <el-table-column v-if="!noHandler" label="操作" width="150">
+      <el-table-column v-if="!noHandler" label="操作" :width="width">
         <template v-if="!($attrs['no-handle'] && $attrs['no-handle'](scope.row))" slot-scope="scope">
           <span>
             <el-button
@@ -34,16 +34,18 @@
               size="mini"
               icon="el-icon-view"
               @click="$emit('editItem',scope.row,scope.$index)"
-            >编辑
-            </el-button>
+            >编辑 </el-button>
             <el-button
               type="text"
               size="mini"
               style="color:#F56C6C"
               icon="el-icon-share"
               @click="$emit('deleteItem',scope.row,scope.$index)"
-            >删除
-            </el-button>
+            >删除 </el-button>
+            <slot name="moreHandle" :data="scope" />
+
+            <!-- <span :slot="parentSlots.moreHandle" /> -->
+            <!-- {{ parentSlots.moreHandle }} -->
           </span>
 
         </template>
@@ -63,6 +65,7 @@ export default {
       return typeof handleValue === 'function' ? handleValue(target, row) : target
     }
   },
+  // inject: ['parentSlots'],
   props: {
     columns: {
       type: Array,
@@ -73,7 +76,10 @@ export default {
       default: false
     }
   },
-  created() {
+  computed: {
+    width() {
+      return this.$scopedSlots.moreHandle() ? 180 : 140
+    }
   }
 }
 </script>

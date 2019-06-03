@@ -17,7 +17,10 @@ export default {
       columns: [
         { prop: 'order', label: '序号', width: '50', noFilter: true },
         { prop: 'name', label: '职务名称' },
-        { prop: 'orgSequence', label: '编制序列', handleValue: (value) => OrgSequences.find(item => item.type === value).name, noFilter: true },
+        { prop: 'orgSequence', label: '编制序列(单位分类)', handleValue: (value, row) => {
+          const found = OrgSequences.find(item => item.type === value)
+          return found ? found.name : row.orgCategory
+        }, noFilter: true },
         { prop: 'commander', label: '指挥员(是/否)', style: { color: '#67C23A' }, handleValue: value => value ? '是' : '否', noFilter: true },
         { prop: 'master', label: '军政主官(是/否)', style: { color: '#F56C6C' }, handleValue: value => value ? '是' : '否', noFilter: true }
         // { prop: 'sortCode', label: '职务编码' }

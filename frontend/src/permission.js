@@ -13,13 +13,11 @@ const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
-
   // set page title
   document.title = getPageTitle(to.meta.title)
 
   // determine whether the user has logged in
   let user = getUser()
-
   if (user) {
     user = JSON.parse(user)
     if (to.path === '/login') {
@@ -33,28 +31,29 @@ router.beforeEach(async(to, from, next) => {
         if (to.matched[0]) {
           const name = (to.matched[0].meta || {}).belong
           store.commit('permission/SET_MODULENAME', name)
+          next()
+        } else {
+          next('/404')
         }
-        next()
       } else {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
+
           await store.dispatch('user/saveToVuex', user)
           console.log(store.getters.permissions)
 
           // generate accessible routes map based on roles
           // await store.dispatch('permission/getModules', roleName)
           const accessRoutes = await store.dispatch('permission/generateRoutes', user.roleName)
-
+          // router.options = [...router.options, ...accessRoutes]
           // dynamically add accessible routes
           // console.log(accessRoutes)
-          // console.log(store.getters.addRoutes, 111)
           router.addRoutes(accessRoutes)
-          // console.log(router)
 
+          next({ ...to, replace: true })
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record
-          next({ ...to, replace: true })
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
@@ -69,6 +68,7 @@ router.beforeEach(async(to, from, next) => {
 
     if (whiteList.indexOf(to.path) !== -1) {
       // in the free login whitelist, go directly
+
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.

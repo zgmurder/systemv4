@@ -109,5 +109,11 @@ export default {
       return value || 0
     })
     return time_str
+  },
+  distanceToday(field) {
+    return this.timeObj[field]
+  },
+  timeObj: {
+    year: value => new Date().getFullYear() - new Date(value).getFullYear()
   }
 }
