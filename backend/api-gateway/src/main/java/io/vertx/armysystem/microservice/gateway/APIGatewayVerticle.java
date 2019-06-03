@@ -17,6 +17,7 @@ import io.vertx.servicediscovery.Record;
 import io.vertx.servicediscovery.ServiceDiscovery;
 import io.vertx.servicediscovery.types.HttpEndpoint;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,9 @@ public class APIGatewayVerticle extends RestAPIVerticle {
 
     // version handler
     router.get("/api/v").handler(this::apiVersion);
+
+    // time handler
+    router.get("/api/time").handler(this::apiTime);
 
     // api dispatcher
     router.route("/api/*").handler(this::dispatchRequests);
@@ -154,6 +158,11 @@ public class APIGatewayVerticle extends RestAPIVerticle {
   private void apiVersion(RoutingContext context) {
     context.response()
         .end(new JsonObject().put("version", "v1").encodePrettily());
+  }
+
+  private void apiTime(RoutingContext context) {
+    context.response()
+        .end(new JsonObject().put("time", new Date().getTime()).encodePrettily());
   }
 
   /**
