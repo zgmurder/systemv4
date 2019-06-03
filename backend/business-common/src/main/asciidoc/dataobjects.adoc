@@ -267,6 +267,7 @@
 |[[personProperty]]`@personProperty`|`String`|-
 |[[physicalLevel]]`@physicalLevel`|`String`|-
 |[[politicalStatus]]`@politicalStatus`|`String`|-
+|[[positionAt]]`@positionAt`|`Number (Long)`|-
 |[[positionId]]`@positionId`|`String`|-
 |[[rankId]]`@rankId`|`String`|-
 |[[soldierCategory]]`@soldierCategory`|`String`|-

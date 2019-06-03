@@ -124,6 +124,11 @@ public class SoldierConverter {
             obj.setPoliticalStatus((String)member.getValue());
           }
           break;
+        case "positionAt":
+          if (member.getValue() instanceof Number) {
+            obj.setPositionAt(((Number)member.getValue()).longValue());
+          }
+          break;
         case "positionId":
           if (member.getValue() instanceof String) {
             obj.setPositionId((String)member.getValue());
@@ -240,6 +245,9 @@ public class SoldierConverter {
     }
     if (obj.getPoliticalStatus() != null) {
       json.put("politicalStatus", obj.getPoliticalStatus());
+    }
+    if (obj.getPositionAt() != null) {
+      json.put("positionAt", obj.getPositionAt());
     }
     if (obj.getPositionId() != null) {
       json.put("positionId", obj.getPositionId());
