@@ -122,13 +122,14 @@ export const OrgLevelOptions = {
 }
 
 export const OrgSequenceMap = {
-  '总部': [OrgSequence.Army],
-  '总队': [OrgSequence.Division],
-  '支队': [OrgSequence.Brigade, OrgSequence.Regiment],
-  '大队': [OrgSequence.Battalion],
-  '中队': [OrgSequence.Company],
-  '排': [OrgSequence.Platoon],
-  '班': [OrgSequence.Squad]
+  [OrgSequence.Army]: '总部',
+  [OrgSequence.Division]: '总队',
+  [OrgSequence.Brigade]: '支队',
+  [OrgSequence.Regiment]: '支队',
+  [OrgSequence.Battalion]: '大队',
+  [OrgSequence.Company]: '中队',
+  [OrgSequence.Platoon]: '排',
+  [OrgSequence.Squad]: '班'
 }
 
 export const OrgSequences = [{

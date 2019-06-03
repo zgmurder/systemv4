@@ -111,9 +111,53 @@ export default {
     return time_str
   },
   distanceToday(field) {
-    return this.timeObj[field]
+    return this.timeObj[field].bind(this)
+  },
+  dateToJSON(date) {
+    const year = date.getFullYear()
+    const month = date.getMonth()
+    const day = date.getDate()
+    return { year, month, day }
   },
   timeObj: {
-    year: value => new Date().getFullYear() - new Date(value).getFullYear()
+
+    year(value) {
+      const birthDay = this.dateToJSON(new Date(value))
+      const toDay = this.dateToJSON(new Date())
+
+      const diffYear = toDay.year - birthDay.year
+      const diffMonth = toDay.month - birthDay.month
+      const diffDay = toDay.day - birthDay.day
+
+      return (diffMonth < 0 || (!diffMonth && diffDay < 0)) ? diffYear - 1 : diffYear
+      // if ((toDay.year - birthDay.year) > 0){
+      //   if ((toDay.month - birthDay.month) > 0) returnAge =
+      // }
+
+      // if (toDay.year === birthDay.year) {
+      //   returnAge = 0 // 同年 则为0岁
+      // } else {
+      //   const ageDiff = nowYear - birthYear // 年之差
+      //   if (ageDiff > 0) {
+      //     if (nowMonth == birthMonth) {
+      //       var dayDiff = nowDay - birthDay // 日之差
+      //       if (dayDiff < 0) {
+      //         returnAge = ageDiff - 1
+      //       } else {
+      //         returnAge = ageDiff
+      //       }
+      //     } else {
+      //       var monthDiff = nowMonth - birthMonth // 月之差
+      //       if (monthDiff < 0) {
+      //         returnAge = ageDiff - 1
+      //       } else {
+      //         returnAge = ageDiff
+      //       }
+      //     }
+      //   } else {
+      //     returnAge = -1 // 返回-1 表示出生日期输入错误 晚于今天
+      //   }
+      // }
+    }
   }
 }

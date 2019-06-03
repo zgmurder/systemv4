@@ -2,13 +2,15 @@
 <template>
   <div class="form-and-table">
     <div ref="search" class="search">
-      <div>
+      <!-- <div>
         <el-input v-model="where[filterName]" size="mini" placeholder="请输入内容" clearable @input="handleSearch">
           <el-select slot="prepend" v-model="filterName" closed style="width:120px" placeholder="请选择">
             <el-option v-for="(item,index) in searchColumns" :key="index" :label="item.searchLabel || item.label" :value="item.prop" />
           </el-select>
         </el-input>
-      </div>
+
+      </div> -->
+      <minformSchema v-if="filterSchema.length" :schema="filterSchema" @formFinish="formFinish" />
       <el-button v-show="btnShow" class="btn" size="small" type="primary" icon="el-icon-plus" @click="handleAddBtn" />
     </div>
 
@@ -64,13 +66,15 @@
 <script>
 import tableSchema from './tableSchema'
 import formSchema from './formSchema'
+import minformSchema from './formSchema/mini'
 import { saveItem, deleteItem, queryListAndTotal, updateItem } from '@/api/baseApi'
-import { cloneDeep } from './units'
+import { cloneDeep, type } from './units'
 export default {
   name: 'TableAndForm',
   components: {
     tableSchema,
-    formSchema
+    formSchema,
+    minformSchema
   },
   provide: function(params) {
     return {
@@ -117,13 +121,15 @@ export default {
         limit: 10
       },
       where: {},
-      filterName: ''
+      filterName: '',
+      filterSchema: []
     }
   },
   computed: {
     searchColumns() {
       return this.columns.filter(item => !item.noFilter)
     }
+
   },
   watch: {
     'filterName': {
@@ -135,11 +141,37 @@ export default {
         }
       },
       immediate: false
+    },
+    'filterSchema': {
+      handler(newValue, oldValue) {
+        this.where = newValue.reduce((prev, curr) => {
+          const value = curr.vModel
+          if (curr[value]) {
+            prev[value] = curr.filterConfig(curr[value])
+          }
+          return prev
+        }, {})
+        this.handleSearch()
+      },
+      deep: true
     }
   },
   created() {
     this.filterName = this.searchColumns[0].prop
     this.fetchTableList()
+    setTimeout(() => {
+      const columns = this.columns.filter(item => !!item.filterConfig)
+      this.filterSchema = columns.map(item => {
+        if (type.isObject(item.filterConfig)) return item.filterConfig
+        const found = this.schema.find(subItem => subItem.vModel === item.prop)
+        const obj = { ...found, filterConfig: item.filterConfig }
+        this.$set(obj, obj.vModel, undefined)
+        return obj
+      })
+    }, 500)
+  },
+  mounted() {
+
   },
   methods: {
     handleSearch() {
@@ -152,20 +184,20 @@ export default {
       // eslint-disable-next-line no-unused-vars
       const { limit, skip } = this.options
       const num = (skip - 1) * limit
-      const where = cloneDeep(this.where)
-      Object.assign(where, this.$attrs.where || {})
-      if (where[this.filterName]) {
-        where[this.filterName] = {
-          '$regex': where[this.filterName]
-        }
-      } else {
-        delete where[this.filterName]
-      }
+      // const where = cloneDeep(this.where)
+      // Object.assign(where, this.$attrs.where || {})
+      // if (where[this.filterName]) {
+      //   where[this.filterName] = {
+      //     '$regex': where[this.filterName]
+      //   }
+      // } else {
+      //   delete where[this.filterName]
+      // }
       queryListAndTotal(this.url, { option: {
         // sort: { updatedTime: -1 },
         skip: num,
         limit
-      }, where }).then(({ list, total }) => {
+      }, where: this.where }).then(({ list, total }) => {
         this.tableList = list
         this.total = total
       })

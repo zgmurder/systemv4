@@ -18,3 +18,27 @@ export const cloneDeep = obj => {
 export const handleText = (text) => {
   if (typeof text === 'boolean') return text ? '是' : ''
 }
+const checkType = str => {
+  return obj => Object.prototype.toString.call(obj) === '[object ' + str + ']'
+}
+
+// export const Type = (function () {
+//   const type = {}
+//   const typeArr = ['String', 'Object', 'Number', 'Array', 'Undefined', 'Function', 'Null', 'Symbol']
+//   typeArr.forEach(item => {
+//     type[`is${item}`] = obj => Object.prototype.toString.call(obj) === '[object ' + item + ']'
+//   })
+//   type.isBoolean = obj => typeof obj === 'boolean'
+//   type.isEmpty = obj => JSON.stringify(obj) === '[]' || JSON.stringify(obj) === '{}' || !obj
+//   return type
+// })()
+export const type = {
+  isString: obj => checkType('String')(obj),
+  isObject: obj => checkType('Object')(obj),
+  isNumber: obj => checkType('Number')(obj),
+  isArray: obj => checkType('Array')(obj),
+  isUndefined: obj => checkType('Undefined')(obj),
+  isFunction: obj => checkType('Function')(obj),
+  isNull: obj => checkType('Null')(obj),
+  isSymbol: obj => checkType('Symbol')(obj)
+}
