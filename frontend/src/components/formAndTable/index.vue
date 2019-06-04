@@ -107,8 +107,11 @@ export default {
     beforeClickAdd: {
       type: Function,
       default: () => {}
+    },
+    defaultWhere: {
+      type: Object,
+      default: () => {}
     }
-
   },
   data() {
     return {
@@ -142,6 +145,12 @@ export default {
       },
       immediate: false
     },
+    'defaultWhere': {
+      handler(newValue, oldValue) {
+        this.fetchTableList()
+      }
+      // immediate: false
+    },
     'filterSchema': {
       handler(newValue, oldValue) {
         this.where = newValue.reduce((prev, curr) => {
@@ -159,7 +168,7 @@ export default {
   created() {
     this.filterName = this.searchColumns[0].prop
     this.fetchTableList()
-    setTimeout(() => {
+    this.$EventBus.$on('finished', () => {
       const columns = this.columns.filter(item => !!item.filterConfig)
       this.filterSchema = columns.map(item => {
         if (type.isObject(item.filterConfig)) return item.filterConfig
@@ -168,7 +177,8 @@ export default {
         this.$set(obj, obj.vModel, undefined)
         return obj
       })
-    }, 500)
+      this.$EventBus.$off('finished')
+    })
   },
   mounted() {
 
@@ -197,7 +207,7 @@ export default {
         // sort: { updatedTime: -1 },
         skip: num,
         limit
-      }, where: this.where }).then(({ list, total }) => {
+      }, where: { ...this.where, ...this.defaultWhere }}).then(({ list, total }) => {
         this.tableList = list
         this.total = total
       })
