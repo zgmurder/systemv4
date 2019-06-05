@@ -32,12 +32,12 @@ Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
   i18n: (key, value) => i18n.t(key, value)
 })
-
 // register global utility filters
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
 
+Vue.prototype.$EventBus = new Vue()
 Vue.config.productionTip = false
 Vue.prototype.$tools = tools
 new Vue({
