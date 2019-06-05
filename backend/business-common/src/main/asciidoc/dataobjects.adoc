@@ -396,7 +396,7 @@
 == TrainStageTime
 
 ++++
- 训练大纲标准分册
+ 训练阶段时长定义
 ++++
 '''
 
@@ -428,6 +428,7 @@
 |[[name]]`@name`|`String`|-
 |[[startTime]]`@startTime`|`Number (Long)`|-
 |[[state]]`@state`|`Number (int)`|-
+|[[version]]`@version`|`String`|-
 |===
 
 [[TrainStep]]

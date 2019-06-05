@@ -6,7 +6,7 @@ import io.vertx.core.json.JsonObject;
 import java.util.List;
 
 /**
- * 训练大纲标准分册
+ * 训练阶段时长定义
  *
  * @author Derek Zheng
  */

@@ -38,7 +38,7 @@ public class ResourceRestAPIVerticle extends RestAPIVerticle {
     soldierRouter.route(router);
 
     String host = config().getString("http.address", "0.0.0.0");
-    int port = config().getInteger("http.port", 8082);
+    int port = config().getInteger("http.port", 8084);
 
     logger.info("Start resource api on port " + port);
 

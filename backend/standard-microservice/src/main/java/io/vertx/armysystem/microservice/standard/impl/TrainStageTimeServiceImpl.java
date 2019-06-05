@@ -1,23 +1,24 @@
-package io.vertx.armysystem.microservice.dictionary.impl;
+package io.vertx.armysystem.microservice.standard.impl;
 
-import io.vertx.armysystem.business.common.CRUDService;
-import io.vertx.armysystem.business.common.QueryCondition;
-import io.vertx.armysystem.business.common.ServiceBase;
-import io.vertx.armysystem.business.common.dictionary.GroupTrainMethod;
+import io.vertx.armysystem.business.common.*;
+import io.vertx.armysystem.business.common.standard.TrainStageTime;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
+import io.vertx.armysystem.microservice.standard.StandardModelUtil;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 
 import java.util.List;
 
-public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implements CRUDService, ServiceBase {
+public class TrainStageTimeServiceImpl extends MongoRepositoryWrapper implements ServiceBase, CRUDService {
+  private static final Logger logger = LoggerFactory.getLogger(TrainStageTimeServiceImpl.class);
   private final Vertx vertx;
 
-  public GroupTrainMethodServiceImpl(Vertx vertx, JsonObject config) {
+  public TrainStageTimeServiceImpl(Vertx vertx, JsonObject config) {
     super(vertx, config);
 
     this.vertx = vertx;
@@ -25,22 +26,22 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
 
   @Override
   public String getServiceName() {
-    return "dictionary-GroupTrainMethod-eb-service";
+    return "dictionary-TrainStageTime-eb-service";
   }
 
   @Override
   public String getServiceAddress() {
-    return "service.dictionary.GroupTrainMethod";
+    return "service.dictionary.TrainStageTime";
   }
 
   @Override
   public String getPermission() {
-    return "dictionary";
+    return "standard";
   }
 
   @Override
   public String getCollectionName() {
-    return "GroupTrainMethod";
+    return "TrainStageTime";
   }
 
   @Override
@@ -48,10 +49,7 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
     this.createCollection(getCollectionName())
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("name", 1), new JsonObject().put("unique", true)))
-        .otherwise(err -> null)
-        .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("order", 1), new JsonObject()))
+            new JsonObject().put("standardName", 1), new JsonObject()))
         .otherwise(err -> null)
         .setHandler(resultHandler);
 
@@ -60,7 +58,8 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
 
   @Override
   public CRUDService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
-    this.insertOne(getCollectionName(), new GroupTrainMethod(item).toJson())
+    validateParams(item, true)
+        .compose(o -> this.insertOne(getCollectionName(), new TrainStageTime(o).toJson()))
         .setHandler(resultHandler);
 
     return this;
@@ -85,7 +84,7 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
   @Override
   public CRUDService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
-    this.count(getCollectionName(), qCondition.getQuery()).setHandler(resultHandler);
+    StandardModelUtil.countWithStandard(this, getCollectionName(), qCondition).setHandler(resultHandler);
 
     return this;
   }
@@ -95,11 +94,12 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
     QueryCondition qCondition = QueryCondition.parse(condition);
 
     if (qCondition.getOption().getJsonObject("sort") == null) {
-      qCondition.getOption().put("sort", new JsonObject().put("order", 1));
+      qCondition.getOption().put("sort", new JsonObject().put("standard.version", -1).put("createdTime", 1));
     }
 
-    this.findWithOptions(getCollectionName(), qCondition.getQuery(), qCondition.getOption())
-        .setHandler(resultHandler);
+    logger.info("query condition: " + qCondition);
+    StandardModelUtil.queryWithStandard(this, getCollectionName(), qCondition)
+      .setHandler(resultHandler);
 
     return this;
   }
@@ -108,7 +108,7 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
   public CRUDService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
     item.remove("id");
 
-    this.update(getCollectionName(), getIdQuery(id), new GroupTrainMethod(item).toJson())
+    this.update(getCollectionName(), getIdQuery(id), new TrainStageTime(item).toJson())
         .setHandler(ar -> {
           if (ar.succeeded()) {
             this.retrieveOne(id, principal, resultHandler);
@@ -129,8 +129,30 @@ public class GroupTrainMethodServiceImpl extends MongoRepositoryWrapper implemen
   }
 
   private JsonObject getIdQuery(String id) {
-    return new JsonObject().put("$or", new JsonArray()
-        .add(new JsonObject().put("_id", id))
-        .add(new JsonObject().put("name", id)));
+    return new JsonObject().put("_id", id);
+  }
+
+  private Future<JsonObject> validateParams(JsonObject item, Boolean forAdd) {
+    Future<JsonObject> future = Future.future();
+
+    TrainStageTime stageTime = new TrainStageTime(item);
+
+    Boolean failed = false;
+
+    if (forAdd) {
+      failed = BaseUtil.isEmpty(stageTime.getStandardName()) ||
+          BaseUtil.isEmpty(stageTime.getOrgCategories()) ||
+          BaseUtil.isEmpty(stageTime.getStageTimes());
+    } else {
+
+    }
+
+    if (failed) {
+      future.fail("Invalid parameter");
+    } else {
+      future.complete(stageTime.toJson());
+    }
+
+    return future;
   }
 }

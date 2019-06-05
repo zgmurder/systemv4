@@ -1,6 +1,5 @@
 package io.vertx.armysystem.business.common;
 
-import io.vertx.armysystem.business.common.resource.Organization;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;

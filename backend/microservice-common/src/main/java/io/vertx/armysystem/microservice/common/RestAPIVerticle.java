@@ -10,6 +10,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.auth.jwt.JWTAuth;
+import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.CookieHandler;
@@ -54,7 +55,7 @@ public abstract class RestAPIVerticle extends BaseMicroserviceVerticle {
    *
    */
   protected void enableJWTAuth() {
-    authProvider = JWTAuth.create(vertx, config());
+    authProvider = JWTAuth.create(vertx, new JWTAuthOptions(config()));
   }
 
   /**

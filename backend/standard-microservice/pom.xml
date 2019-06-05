@@ -11,6 +11,10 @@
 
     <artifactId>standard-microservice</artifactId>
 
+    <properties>
+        <main.verticle>io.vertx.armysystem.microservice.standard.StandardVerticle</main.verticle>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.vertx.armysystem</groupId>

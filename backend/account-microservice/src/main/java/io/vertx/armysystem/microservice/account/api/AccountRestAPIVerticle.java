@@ -81,7 +81,7 @@ public class AccountRestAPIVerticle extends RestAPIVerticle {
     router.delete(API_ROLE_DELETE).handler(context -> requireAuth(context, ((ServiceBase)roleService).getPermission(), Action.Delete.toString(), this::apiDeleteRole));
 
     String host = config().getString("http.address", "0.0.0.0");
-    int port = config().getInteger("http.port", 8082);
+    int port = config().getInteger("http.port", 8081);
 
     logger.info("Start account api on port " + port);
 

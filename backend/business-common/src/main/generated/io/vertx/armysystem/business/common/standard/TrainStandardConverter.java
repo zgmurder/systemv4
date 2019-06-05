@@ -39,6 +39,11 @@ public class TrainStandardConverter {
             obj.setState(((Number)member.getValue()).intValue());
           }
           break;
+        case "version":
+          if (member.getValue() instanceof String) {
+            obj.setVersion((String)member.getValue());
+          }
+          break;
       }
     }
   }
@@ -61,5 +66,8 @@ public class TrainStandardConverter {
       json.put("startTime", obj.getStartTime());
     }
     json.put("state", obj.getState());
+    if (obj.getVersion() != null) {
+      json.put("version", obj.getVersion());
+    }
   }
 }

@@ -12,6 +12,7 @@ import io.vertx.core.json.JsonObject;
 public class TrainStandard {
   private String id;
   private String name;
+  private String version;     // 版本号
   private int state;          // 大纲启用状态: 0: 未启用/ 1: 已启用/ 2: 已停用, 参考StandardState
   private Long startTime;     // 大纲启用日期
   private Long endTime;       // 大纲停用日期
@@ -45,6 +46,15 @@ public class TrainStandard {
 
   public TrainStandard setName(String name) {
     this.name = name;
+    return this;
+  }
+
+  public String getVersion() {
+    return version;
+  }
+
+  public TrainStandard setVersion(String version) {
+    this.version = version;
     return this;
   }
 

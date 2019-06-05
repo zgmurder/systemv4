@@ -362,6 +362,53 @@ Activated(1),
 Stopped(2);
 ```
 
+### 大纲标准(TrainStandard)
+```java
+class TrainStandard {
+  private String id;
+  private String name;        // 手动录入
+  private String version;     // 版本号, 手动录入
+  private int state;          // 大纲启用状态: 0: 未启用/ 1: 已启用/ 2: 已停用, 参考StandardState  不可编辑
+  private Long startTime;     // 大纲启用日期, 不可编辑
+  private Long endTime;       // 大纲停用日期, 不可编辑
+}
+```
+
+1. 额外接口(启用或停用大纲)
+
+
+
+### 大纲分册(TrainSection)
+```java
+class TrainSection {
+  private String id;
+  private String name;          // 大纲分册名称，手动录入
+  private String code;          // 分册编号, 手动录入
+  private String standardName;  // 关联的大纲标准名称, 选择填入
+  private List<String> orgTypes;  // 单位类型, 选择填入
+  private List<String> orgCategories; // 单位分类, 选择填入
+  private List<String> personProperties;  // 人员属性, 选择填入
+}
+```
+
+
+### 阶段时间表(TrainStageTime)
+```java
+class TrainStageTime {
+  private String id;
+  private String standardName;        // 关联的大纲标准名称, 选择填入
+  private List<String> orgCategories; // 单位分类列表, 选择填入
+  private List<String> majors;        // 专业列表, 选择填入
+  private List<StageTime> stageTimes; // 时段列表
+}
+
+class StageTime {
+  private String task;                // 训练任务
+  private Double months;              // 月数
+}
+```
+
+
 
 ## 资源管理(resource)
 
