@@ -1,8 +1,8 @@
 {
   "api.name": "standard",
-  "account.http.address": "standard-microservice",
-  "account.http.port": 8093,
-  "connection_string": "mongodb://armysystem:topzen123@localhost:27017/armysystemv2",
+  "http.address": "standard-microservice",
+  "http.port": 8093,
+  "connection_string": "mongodb://armysystemv2:topzen123@localhost:27017/armysystemv2",
   "db_name" : "armysystemv2",
 
   "keyStore": {
