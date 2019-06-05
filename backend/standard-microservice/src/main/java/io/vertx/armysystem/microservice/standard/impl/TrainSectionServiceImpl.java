@@ -27,12 +27,12 @@ public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements S
 
   @Override
   public String getServiceName() {
-    return "dictionary-TrainSection-eb-service";
+    return "standard-TrainSection-eb-service";
   }
 
   @Override
   public String getServiceAddress() {
-    return "service.dictionary.TrainSection";
+    return "service.standard.TrainSection";
   }
 
   @Override

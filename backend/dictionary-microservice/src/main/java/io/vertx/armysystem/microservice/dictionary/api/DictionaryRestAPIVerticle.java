@@ -17,7 +17,7 @@ public class DictionaryRestAPIVerticle extends CRUDRestAPIVerticle {
   }
 
   @Override
-  public void routeApi(Router router) throws Exception {
+  public void routeApi(Router router) {
 
   }
 }

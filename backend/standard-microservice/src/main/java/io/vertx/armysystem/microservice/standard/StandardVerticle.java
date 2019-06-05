@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class StandardVerticle extends BaseMicroserviceVerticle {
   private static final Logger logger = LoggerFactory.getLogger(StandardVerticle.class);
   private List<CRUDService> services = new ArrayList<>();
+  private StandardService standardService;
 
   @Override
   public void start(Future<Void> future) throws Exception {
@@ -35,12 +36,18 @@ public class StandardVerticle extends BaseMicroserviceVerticle {
     crudService = new TrainStageTimeServiceImpl(vertx, config());
     services.add(crudService);
 
+    standardService = new StandardServiceImpl(vertx, config());
+
     // register the service proxy on event bus
     services.forEach(service ->
         new ServiceBinder(vertx)
             .setAddress(((ServiceBase)service).getServiceAddress())
             .register(CRUDService.class, service)
     );
+
+    new ServiceBinder(vertx)
+        .setAddress("service.standard.StandardService")
+        .register(StandardService.class, standardService);
 
     // publish the service and REST endpoint in the discovery infrastructure
     new MongoRepositoryWrapper(vertx, config()).checkDatabase()
@@ -70,7 +77,7 @@ public class StandardVerticle extends BaseMicroserviceVerticle {
 
   private Future<Void> deployRestVerticle() {
     Future<String> future = Future.future();
-    vertx.deployVerticle(new StandardRestAPIVerticle(services),
+    vertx.deployVerticle(new StandardRestAPIVerticle(services, standardService),
         new DeploymentOptions().setConfig(config()), future);
 
     logger.info("Started");

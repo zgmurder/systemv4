@@ -29,12 +29,12 @@ public class TrainStandardServiceImpl extends MongoRepositoryWrapper implements 
 
   @Override
   public String getServiceName() {
-    return "dictionary-TrainStandard-eb-service";
+    return "standard-TrainStandard-eb-service";
   }
 
   @Override
   public String getServiceAddress() {
-    return "service.dictionary.TrainStandard";
+    return "service.standard.TrainStandard";
   }
 
   @Override

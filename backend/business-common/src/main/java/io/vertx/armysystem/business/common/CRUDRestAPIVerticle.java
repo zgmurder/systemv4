@@ -53,9 +53,8 @@ public abstract class CRUDRestAPIVerticle extends RestAPIVerticle {
   /**
    * Add new api router to this verticle
    * @param router  the router object.
-   * @throws Exception
    */
-  public void routeApi(Router router) throws Exception {
+  public void routeApi(Router router) {
 
   }
 

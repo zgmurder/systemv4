@@ -26,12 +26,12 @@ public class TrainStageTimeServiceImpl extends MongoRepositoryWrapper implements
 
   @Override
   public String getServiceName() {
-    return "dictionary-TrainStageTime-eb-service";
+    return "standard-TrainStageTime-eb-service";
   }
 
   @Override
   public String getServiceAddress() {
-    return "service.dictionary.TrainStageTime";
+    return "service.standard.TrainStageTime";
   }
 
   @Override
