@@ -81,7 +81,7 @@ public abstract class CRUDRestAPIVerticle extends RestAPIVerticle {
 
     logger.info("apiAddItem " + object);
 
-    if (object == null || !object.containsKey("name") || !object.containsKey("order")) {
+    if (object == null) {
       badRequest(context, new IllegalArgumentException("Invalid parameters"));
     } else {
       getService(context).addOne(object, principal, resultHandlerNonEmpty(context));

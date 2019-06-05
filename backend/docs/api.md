@@ -375,7 +375,8 @@ class TrainStandard {
 ```
 
 1. 额外接口(启用或停用大纲)
-
+URL: POST http://127.0.0.1:8080/api/standard/trainstandard/activate/[id or name]
+BODY: { activate: Boolean }
 
 
 ### 大纲分册(TrainSection)
