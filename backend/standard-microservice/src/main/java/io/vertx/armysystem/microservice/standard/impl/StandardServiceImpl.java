@@ -54,6 +54,7 @@ public class StandardServiceImpl extends MongoRepositoryWrapper implements Stand
   }
 
   private Future<JsonObject> activate(String id) {
+    logger.info("activate standard: " + id);
     return this.update("TrainStandard",
         new JsonObject().put("_id", id),
         new JsonObject().put("state", StandardState.Activated.getValue())
@@ -64,6 +65,7 @@ public class StandardServiceImpl extends MongoRepositoryWrapper implements Stand
   }
 
   private Future<JsonObject> deactivate(String id) {
+    logger.info("deactivate standard: " + id);
     return this.update("TrainStandard",
         new JsonObject().put("_id", id),
         new JsonObject().put("state", StandardState.Stopped.getValue())
@@ -77,7 +79,7 @@ public class StandardServiceImpl extends MongoRepositoryWrapper implements Stand
     return this.update("TrainStandard",
         new JsonObject().put("state", StandardState.Activated.getValue()),
         new JsonObject().put("state", StandardState.Stopped.getValue())
-            .put("endTime", new Date().getTime()));
+            .put("endTime", new Date().getTime())).otherwiseEmpty();
   }
 
   private JsonObject getIdQuery(String id) {
