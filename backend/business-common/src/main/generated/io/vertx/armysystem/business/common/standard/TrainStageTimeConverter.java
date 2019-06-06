@@ -49,9 +49,9 @@ public class TrainStageTimeConverter {
             obj.setStageTimes(list);
           }
           break;
-        case "standardName":
+        case "standardId":
           if (member.getValue() instanceof String) {
-            obj.setStandardName((String)member.getValue());
+            obj.setStandardId((String)member.getValue());
           }
           break;
       }
@@ -81,8 +81,8 @@ public class TrainStageTimeConverter {
       obj.getStageTimes().forEach(item -> array.add(item.toJson()));
       json.put("stageTimes", array);
     }
-    if (obj.getStandardName() != null) {
-      json.put("standardName", obj.getStandardName());
+    if (obj.getStandardId() != null) {
+      json.put("standardId", obj.getStandardId());
     }
   }
 }

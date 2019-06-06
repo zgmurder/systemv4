@@ -23,6 +23,98 @@
 |[[phoneNum]]`@phoneNum`|`String`|-
 |===
 
+[[Course]]
+== Course
+
+++++
+ 训练课目定义
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[ascending]]`@ascending`|`Boolean`|-
+|[[category]]`@category`|`Number (int)`|-
+|[[countType]]`@countType`|`String`|-
+|[[gunnerType]]`@gunnerType`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[majorReqs]]`@majorReqs`|`Array of String`|-
+|[[manual]]`@manual`|`Boolean`|-
+|[[name]]`@name`|`String`|-
+|[[ordnanceTypes]]`@ordnanceTypes`|`Array of String`|-
+|[[orgCategories]]`@orgCategories`|`Array of String`|-
+|[[orgType]]`@orgType`|`String`|-
+|[[personProperties]]`@personProperties`|`Array of String`|-
+|[[placeTypes]]`@placeTypes`|`Array of String`|-
+|[[rankReqs]]`@rankReqs`|`Array of String`|-
+|[[require]]`@require`|`String`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
+|[[sectionId]]`@sectionId`|`String`|-
+|[[seq]]`@seq`|`String`|-
+|[[serviceReqs]]`@serviceReqs`|`Array of String`|-
+|[[sportCategory]]`@sportCategory`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[subcourses]]`@subcourses`|`Array of link:dataobjects.html#SubCourseL1[SubCourseL1]`|-
+|[[tasks]]`@tasks`|`Array of String`|-
+|[[testContents]]`@testContents`|`Array of link:dataobjects.html#TestContent[TestContent]`|-
+|[[textCondition]]`@textCondition`|`String`|-
+|[[textEvaluation]]`@textEvaluation`|`String`|-
+|[[textStandard]]`@textStandard`|`String`|-
+|[[trainStepName]]`@trainStepName`|`String`|-
+|[[trainUnits]]`@trainUnits`|`Array of Number (Integer)`|-
+|[[unitType]]`@unitType`|`String`|-
+|===
+
+[[CourseDistribution]]
+== CourseDistribution
+
+++++
+ 课目配当表定义
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[courseId]]`@courseId`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[orgCategories]]`@orgCategories`|`Array of String`|-
+|[[personProperties]]`@personProperties`|`Array of String`|-
+|[[sectionId]]`@sectionId`|`String`|-
+|[[serviceReq]]`@serviceReq`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[subjects]]`@subjects`|`Array of String`|-
+|[[task]]`@task`|`String`|-
+|===
+
+[[CourseTime]]
+== CourseTime
+
+++++
+ 课目时间参考表定义
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[courseIds]]`@courseIds`|`Array of String`|-
+|[[hoursAtNight]]`@hoursAtNight`|`Number (int)`|-
+|[[hoursInDay]]`@hoursInDay`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[major]]`@major`|`String`|-
+|[[orgCategories]]`@orgCategories`|`Array of String`|-
+|[[personProperties]]`@personProperties`|`Array of String`|-
+|[[sectionId]]`@sectionId`|`String`|-
+|[[serviceReqs]]`@serviceReqs`|`Array of String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[tasks]]`@tasks`|`Array of String`|-
+|===
+
 [[GroupTrainMethod]]
 == GroupTrainMethod
 
@@ -93,6 +185,28 @@
 |[[name]]`@name`|`String`|-
 |[[order]]`@order`|`Number (int)`|-
 |[[unit]]`@unit`|`String`|-
+|===
+
+[[OptionalSportCourse]]
+== OptionalSportCourse
+
+++++
+ 体育专项训练课目组
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[courseIds]]`@courseIds`|`Array of String`|-
+|[[gender]]`@gender`|`String`|-
+|[[groupId]]`@groupId`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[itemSeq]]`@itemSeq`|`Number (int)`|-
+|[[physicalLevel]]`@physicalLevel`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[troopCategory]]`@troopCategory`|`String`|-
 |===
 
 [[OrdnanceType]]
@@ -234,6 +348,30 @@
 |[[orgSequence]]`@orgSequence`|`Number (int)`|-
 |===
 
+[[RequiredSportCourse]]
+== RequiredSportCourse
+
+++++
+ 体育通用训练课目考核要求表
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[ageEnabled]]`@ageEnabled`|`Boolean`|-
+|[[civilServant]]`@civilServant`|`Boolean`|-
+|[[courseId]]`@courseId`|`String`|-
+|[[fromAge]]`@fromAge`|`Number (int)`|-
+|[[genders]]`@genders`|`Array of String`|-
+|[[id]]`@id`|`String`|-
+|[[physicalLevels]]`@physicalLevels`|`Array of String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[toAge]]`@toAge`|`Number (int)`|-
+|[[troopCategories]]`@troopCategories`|`Array of String`|-
+|===
+
 [[Soldier]]
 == Soldier
 
@@ -338,6 +476,25 @@
 |[[order]]`@order`|`Number (int)`|-
 |===
 
+[[SportTime]]
+== SportTime
+
+++++
+ 体育课目训练时间参考表
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[hours]]`@hours`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[physicalLevel]]`@physicalLevel`|`String`|-
+|[[sportCategory]]`@sportCategory`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|===
+
 [[StageTime]]
 == StageTime
 
@@ -352,6 +509,41 @@
 ^|Name | Type ^| Description
 |[[months]]`@months`|`Number (Double)`|-
 |[[task]]`@task`|`String`|-
+|===
+
+[[SubCourseL1]]
+== SubCourseL1
+
+++++
+ 一级子课目定义
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[name]]`@name`|`String`|-
+|[[require]]`@require`|`String`|-
+|[[seq]]`@seq`|`Number (int)`|-
+|[[subcourses]]`@subcourses`|`Array of link:dataobjects.html#SubCourseL2[SubCourseL2]`|-
+|===
+
+[[SubCourseL2]]
+== SubCourseL2
+
+++++
+ 二级子课目定义
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[name]]`@name`|`String`|-
+|[[require]]`@require`|`String`|-
+|[[seq]]`@seq`|`Number (int)`|-
 |===
 
 [[SupporterMajor]]
@@ -369,6 +561,22 @@
 |[[id]]`@id`|`String`|-
 |[[name]]`@name`|`String`|-
 |[[order]]`@order`|`Number (int)`|-
+|===
+
+[[TestContent]]
+== TestContent
+
+++++
+ 考核内容定义
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[name]]`@name`|`String`|-
+|[[testReq]]`@testReq`|`String`|-
 |===
 
 [[TrainSection]]
@@ -389,7 +597,7 @@
 |[[orgCategories]]`@orgCategories`|`Array of String`|-
 |[[orgTypes]]`@orgTypes`|`Array of String`|-
 |[[personProperties]]`@personProperties`|`Array of String`|-
-|[[standardName]]`@standardName`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
 |===
 
 [[TrainStageTime]]
@@ -408,7 +616,7 @@
 |[[majors]]`@majors`|`Array of String`|-
 |[[orgCategories]]`@orgCategories`|`Array of String`|-
 |[[stageTimes]]`@stageTimes`|`Array of link:dataobjects.html#StageTime[StageTime]`|-
-|[[standardName]]`@standardName`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
 |===
 
 [[TrainStandard]]
