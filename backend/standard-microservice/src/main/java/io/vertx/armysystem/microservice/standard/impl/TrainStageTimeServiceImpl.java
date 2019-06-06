@@ -49,7 +49,7 @@ public class TrainStageTimeServiceImpl extends MongoRepositoryWrapper implements
     this.createCollection(getCollectionName())
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("standardName", 1), new JsonObject()))
+            new JsonObject().put("standardId", 1), new JsonObject()))
         .otherwise(err -> null)
         .setHandler(resultHandler);
 
@@ -140,7 +140,7 @@ public class TrainStageTimeServiceImpl extends MongoRepositoryWrapper implements
     Boolean failed = false;
 
     if (forAdd) {
-      failed = BaseUtil.isEmpty(stageTime.getStandardName()) ||
+      failed = BaseUtil.isEmpty(stageTime.getStandardId()) ||
           BaseUtil.isEmpty(stageTime.getOrgCategories()) ||
           BaseUtil.isEmpty(stageTime.getStageTimes());
     } else {

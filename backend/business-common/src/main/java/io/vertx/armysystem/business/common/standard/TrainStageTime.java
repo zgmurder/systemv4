@@ -13,7 +13,7 @@ import java.util.List;
 @DataObject(generateConverter = true)
 public class TrainStageTime {
   private String id;
-  private String standardName;
+  private String standardId;
   private List<String> orgCategories;
   private List<String> majors;
   private List<StageTime> stageTimes;
@@ -41,12 +41,12 @@ public class TrainStageTime {
     return this;
   }
 
-  public String getStandardName() {
-    return standardName;
+  public String getStandardId() {
+    return standardId;
   }
 
-  public TrainStageTime setStandardName(String standardName) {
-    this.standardName = standardName;
+  public TrainStageTime setStandardId(String standardId) {
+    this.standardId = standardId;
     return this;
   }
 

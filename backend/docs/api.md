@@ -385,7 +385,7 @@ class TrainSection {
   private String id;
   private String name;          // 大纲分册名称，手动录入
   private String code;          // 分册编号, 手动录入
-  private String standardName;  // 关联的大纲标准名称, 选择填入
+  private String standardId;  // 关联的大纲标准ID, 选择填入
   private List<String> orgTypes;  // 单位类型, 选择填入
   private List<String> orgCategories; // 单位分类, 选择填入
   private List<String> personProperties;  // 人员属性, 选择填入
@@ -397,7 +397,7 @@ class TrainSection {
 ```java
 class TrainStageTime {
   private String id;
-  private String standardName;        // 关联的大纲标准名称, 选择填入
+  private String standardId;        // 关联的大纲标准ID, 选择填入
   private List<String> orgCategories; // 单位分类列表, 选择填入
   private List<String> majors;        // 专业列表, 选择填入
   private List<StageTime> stageTimes; // 时段列表

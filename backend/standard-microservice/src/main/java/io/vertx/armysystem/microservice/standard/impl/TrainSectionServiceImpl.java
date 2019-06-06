@@ -56,7 +56,7 @@ public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements S
             new JsonObject().put("code", 1), new JsonObject().put("unique", true)))
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("standardName", 1), new JsonObject()))
+            new JsonObject().put("standardId", 1), new JsonObject()))
         .otherwise(err -> null)
         .setHandler(resultHandler);
 
@@ -152,7 +152,7 @@ public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements S
     if (forAdd) {
       failed = BaseUtil.isEmpty(section.getName()) ||
           BaseUtil.isEmpty(section.getCode()) ||
-          BaseUtil.isEmpty(section.getStandardName()) ||
+          BaseUtil.isEmpty(section.getStandardId()) ||
           BaseUtil.isEmpty(section.getOrgTypes()) ||
           BaseUtil.isEmpty(section.getOrgCategories()) ||
           BaseUtil.isEmpty(section.getPersonProperties());

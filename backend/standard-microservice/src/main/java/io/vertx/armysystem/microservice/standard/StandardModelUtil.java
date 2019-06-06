@@ -15,8 +15,8 @@ public class StandardModelUtil {
     JsonArray pipeline = new JsonArray()
         .add(new JsonObject().put("$lookup", new JsonObject()
             .put("from", "TrainStandard")
-            .put("localField", "standardName")
-            .put("foreignField", "name")
+            .put("localField", "standardId")
+            .put("foreignField", "_id")
             .put("as", "standard")))
         .add(new JsonObject().put("$match", qCondition.getQuery()))
         .add(new JsonObject().put("$count", "count"));
@@ -40,8 +40,8 @@ public class StandardModelUtil {
     JsonArray pipeline = new JsonArray()
         .add(new JsonObject().put("$lookup", new JsonObject()
             .put("from", "TrainStandard")
-            .put("localField", "standardName")
-            .put("foreignField", "name")
+            .put("localField", "standardId")
+            .put("foreignField", "_id")
             .put("as", "standard")))
         .add(new JsonObject().put("$match", qCondition.getQuery()));
     if (qCondition.getOption().containsKey("sort")) {

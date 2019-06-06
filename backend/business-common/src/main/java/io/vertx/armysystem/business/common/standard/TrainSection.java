@@ -15,7 +15,7 @@ public class TrainSection {
   private String id;
   private String name;
   private String code;
-  private String standardName;
+  private String standardId;
   private List<String> orgTypes;
   private List<String> orgCategories;
   private List<String> personProperties;
@@ -61,12 +61,12 @@ public class TrainSection {
     return this;
   }
 
-  public String getStandardName() {
-    return standardName;
+  public String getStandardId() {
+    return standardId;
   }
 
-  public TrainSection setStandardName(String standardName) {
-    this.standardName = standardName;
+  public TrainSection setStandardId(String standardId) {
+    this.standardId = standardId;
     return this;
   }
 
