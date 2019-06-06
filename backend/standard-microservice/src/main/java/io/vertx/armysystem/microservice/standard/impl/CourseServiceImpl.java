@@ -1,25 +1,24 @@
 package io.vertx.armysystem.microservice.standard.impl;
 
 import io.vertx.armysystem.business.common.*;
-import io.vertx.armysystem.business.common.standard.TrainSection;
+import io.vertx.armysystem.business.common.enums.CourseCategory;
+import io.vertx.armysystem.business.common.standard.Course;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
-import io.vertx.armysystem.microservice.standard.StandardModelUtil;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
 import java.util.List;
 
-public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements ServiceBase, CRUDService {
-  private static final Logger logger = LoggerFactory.getLogger(TrainSectionServiceImpl.class);
+public class CourseServiceImpl extends MongoRepositoryWrapper implements ServiceBase, CRUDService {
+  private static final Logger logger = LoggerFactory.getLogger(CourseServiceImpl.class);
   private final Vertx vertx;
 
-  public TrainSectionServiceImpl(Vertx vertx, JsonObject config) {
+  public CourseServiceImpl(Vertx vertx, JsonObject config) {
     super(vertx, config);
 
     this.vertx = vertx;
@@ -27,12 +26,12 @@ public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements S
 
   @Override
   public String getServiceName() {
-    return "standard-TrainSection-eb-service";
+    return "standard-Course-eb-service";
   }
 
   @Override
   public String getServiceAddress() {
-    return "service.standard.TrainSection";
+    return "service.standard.Course";
   }
 
   @Override
@@ -42,7 +41,7 @@ public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements S
 
   @Override
   public String getCollectionName() {
-    return "TrainSection";
+    return "Course";
   }
 
   @Override
@@ -53,10 +52,22 @@ public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements S
             new JsonObject().put("name", 1), new JsonObject()))
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("code", 1), new JsonObject().put("unique", true)))
+            new JsonObject().put("seq", 1), new JsonObject()))
+        .otherwise(err -> null)
+        .compose(o -> this.createIndexWithOptions(getCollectionName(),
+            new JsonObject().put("category", 1), new JsonObject()))
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
             new JsonObject().put("standardId", 1), new JsonObject()))
+        .otherwise(err -> null)
+        .compose(o -> this.createIndexWithOptions(getCollectionName(),
+            new JsonObject().put("sectionId", 1), new JsonObject()))
+        .otherwise(err -> null)
+        .compose(o -> this.createIndexWithOptions(getCollectionName(),
+            new JsonObject().put("trainStepName", 1), new JsonObject()))
+        .otherwise(err -> null)
+        .compose(o -> this.createIndexWithOptions(getCollectionName(),
+            new JsonObject().put("orgType", 1), new JsonObject()))
         .otherwise(err -> null)
         .setHandler(resultHandler);
 
@@ -66,7 +77,7 @@ public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements S
   @Override
   public CRUDService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
     validateParams(item, true)
-        .compose(o -> this.insertOne(getCollectionName(), new TrainSection(o).toJson()))
+        .compose(o -> this.insertOne(getCollectionName(), new Course(o).toJson()))
         .setHandler(resultHandler);
 
     return this;
@@ -91,7 +102,16 @@ public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements S
   @Override
   public CRUDService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
-    StandardModelUtil.countWithStandard(this, getCollectionName(), qCondition).setHandler(resultHandler);
+
+    AggregateBuilder builder = new AggregateBuilder()
+        .addLookupStandard()
+        .addLookupSection()
+        .addQuery(qCondition.getQuery())
+        .addCount();
+
+    this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
+        .map(list -> builder.getCount(list))
+        .setHandler(resultHandler);
 
     return this;
   }
@@ -101,11 +121,23 @@ public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements S
     QueryCondition qCondition = QueryCondition.parse(condition);
 
     if (qCondition.getOption().getJsonObject("sort") == null) {
-      qCondition.getOption().put("sort", new JsonObject().put("standard.version", -1).put("code", 1));
+      qCondition.getOption().put("sort", new JsonObject()
+          .put("standard.version", -1)
+          .put("section.code", 1)
+          .put("trainStep.priority", 1)
+          .put("seq", 1));
     }
 
     logger.info("query condition: " + qCondition);
-    StandardModelUtil.queryWithStandard(this, getCollectionName(), qCondition)
+    AggregateBuilder builder = new AggregateBuilder()
+        .addLookupStandard()
+        .addLookupSection()
+        .addLookupTrainStep()
+        .addQuery(qCondition.getQuery())
+        .addCount();
+
+    this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
+        .map(list -> builder.fixLookupResults(list))
         .setHandler(resultHandler);
 
     return this;
@@ -115,7 +147,7 @@ public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements S
   public CRUDService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
     item.remove("id");
 
-    this.update(getCollectionName(), getIdQuery(id), new TrainSection(item).toJson())
+    this.update(getCollectionName(), getIdQuery(id), new Course(item).toJson())
         .setHandler(ar -> {
           if (ar.succeeded()) {
             this.retrieveOne(id, principal, resultHandler);
@@ -136,25 +168,38 @@ public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements S
   }
 
   private JsonObject getIdQuery(String id) {
-    return new JsonObject().put("$or", new JsonArray()
-        .add(new JsonObject().put("_id", id))
-        .add(new JsonObject().put("code", id)));
+    return new JsonObject().put("_id", id);
   }
+
 
   private Future<JsonObject> validateParams(JsonObject item, Boolean forAdd) {
     Future<JsonObject> future = Future.future();
 
-    TrainSection section = new TrainSection(item);
+    Course course = new Course(item);
 
     Boolean failed = false;
 
     if (forAdd) {
-      failed = BaseUtil.isEmpty(section.getName()) ||
-          BaseUtil.isEmpty(section.getCode()) ||
-          BaseUtil.isEmpty(section.getStandardId()) ||
-          BaseUtil.isEmpty(section.getOrgTypes()) ||
-          BaseUtil.isEmpty(section.getOrgCategories()) ||
-          BaseUtil.isEmpty(section.getPersonProperties());
+      failed = course.getSeq() == 0 ||
+          BaseUtil.isEmpty(course.getName()) ||
+          BaseUtil.isEmpty(course.getStandardId()) ||
+          BaseUtil.isEmpty(course.getSectionId()) ||
+          BaseUtil.isEmpty(course.getRequire()) ||
+          BaseUtil.isEmpty(course.getPlaceTypes());
+
+      if (course.getCategory() == CourseCategory.Train.getValue()) {
+        failed = failed || BaseUtil.isEmpty(course.getTrainStepName()) ||
+            BaseUtil.isEmpty(course.getTrainUnits()) ||
+            BaseUtil.isEmpty(course.getOrgType()) ||
+            BaseUtil.isEmpty(course.getOrgCategories()) ||
+            BaseUtil.isEmpty(course.getPersonProperties()) ||
+            BaseUtil.isEmpty(course.getScoreCriteria());
+      }
+
+      if (course.getCategory() == CourseCategory.Sport.getValue()) {
+        failed = failed || BaseUtil.isEmpty(course.getSportCategory()) ||
+            BaseUtil.isEmpty(course.getScoreCriteria());
+      }
     } else {
 
     }
@@ -162,7 +207,7 @@ public class TrainSectionServiceImpl extends MongoRepositoryWrapper implements S
     if (failed) {
       future.fail("Invalid parameter");
     } else {
-      future.complete(section.toJson());
+      future.complete(course.toJson());
     }
 
     return future;

@@ -21,12 +21,12 @@ public class SportTime {
   }
 
   public SportTime(JsonObject json) {
-//    CourseTimeConverter.fromJson(json, this);
+    SportTimeConverter.fromJson(json, this);
   }
 
   public JsonObject toJson() {
     JsonObject json = new JsonObject();
-//    CourseTimeConverter.toJson(this, json);
+    SportTimeConverter.toJson(this, json);
     return json;
   }
 

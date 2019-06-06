@@ -29,12 +29,12 @@ public class CourseTime {
   }
 
   public CourseTime(JsonObject json) {
-//    CourseTimeConverter.fromJson(json, this);
+    CourseTimeConverter.fromJson(json, this);
   }
 
   public JsonObject toJson() {
     JsonObject json = new JsonObject();
-//    CourseTimeConverter.toJson(this, json);
+    CourseTimeConverter.toJson(this, json);
     return json;
   }
 

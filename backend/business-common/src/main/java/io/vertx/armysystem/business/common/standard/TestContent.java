@@ -18,12 +18,12 @@ public class TestContent {
   }
 
   public TestContent(JsonObject json) {
-//    TestContentConverter.fromJson(json, this);
+    TestContentConverter.fromJson(json, this);
   }
 
   public JsonObject toJson() {
     JsonObject json = new JsonObject();
-//    TestContentConverter.toJson(this, json);
+    TestContentConverter.toJson(this, json);
     return json;
   }
 

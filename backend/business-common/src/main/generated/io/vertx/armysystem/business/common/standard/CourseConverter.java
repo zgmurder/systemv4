@@ -130,8 +130,8 @@ public class CourseConverter {
           }
           break;
         case "seq":
-          if (member.getValue() instanceof String) {
-            obj.setSeq((String)member.getValue());
+          if (member.getValue() instanceof Number) {
+            obj.setSeq(((Number)member.getValue()).intValue());
           }
           break;
         case "serviceReqs":
@@ -289,9 +289,7 @@ public class CourseConverter {
     if (obj.getSectionId() != null) {
       json.put("sectionId", obj.getSectionId());
     }
-    if (obj.getSeq() != null) {
-      json.put("seq", obj.getSeq());
-    }
+    json.put("seq", obj.getSeq());
     if (obj.getServiceReqs() != null) {
       JsonArray array = new JsonArray();
       obj.getServiceReqs().forEach(item -> array.add(item));

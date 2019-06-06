@@ -27,12 +27,12 @@ public class CourseDistribution {
   }
 
   public CourseDistribution(JsonObject json) {
-//    CourseDistributionConverter.fromJson(json, this);
+    CourseDistributionConverter.fromJson(json, this);
   }
 
   public JsonObject toJson() {
     JsonObject json = new JsonObject();
-//    CourseDistributionConverter.toJson(this, json);
+    CourseDistributionConverter.toJson(this, json);
     return json;
   }
 

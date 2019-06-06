@@ -28,12 +28,12 @@ public class RequiredSportCourse {
   }
 
   public RequiredSportCourse(JsonObject json) {
-//    RequiredSportCourseConverter.fromJson(json, this);
+    RequiredSportCourseConverter.fromJson(json, this);
   }
 
   public JsonObject toJson() {
     JsonObject json = new JsonObject();
-//    RequiredSportCourseConverter.toJson(this, json);
+    RequiredSportCourseConverter.toJson(this, json);
     return json;
   }
 

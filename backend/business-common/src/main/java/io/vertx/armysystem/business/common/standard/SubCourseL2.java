@@ -19,12 +19,12 @@ public class SubCourseL2 {
   }
 
   public SubCourseL2(JsonObject json) {
-//    SubCourseL2Converter.fromJson(json, this);
+    SubCourseL2Converter.fromJson(json, this);
   }
 
   public JsonObject toJson() {
     JsonObject json = new JsonObject();
-//    SubCourseL2Converter.toJson(this, json);
+    SubCourseL2Converter.toJson(this, json);
     return json;
   }
 

@@ -1,5 +1,6 @@
 package io.vertx.armysystem.microservice.resource.impl;
 
+import io.vertx.armysystem.business.common.AggregateBuilder;
 import io.vertx.armysystem.business.common.ModelUtil;
 import io.vertx.armysystem.business.common.QueryCondition;
 import io.vertx.armysystem.business.common.ServiceBase;
@@ -173,7 +174,15 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
     qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
     logger.info("count soldier condition: " + qCondition);
 
-    ModelUtil.countByWithOrganization(this, getCollectionName(), qCondition)
+    AggregateBuilder builder = new AggregateBuilder()
+        .addLookupOrganization()
+        .addLookupPosition()
+        .addLookupRank()
+        .addQuery(qCondition.getQuery())
+        .addCount();
+
+    this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
+        .map(list -> builder.getCount(list))
         .setHandler(resultHandler);
 
     return this;
@@ -190,74 +199,17 @@ public class SoldierServiceImpl extends MongoRepositoryWrapper implements Soldie
 
     qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
     logger.info("query condition: " + qCondition);
-    JsonArray pipeline = new JsonArray()
-        .add(new JsonObject().put("$lookup", new JsonObject()
-            .put("from", "Organization")
-            .put("localField", "organizationId")
-            .put("foreignField", "_id")
-            .put("as", "organization")))
-        .add(new JsonObject().put("$lookup", new JsonObject()
-            .put("from", "Position")
-            .put("localField", "positionId")
-            .put("foreignField", "_id")
-            .put("as", "position")))
-        .add(new JsonObject().put("$lookup", new JsonObject()
-            .put("from", "MilitaryRank")
-            .put("localField", "rankId")
-            .put("foreignField", "_id")
-            .put("as", "rank")))
-        .add(new JsonObject().put("$match", qCondition.getQuery()));
-    if (qCondition.getOption().containsKey("sort")) {
-      pipeline.add(new JsonObject().put("$sort", qCondition.getOption().getJsonObject("sort")));
-    }
-    if (qCondition.getOption().containsKey("skip")) {
-      pipeline.add(new JsonObject().put("$skip", qCondition.getOption().getInteger("skip")));
-    }
-    if (qCondition.getOption().containsKey("limit")) {
-      pipeline.add(new JsonObject().put("$limit", qCondition.getOption().getInteger("limit")));
-    }
-    if (qCondition.getOption().containsKey("fields")) {
-      JsonObject project = new JsonObject();
-      qCondition.getOption().getJsonArray("fields").getList()
-          .forEach(field -> project.put(field.toString(), 1));
-      pipeline.add(new JsonObject().put("$project", project));
-    }
 
-    List<JsonObject> results = new ArrayList<>();
-    Future<List<JsonObject>> future = Future.future();
-    this.aggregateWithOptions(getCollectionName(), pipeline, new JsonObject())
-        .handler(object -> results.add(object))
-        .endHandler(v -> {
-          logger.info("retrieve soldiers: " + results);
-          future.complete(results);
-        })
-        .exceptionHandler(ex -> {
-          logger.error("retrieve soldiers failed: " + ex);
-          future.fail(ex);
-        });
+    AggregateBuilder builder = new AggregateBuilder()
+        .addLookupOrganization()
+        .addLookupPosition()
+        .addLookupRank()
+        .addQuery(qCondition.getQuery())
+        .addOption(qCondition.getOption());
 
-    future.map(list -> list.stream()
-        .map(item -> {
-          if (item.containsKey("organization") && item.getJsonArray("organization").size() > 0) {
-            item.put("organization", item.getJsonArray("organization").getJsonObject(0));
-          } else {
-            item.remove("organization");
-          }
-
-          if (item.containsKey("position") && item.getJsonArray("position").size() > 0) {
-            item.put("position", item.getJsonArray("position").getJsonObject(0).getString("name"));
-          } else {
-            item.remove("position");
-          }
-
-          if (item.containsKey("rank") && item.getJsonArray("rank").size() > 0) {
-            item.put("rank", item.getJsonArray("rank").getJsonObject(0).getString("name"));
-          } else {
-            item.remove("rank");
-          }
-          return item;
-        }).collect(Collectors.toList())
-    ).setHandler(resultHandler);
+    this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
+        .map(list -> builder.fixLookupResults(list))
+        .setHandler(resultHandler);
 
     return this;
   }

@@ -362,6 +362,16 @@ Activated(1),
 Stopped(2);
 ```
 
+#### 课目分类
+```
+Train(0, "军事课目"),
+Sport(1, "体育课目"),
+Politics(2, "政治教育"),
+Activity(3, "党团活动"),
+Others(4, "其它工作"),
+Custom(5, "自定义课目");
+```
+
 ### 大纲标准(TrainStandard)
 ```java
 class TrainStandard {
@@ -409,6 +419,143 @@ class StageTime {
 }
 ```
 
+### 训练课目(Course)
+```java
+class Course {
+  private String id;
+  private String name;    // 课目名称
+  private int seq;     // 课目序号
+  private int category;   // 课目分类，参考CourseCategory
+  private String standardId;  // 大纲标准ID
+  private String sectionId;   // 大纲分册ID
+  private Boolean isManual;     // 子课目是否自定义
+  private String require;     // 训练要求, 必训/选训/自训
+  private String scoreCriteria; // 评分标准, 二级制/四机制/七级制/百分制
+  private List<String> placeTypes;        // 训练场地要求, 参考PlaceType表
+
+  // 军事课目特有字段
+  private String trainStepName; // 训练步骤, 参考TrainStep表, trainStep返回完整的TrainStep对象
+  private List<Integer> trainUnits; // 训练单元(编制序列), 单兵/班/排/中队/大队.
+  private String orgType;       // 课目适用的单位类型
+
+  private List<String> orgCategories;   // 课目适用的单位分类列表
+  private List<String> personProperties;  // 课目适用的人员属性列表
+  private List<String> tasks;             // 课目对应任务(可多选)
+  private List<String> serviceReqs;       // 勤务类型要求(可多选)
+  private List<String> majorReqs;         // 专业类型要求(可多选)
+  private List<String> rankReqs;          // 军衔要求(可多选)
+  private List<String> ordnanceTypes;     // 配套军械类型, 参考OrdnanceType表
+  private String gunnerType;              // 要求枪手类型
+
+
+  // 体育课目特有字段
+  private String sportCategory;           // 体育课目分类, 参考SportCategory表
+  private String countType;               // 课目成绩按 时间或数量 计数
+  private Boolean isAscending;              // true: 递增评分，false: 递减评分
+  private String unitType;                // 计量单位, (手动输入)（次/转/米/阶/圈等）
+
+  // 军事课目和体育课目特有字段
+  private List<SubCourseL1> subcourses;  // 子课目列表
+  // 军事课目特有字段
+  private List<TestContent> testContents; // 考核内容
+
+  // 军事课目和体育课目特有字段
+  private String textCondition;           // 课目条件
+  private String textStandard;            // 课目标准
+  private String textEvaluation;          // 考核要求
+}
+
+class SubCourseL1 {
+  private int seq;              // 子课目序号
+  private String name;          // 子课目名称
+  private String require;       // 训练要求, 必训/选训/自训
+  private List<SubCourseL2> subcourses;   // 二级子课目列表
+}
+
+class SubCourseL2 {
+  private int seq;              // 子课目序号
+  private String name;          // 子课目名称
+  private String require;       // 训练要求, 必训/选训/
+}
+
+class TestContent {
+  private String name;        // 考核内容名称
+  private String testReq;     // 考核要求, 必考或选考
+}
+```
+
+### 课目配当表(CourseDistribution)
+```java
+class CourseDistribution {
+  private String id;
+  private String courseId;                  // 军事课目ID
+  private String standardId;                // 大纲标准ID
+  private String sectionId;                 // 大纲分册ID
+  private List<String> orgCategories;       // 课目适用的单位分类列表
+  private List<String> personProperties;    // 课目适用的人员属性列表
+  private String serviceReq;                // 勤务类型(可选)
+  private String task;                      // 训练任务
+  private List<String> subjects;            // 训练课题列表
+}
+```
+
+### 课目时间参考表(CourseTime)
+```java
+class CourseTime {
+  private String id;
+  private List<String> courseIds;           // 训练课目ID列表
+  private String standardId;                // 大纲标准ID
+  private String sectionId;                 // 大纲分册ID
+  private List<String> orgCategories;       // 课目适用的单位分类列表
+  private List<String> personProperties;    // 课目适用的人员属性列表
+  private List<String> tasks;               // 对应任务列表
+  private List<String> serviceReqs;         // 勤务类型列表
+  private String major;                     // 专业类型
+  private int hoursInDay;                   // 昼训时间要求
+  private int hoursAtNight;                 // 夜训时间要求
+}
+```
+
+### 体育课目时间参考表
+```java
+class SportTime {
+  private String id;
+  private String standardId;      // 大纲标准ID
+  private String sportCategory;   // 体育科目分类
+  private String physicalLevel;   // 体能训练等级
+  private int hours;              // 时间要求
+}
+```
+
+### 通用训练课目
+```java
+class RequiredSportCourse {
+  private String id;
+  private String courseId;
+  private String standardId;
+  private List<String> physicalLevels;    // 体能训练等级列表
+  private List<String> troopCategories;   // 军兵种类型列表
+  private List<String> genders;           // 性别要求列表(男/女)
+  private Boolean isCivilServant;         // 是否适用于文职人员
+  private Boolean isAgeEnabled;           // 是否启用年龄条件
+  private int fromAge;                    // 年龄条件
+  private int toAge;
+}
+```
+
+### 专项训练课目
+```java
+class OptionalSportCourse {
+  private String id;
+  private String standardId;
+  private List<String> courseIds;       // 体育课目列表，或者的关系
+  private int groupId;                  // 课目组编号
+  private int itemSeq;                  // 课目序号
+  private String physicalLevel;         // 体能训练等级
+  private String troopCategory;         // 军兵种类型
+  private String gender;                // 性别要求
+}
+```
 
 
 ## 资源管理(resource)

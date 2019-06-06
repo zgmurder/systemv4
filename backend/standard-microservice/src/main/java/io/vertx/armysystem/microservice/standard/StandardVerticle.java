@@ -35,6 +35,18 @@ public class StandardVerticle extends BaseMicroserviceVerticle {
     services.add(crudService);
     crudService = new TrainStageTimeServiceImpl(vertx, config());
     services.add(crudService);
+    crudService = new CourseServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new CourseDistributionServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new CourseTimeServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new SportTimeServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new RequiredSportCourseServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new OptionalSportCourseServiceImpl(vertx, config());
+    services.add(crudService);
 
     standardService = new StandardServiceImpl(vertx, config());
 

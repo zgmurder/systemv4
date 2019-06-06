@@ -52,7 +52,7 @@
 |[[require]]`@require`|`String`|-
 |[[scoreCriteria]]`@scoreCriteria`|`String`|-
 |[[sectionId]]`@sectionId`|`String`|-
-|[[seq]]`@seq`|`String`|-
+|[[seq]]`@seq`|`Number (int)`|-
 |[[serviceReqs]]`@serviceReqs`|`Array of String`|-
 |[[sportCategory]]`@sportCategory`|`String`|-
 |[[standardId]]`@standardId`|`String`|-

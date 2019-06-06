@@ -14,7 +14,7 @@ import java.util.List;
 public class Course {
   private String id;
   private String name;    // 课目名称
-  private String seq;     // 课目序号
+  private int seq;     // 课目序号
   private int category;   // 课目分类，参考CourseCategory
   private String standardId;  // 大纲标准ID
   private String sectionId;   // 大纲分册ID
@@ -59,12 +59,12 @@ public class Course {
   }
 
   public Course(JsonObject json) {
-//    CourseConverter.fromJson(json, this);
+    CourseConverter.fromJson(json, this);
   }
 
   public JsonObject toJson() {
     JsonObject json = new JsonObject();
-//    CourseConverter.toJson(this, json);
+    CourseConverter.toJson(this, json);
     return json;
   }
 
@@ -86,11 +86,11 @@ public class Course {
     return this;
   }
 
-  public String getSeq() {
+  public int getSeq() {
     return seq;
   }
 
-  public Course setSeq(String seq) {
+  public Course setSeq(int seq) {
     this.seq = seq;
     return this;
   }

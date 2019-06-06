@@ -7,10 +7,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.ext.mongo.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MongoRepositoryWrapper {
@@ -162,6 +159,17 @@ public class MongoRepositoryWrapper {
 
   public ReadStream<JsonObject> aggregateWithOptions(String collection, final JsonArray pipeline, JsonObject options) {
     return client.aggregateWithOptions(collection, pipeline, new AggregateOptions(options));
+  }
+
+  public Future<List<JsonObject>> aggregateQuery(String collection, final JsonArray pipeline, JsonObject options) {
+    List<JsonObject> results = new ArrayList<>();
+    Future<List<JsonObject>> future = Future.future();
+    client.aggregateWithOptions(collection, pipeline, new AggregateOptions(options))
+        .handler(object -> results.add(object))
+        .endHandler(v -> future.complete(results))
+        .exceptionHandler(ex -> future.fail(ex));
+
+    return future;
   }
 
   protected Future<Void> createCollection(String collectionName) {
