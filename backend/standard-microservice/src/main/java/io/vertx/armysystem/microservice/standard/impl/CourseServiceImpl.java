@@ -134,7 +134,7 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
         .addLookupSection()
         .addLookupTrainStep()
         .addQuery(qCondition.getQuery())
-        .addCount();
+        .addOption(qCondition.getOption());
 
     this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
         .map(list -> builder.fixLookupResults(list))

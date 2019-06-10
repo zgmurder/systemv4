@@ -117,7 +117,7 @@ public class SportTimeServiceImpl extends MongoRepositoryWrapper implements Serv
     AggregateBuilder builder = new AggregateBuilder()
         .addLookupStandard()
         .addQuery(qCondition.getQuery())
-        .addCount();
+        .addOption(qCondition.getOption());
 
     this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
         .map(list -> builder.fixLookupResults(list))

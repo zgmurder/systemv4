@@ -120,7 +120,7 @@ public class CourseTimeServiceImpl extends MongoRepositoryWrapper implements Ser
         .addLookupSection()
         .addLookupCourses()
         .addQuery(qCondition.getQuery())
-        .addCount();
+        .addOption(qCondition.getOption());
 
     this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
         .map(list -> builder.fixLookupResults(list))

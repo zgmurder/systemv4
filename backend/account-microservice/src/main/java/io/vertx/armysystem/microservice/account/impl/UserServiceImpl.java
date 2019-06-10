@@ -1,12 +1,9 @@
 package io.vertx.armysystem.microservice.account.impl;
 
-import io.vertx.armysystem.business.common.CRUDService;
-import io.vertx.armysystem.business.common.ServiceBase;
+import io.vertx.armysystem.business.common.*;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.armysystem.business.common.ModelUtil;
-import io.vertx.armysystem.business.common.QueryCondition;
 import io.vertx.armysystem.microservice.account.User;
 import io.vertx.armysystem.microservice.account.UserService;
 import io.vertx.armysystem.microservice.account.common.Functional;
@@ -163,7 +160,13 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
 
     qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
     logger.info("count user condition: " + qCondition);
-    ModelUtil.countByWithOrganization(this, getCollectionName(), qCondition)
+    AggregateBuilder builder = new AggregateBuilder()
+        .addLookupOrganization()
+        .addQuery(qCondition.getQuery())
+        .addCount();
+
+    this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
+        .map(list -> builder.getCount(list))
         .setHandler(resultHandler);
 
     return this;
@@ -179,51 +182,15 @@ public class UserServiceImpl extends MongoRepositoryWrapper implements UserServi
 
     qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
     logger.info("query condition: " + qCondition);
-    JsonArray pipeline = new JsonArray()
-        .add(new JsonObject().put("$lookup", new JsonObject()
-            .put("from", "Organization")
-            .put("localField", "organizationId")
-            .put("foreignField", "_id")
-            .put("as", "organization")))
-        .add(new JsonObject().put("$match", qCondition.getQuery()));
-    if (qCondition.getOption().containsKey("sort")) {
-      pipeline.add(new JsonObject().put("$sort", qCondition.getOption().getJsonObject("sort")));
-    }
-    if (qCondition.getOption().containsKey("skip")) {
-      pipeline.add(new JsonObject().put("$skip", qCondition.getOption().getInteger("skip")));
-    }
-    if (qCondition.getOption().containsKey("limit")) {
-      pipeline.add(new JsonObject().put("$limit", qCondition.getOption().getInteger("limit")));
-    }
-    if (qCondition.getOption().containsKey("fields")) {
-      JsonObject project = new JsonObject();
-      qCondition.getOption().getJsonArray("fields").getList()
-          .forEach(field -> project.put(field.toString(), 1));
-      pipeline.add(new JsonObject().put("$project", project));
-    }
 
-    List<JsonObject> results = new ArrayList<>();
-    Future<List<JsonObject>> future = Future.future();
-    this.aggregateWithOptions(getCollectionName(), pipeline, new JsonObject())
-        .handler(object -> results.add(object))
-        .endHandler(v -> {
-          logger.info("retrieve users: " + results);
-          future.complete(results);
-        })
-        .exceptionHandler(ex -> {
-          logger.error("retrieve users failed: " + ex);
-          future.fail(ex);
-        });
-    future.map(list -> list.stream()
-          .map(item -> {
-            if (item.containsKey("organization") && item.getJsonArray("organization").size() > 0) {
-              item.put("organization", item.getJsonArray("organization").getJsonObject(0));
-            } else {
-              item.remove("organization");
-            }
-            return item;
-          }).collect(Collectors.toList())
-    ).setHandler(resultHandler);
+    AggregateBuilder builder = new AggregateBuilder()
+        .addLookupOrganization()
+        .addQuery(qCondition.getQuery())
+        .addOption(qCondition.getOption());
+
+    this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
+        .map(list -> builder.fixLookupResults(list))
+        .setHandler(resultHandler);
 
     return this;
   }
