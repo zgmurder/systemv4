@@ -184,8 +184,7 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
           BaseUtil.isEmpty(course.getName()) ||
           BaseUtil.isEmpty(course.getStandardId()) ||
           BaseUtil.isEmpty(course.getSectionId()) ||
-          BaseUtil.isEmpty(course.getRequire()) ||
-          BaseUtil.isEmpty(course.getPlaceTypes());
+          BaseUtil.isEmpty(course.getRequire());
 
       if (course.getCategory() == CourseCategory.Train.getValue()) {
         failed = failed || BaseUtil.isEmpty(course.getTrainStepName()) ||
