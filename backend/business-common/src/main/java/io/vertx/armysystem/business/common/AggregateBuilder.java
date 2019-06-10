@@ -64,10 +64,10 @@ public class AggregateBuilder {
     return results.stream()
         .map(item -> {
           lookupKeys.forEach(key -> {
-            if (item.containsKey("key") && item.getJsonArray("key").size() > 0) {
-              item.put("key", item.getJsonArray("key").getJsonObject(0));
+            if (item.containsKey(key) && item.getJsonArray(key).size() > 0) {
+              item.put(key, item.getJsonArray(key).getJsonObject(0));
             } else {
-              item.remove("key");
+              item.remove(key);
             }
           });
 
