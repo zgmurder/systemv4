@@ -170,8 +170,7 @@ public class CourseTimeServiceImpl extends MongoRepositoryWrapper implements Ser
           BaseUtil.isEmpty(courseTime.getStandardId()) ||
           BaseUtil.isEmpty(courseTime.getSectionId()) ||
           BaseUtil.isEmpty(courseTime.getOrgCategories()) ||
-          BaseUtil.isEmpty(courseTime.getPersonProperties()) ||
-          BaseUtil.isEmpty(courseTime.getTasks());
+          BaseUtil.isEmpty(courseTime.getPersonProperties());
     } else {
 
     }
