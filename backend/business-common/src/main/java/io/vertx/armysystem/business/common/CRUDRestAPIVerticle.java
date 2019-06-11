@@ -140,7 +140,7 @@ public abstract class CRUDRestAPIVerticle extends RestAPIVerticle {
 
   private CRUDService getService(RoutingContext context) {
     String path = context.request().path();
-    String collectionName = path.substring(1).split("/")[0];
+    String collectionName = path.split("/")[0];
     Optional<CRUDService> service = services.stream()
         .filter(item -> ((ServiceBase)item).getCollectionName().equalsIgnoreCase(collectionName) ||
             ((ServiceBase)item).getCollectionName().equalsIgnoreCase(collectionName+"s"))
