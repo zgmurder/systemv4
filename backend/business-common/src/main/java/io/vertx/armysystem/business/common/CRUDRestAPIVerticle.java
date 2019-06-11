@@ -12,6 +12,7 @@ import io.vertx.ext.web.handler.BodyHandler;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public abstract class CRUDRestAPIVerticle extends RestAPIVerticle {
   private static final Logger logger = LoggerFactory.getLogger(CRUDRestAPIVerticle.class);
@@ -140,12 +141,13 @@ public abstract class CRUDRestAPIVerticle extends RestAPIVerticle {
 
   private CRUDService getService(RoutingContext context) {
     String path = context.request().path();
-    String collectionName = path.split("/")[0];
+    String collectionName = (path.substring(1).split("/"))[0];
+    logger.info("getService collection name from path is " + collectionName);
     Optional<CRUDService> service = services.stream()
         .filter(item -> ((ServiceBase)item).getCollectionName().equalsIgnoreCase(collectionName) ||
             ((ServiceBase)item).getCollectionName().equalsIgnoreCase(collectionName+"s"))
-        .findFirst();
+        .findAny();
 
-    return service.orElse(null);
+    return service.orElseThrow(() -> new RuntimeException("No route found"));
   }
 }
