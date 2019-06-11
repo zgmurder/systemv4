@@ -144,8 +144,8 @@ public abstract class CRUDRestAPIVerticle extends RestAPIVerticle {
     String collectionName = (path.substring(1).split("/"))[0];
     logger.info("getService collection name from path is " + collectionName);
     Optional<CRUDService> service = services.stream()
-        .filter(item -> ((ServiceBase)item).getCollectionName().equalsIgnoreCase(collectionName) ||
-            ((ServiceBase)item).getCollectionName().equalsIgnoreCase(collectionName+"s"))
+        .filter(item -> collectionName.equalsIgnoreCase(((ServiceBase)item).getCollectionName()) ||
+            collectionName.equalsIgnoreCase(((ServiceBase)item).getCollectionName()+"s"))
         .findAny();
 
     return service.orElseThrow(() -> new RuntimeException("No route found"));
