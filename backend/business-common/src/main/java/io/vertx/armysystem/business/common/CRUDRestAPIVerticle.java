@@ -91,12 +91,14 @@ public abstract class CRUDRestAPIVerticle extends RestAPIVerticle {
   private void apiFetchItem(RoutingContext context, JsonObject principal) {
     String id = context.request().getParam("id");
 
+    logger.info("path=" + context.request().path() + " route to table " + ((ServiceBase)getService(context)).getCollectionName());
     logger.info("apiFetchItem " + id);
 
     getService(context).retrieveOne(id, principal, resultHandlerNonEmpty(context));
   }
 
   private void apiQueryItems(RoutingContext context, JsonObject principal) {
+    logger.info("path=" + context.request().path() + " route to table " + ((ServiceBase)getService(context)).getCollectionName());
     logger.info("apiQueryItems " + context.getBodyAsJson());
 
     Future<List<JsonObject>> future = Future.future();
@@ -107,6 +109,7 @@ public abstract class CRUDRestAPIVerticle extends RestAPIVerticle {
   }
 
   private void apiCountItems(RoutingContext context, JsonObject principal) {
+    logger.info("path=" + context.request().path() + " route to table " + ((ServiceBase)getService(context)).getCollectionName());
     logger.info("apiCountItems " + context.getBodyAsJson());
 
     Future<Long> future = Future.future();
@@ -120,6 +123,7 @@ public abstract class CRUDRestAPIVerticle extends RestAPIVerticle {
   private void apiUpdateItem(RoutingContext context, JsonObject principal) {
     String id = context.request().getParam("id");
 
+    logger.info("path=" + context.request().path() + " route to table " + ((ServiceBase)getService(context)).getCollectionName());
     logger.info("apiUpdateItem: id=" + id + " body=" + context.getBodyAsJson());
 
     getService(context).updateOne(id, context.getBodyAsJson(), principal, resultHandlerNonEmpty(context));
@@ -128,6 +132,7 @@ public abstract class CRUDRestAPIVerticle extends RestAPIVerticle {
   private void apiDeleteItem(RoutingContext context, JsonObject principal) {
     String id = context.request().getParam("id");
 
+    logger.info("path=" + context.request().path() + " route to table " + ((ServiceBase)getService(context)).getCollectionName());
     logger.info("apiDeleteItem " + id);
 
     getService(context).deleteOne(id, principal, deleteResultHandler(context));
@@ -137,7 +142,7 @@ public abstract class CRUDRestAPIVerticle extends RestAPIVerticle {
     String path = context.request().path();
     Optional<CRUDService> service = services.stream()
         .filter(item -> path.toLowerCase().indexOf(((ServiceBase)item).getCollectionName().toLowerCase()) > 0)
-        .findAny();
+        .findFirst();
 
     return service.orElse(null);
   }
