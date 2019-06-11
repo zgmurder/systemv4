@@ -71,6 +71,8 @@ public class AggregateBuilder {
             }
           });
 
+          item.put("id", item.getString("_id"));
+          item.remove("_id");
           return item;
         }).collect(Collectors.toList());
   }
