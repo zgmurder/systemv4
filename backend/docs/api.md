@@ -428,7 +428,7 @@ class Course {
   private int category;   // 课目分类，参考CourseCategory
   private String standardId;  // 大纲标准ID
   private String sectionId;   // 大纲分册ID
-  private Boolean isManual;     // 子课目是否自定义
+  private Boolean manual;     // 子课目是否自定义
   private String require;     // 训练要求, 必训/选训/自训
   private String scoreCriteria; // 评分标准, 二级制/四机制/七级制/百分制
   private List<String> placeTypes;        // 训练场地要求, 参考PlaceType表
@@ -451,7 +451,7 @@ class Course {
   // 体育课目特有字段
   private String sportCategory;           // 体育课目分类, 参考SportCategory表
   private String countType;               // 课目成绩按 时间或数量 计数
-  private Boolean isAscending;              // true: 递增评分，false: 递减评分
+  private Boolean ascending;              // true: 递增评分，false: 递减评分
   private String unitType;                // 计量单位, (手动输入)（次/转/米/阶/圈等）
 
   // 军事课目和体育课目特有字段
