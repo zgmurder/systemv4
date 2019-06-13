@@ -17,13 +17,13 @@ export default {
   data() {
     return {
       columns: [
-        { prop: 'order', label: '序号', width: '50', noFilter: true },
-        { prop: 'name', label: '单位名称', style: { color: '#67C23A' }},
-        { prop: 'orgType', label: '单位类型', width: '80', style: { color: '#F56C6C' }},
-        { prop: 'orgProperty', label: '单位属性', width: '80' },
-        { prop: 'troopCategory', label: '兵种类型', width: '80' },
-        { prop: 'physicalLevel', label: '体能等级', style: { color: '#E6A23C' }, width: '80' },
-        { prop: 'optionalMajors', label: '可选专业', handleValue: value => value && value.join('、') },
+        { prop: 'order', label: '序号', width: '50' },
+        { prop: 'name', label: '单位名称', style: { color: '#67C23A' }, filterConfig: value => ({ '$regex': value }) },
+        { prop: 'orgType', label: '单位类型', width: '80', style: { color: '#F56C6C' }, filterConfig: true },
+        { prop: 'orgProperty', label: '单位属性', width: '80', filterConfig: true },
+        { prop: 'troopCategory', label: '兵种类型', width: '80', filterConfig: true },
+        { prop: 'physicalLevel', label: '体能等级', style: { color: '#E6A23C' }, width: '80', filterConfig: true },
+        { prop: 'optionalMajors', label: '可选专业', handleValue: value => value && value.join('、'), filterConfig: { fieldType: 'input', placeholder: '可选专业', label: '可选专业', vModel: 'optionalMajors', filterConfig: value => ({ '$regex': value }) }},
         { prop: 'optionalServices', label: '勤务分类', handleValue: value => value && value.join('、') },
         { prop: 'optionalTasks',
           label: '任务种类',
@@ -87,6 +87,7 @@ export default {
   },
   async created() {
     this.schemaOrgProperty.options = await queryList('dictionary/orgproperty')
+    this.$EventBus.$emit('finished')
     // console.log(this.schemaOrgProperty.options)
     this._schemaLength = this.schema.length
   },

@@ -124,7 +124,7 @@ export default {
   },
   watch: {},
   created() {
-    this._initValues = this.schema.map(item => item[item.vModel])
+    this._initValues = this.schema.map(item => [item.hidden, item[item.vModel]])
     this.schema.forEach(item => {
       this.$set(item, item.vModel, item[item.vModel])
       if (item.required) this.$set(item, 'error', '')
@@ -144,13 +144,15 @@ export default {
       })
       const dataIsOk = !this.schema.some(item => !!item.error)
       if (dataIsOk) {
+        delete obj.underfine
         this.$emit('formFinish', obj)
       }
     },
     initForm() {
       this.schema.splice(this._initValues.length, this.schema.length - this._initValues.length)
       this.schema.forEach((item, index) => {
-        item[item.vModel] = this._initValues[index]
+        item[item.vModel] = this._initValues[index][1]
+        item.hidden = this._initValues[index][0]
         item.error = ''
       })
     },

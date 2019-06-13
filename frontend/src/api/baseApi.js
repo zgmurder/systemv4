@@ -55,6 +55,13 @@ export function stopOrg(id, deactivated) {
     data: { deactivated }
   })
 }
+export function startStandard(id, activate) {
+  return request({
+    url: 'standard/trainstandard/activate/' + id,
+    method: 'post',
+    data: { activate }
+  })
+}
 export function queryOrgs(obj) {
   const { sort, limit, ...where } = obj
   return queryList('resource/organization', {
@@ -70,20 +77,4 @@ export const queryLowerOrgs = (parentId, option = {}) => {
     where
   })
 }
-export const getServerDate = () => {
-  let xhr = null
-  if (window.XMLHttpRequest) {
-    xhr = new window.XMLHttpRequest()
-  } else {
-    // ie
-    // eslint-disable-next-line no-undef
-    xhr = new ActiveObject('Microsoft')
-  }
-  xhr.open('GET', '/', false) // false不可变
-  xhr.send(null)
-  // eslint-disable-next-line no-unused-vars
-  const dateObj = new Date(xhr.getResponseHeader('Date'))
-  // new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate())
-  // new Date(2019,2,24)
-  return new Date(2019, 2, 24)
-}
+

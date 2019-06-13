@@ -14,6 +14,7 @@ import Layout from '@/layout'
 import baseDataRouter from './modules/baseData'
 import orgManageRouter from './modules/orgManage'
 import accountRouter from './modules/account'
+import trainOutlineRouter from './modules/trainOutline'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -152,7 +153,8 @@ export const asyncRouterMap = [
   },
   ...baseDataRouter,
   ...orgManageRouter,
-  ...accountRouter
+  ...accountRouter,
+  ...trainOutlineRouter
   // componentsRouter,
   // chartsRouter
   // {
