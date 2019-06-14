@@ -557,6 +557,97 @@ class OptionalSportCourse {
 }
 ```
 
+### 八落实人员参训率要求
+```java
+class PersonRequirement {
+  private String id;
+  private String standardId;
+  private String orgCategory;
+  private int trainRate;
+}
+```
+
+### 八落实训练时间要求
+```java
+class TimeRequirement {
+  private String id;
+  private String standardId;
+  private String orgCategory;       // 单位分类
+  private String personProperty;    // 人员属性分类
+  private Double months;               // 年度训练月数
+  private Double days;                 // 年度训练天数
+  private Double hours;                // 年度训练小时数
+  private Double daysPerMonth;          // 月度训练天数
+  private Double daysPerWeek;           // 每周训练天数
+  private Double hoursPerDay;           // 每天训练小时数
+  private Double hoursAtNight;          // 年度夜训小时数
+  private Double rateAtNight;           // 年度夜巡比率
+  private Double flexibleDays;          // 机动天数
+}
+```
+
+### 八落实训练场地要求
+```java
+class PlaceRequirement {
+  private String id;
+  private String standardId;
+  private String orgCategory;
+  private List<String> requiredPlaces;
+  private List<String> optionalPlaces;
+}
+```
+
+### 八落实单位训练质量要求
+```java
+class OrgScoreRequirement {
+  private String id;
+  private String standardId;
+  private String orgCategory;   // 单位分类
+  private int scoreReq;         // 最低成绩要求
+}
+```
+
+### 八落实人员训练质量要求
+```java
+class PersonScoreRequirement {
+  private String id;
+  private String standardId;
+  private String personProperty;    // 训练大纲
+  private List<String> ranks;       // 军衔等级列表
+  private int startYear;            // 任职年限范围,比如0-2年, 2年以上等
+  private int endYear;
+  private int scoreReq;             // 成绩要求
+}
+```
+
+### 八落实弹药消耗要求
+```java
+class BulletRequirement {
+  private String id;
+  private String standardId;
+  private String orgCategory;     // 单位分类
+  private String majorType;       // 专业类型
+  private String ordnanceType;    // 军械类型
+  private String rankL1;          // 军衔一级分类(义务兵/士官/军官)
+  private int quota;              // 数量配额
+  private String unitType;        // 计量单位
+  private String numType;         // 数量类型(单人/单炮/总量)
+}
+```
+
+### 八落实摩托飞行小时要求
+```java
+class MotorRequirement {
+  private String id;
+  private String standardId;
+  private String orgCategory;     // 单位分类
+  private String majorType;       // 专业类型
+  private int quota;              // 数量配额: 训练小时数要求或行车里程数
+  private String unitType;        // 计量单位
+}
+```
+
+
 
 ## 资源管理(resource)
 

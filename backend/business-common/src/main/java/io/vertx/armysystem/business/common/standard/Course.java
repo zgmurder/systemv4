@@ -127,7 +127,7 @@ public class Course {
   }
 
   public Course setManual(Boolean manual) {
-    manual = manual;
+    this.manual = manual;
     return this;
   }
 

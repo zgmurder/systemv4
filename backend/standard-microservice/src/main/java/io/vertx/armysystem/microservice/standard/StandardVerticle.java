@@ -48,6 +48,22 @@ public class StandardVerticle extends BaseMicroserviceVerticle {
     crudService = new OptionalSportCourseServiceImpl(vertx, config());
     services.add(crudService);
 
+    // 八落实要求
+    crudService = new BulletRequirementServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new MotorRequirementServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new OrgScoreRequirementServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new PersonRequirementServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new PersonScoreRequirementServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new PlaceRequirementServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new TimeRequirementServiceImpl(vertx, config());
+    services.add(crudService);
+
     standardService = new StandardServiceImpl(vertx, config());
 
     // register the service proxy on event bus

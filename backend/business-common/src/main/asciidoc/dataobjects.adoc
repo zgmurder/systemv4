@@ -23,6 +23,29 @@
 |[[phoneNum]]`@phoneNum`|`String`|-
 |===
 
+[[BulletRequirement]]
+== BulletRequirement
+
+++++
+ 八落实弹药消耗要求
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`@id`|`String`|-
+|[[majorType]]`@majorType`|`String`|-
+|[[numType]]`@numType`|`String`|-
+|[[ordnanceType]]`@ordnanceType`|`String`|-
+|[[orgCategory]]`@orgCategory`|`String`|-
+|[[quota]]`@quota`|`Number (int)`|-
+|[[rankL1]]`@rankL1`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[unitType]]`@unitType`|`String`|-
+|===
+
 [[Course]]
 == Course
 
@@ -169,6 +192,26 @@
 |[[rankLevel2]]`@rankLevel2`|`String`|-
 |===
 
+[[MotorRequirement]]
+== MotorRequirement
+
+++++
+ 摩托飞行小时消耗要求
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`@id`|`String`|-
+|[[majorType]]`@majorType`|`String`|-
+|[[orgCategory]]`@orgCategory`|`String`|-
+|[[quota]]`@quota`|`Number (int)`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[unitType]]`@unitType`|`String`|-
+|===
+
 [[MotorType]]
 == MotorType
 
@@ -271,6 +314,24 @@
 |[[order]]`@order`|`Number (int)`|-
 |===
 
+[[OrgScoreRequirement]]
+== OrgScoreRequirement
+
+++++
+ 八落实单位训练质量要求
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`@id`|`String`|-
+|[[orgCategory]]`@orgCategory`|`String`|-
+|[[scoreReq]]`@scoreReq`|`Number (int)`|-
+|[[standardId]]`@standardId`|`String`|-
+|===
+
 [[Organization]]
 == Organization
 
@@ -308,6 +369,64 @@
 |[[serviceType]]`@serviceType`|`String`|-
 |[[specialMission]]`@specialMission`|`String`|-
 |[[updatedTime]]`@updatedTime`|`Number (Long)`|-
+|===
+
+[[PersonRequirement]]
+== PersonRequirement
+
+++++
+ 八落实人员参训率要求
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`@id`|`String`|-
+|[[orgCategory]]`@orgCategory`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[trainRate]]`@trainRate`|`Number (int)`|-
+|===
+
+[[PersonScoreRequirement]]
+== PersonScoreRequirement
+
+++++
+ 八落实人员训练质量要求
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[endYear]]`@endYear`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[personProperty]]`@personProperty`|`String`|-
+|[[ranks]]`@ranks`|`Array of String`|-
+|[[scoreReq]]`@scoreReq`|`Number (int)`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[startYear]]`@startYear`|`Number (int)`|-
+|===
+
+[[PlaceRequirement]]
+== PlaceRequirement
+
+++++
+ 八落实训练场地要求
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[id]]`@id`|`String`|-
+|[[optionalPlaces]]`@optionalPlaces`|`Array of String`|-
+|[[orgCategory]]`@orgCategory`|`String`|-
+|[[requiredPlaces]]`@requiredPlaces`|`Array of String`|-
+|[[standardId]]`@standardId`|`String`|-
 |===
 
 [[PlaceType]]
@@ -577,6 +696,33 @@
 ^|Name | Type ^| Description
 |[[name]]`@name`|`String`|-
 |[[testReq]]`@testReq`|`String`|-
+|===
+
+[[TimeRequirement]]
+== TimeRequirement
+
+++++
+ 八落实训练时间要求
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[days]]`@days`|`Number (Double)`|-
+|[[daysPerMonth]]`@daysPerMonth`|`Number (Double)`|-
+|[[daysPerWeek]]`@daysPerWeek`|`Number (Double)`|-
+|[[flexibleDays]]`@flexibleDays`|`Number (Double)`|-
+|[[hours]]`@hours`|`Number (Double)`|-
+|[[hoursAtNight]]`@hoursAtNight`|`Number (Double)`|-
+|[[hoursPerDay]]`@hoursPerDay`|`Number (Double)`|-
+|[[id]]`@id`|`String`|-
+|[[months]]`@months`|`Number (Double)`|-
+|[[orgCategory]]`@orgCategory`|`String`|-
+|[[personProperty]]`@personProperty`|`String`|-
+|[[rateAtNight]]`@rateAtNight`|`Number (Double)`|-
+|[[standardId]]`@standardId`|`String`|-
 |===
 
 [[TrainSection]]

@@ -163,4 +163,26 @@ public class AggregateBuilder {
 
     return this;
   }
+
+  public AggregateBuilder addLookupOrgCategory() {
+    lookupKeys.add("orgCategoryObj");
+    pipeline.add(new JsonObject().put("$lookup", new JsonObject()
+        .put("from", "OrgCategory")
+        .put("localField", "orgCategory")
+        .put("foreignField", "name")
+        .put("as", "orgCategoryObj")));
+
+    return this;
+  }
+
+  public AggregateBuilder addLookupOrdnanceType() {
+    lookupKeys.add("ordnanceTypeObj");
+    pipeline.add(new JsonObject().put("$lookup", new JsonObject()
+        .put("from", "OrdnanceType")
+        .put("localField", "ordnanceType")
+        .put("foreignField", "name")
+        .put("as", "ordnanceTypeObj")));
+
+    return this;
+  }
 }
