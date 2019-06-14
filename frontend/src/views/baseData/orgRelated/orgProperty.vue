@@ -16,9 +16,9 @@ export default {
   data() {
     return {
       columns: [
-        { prop: 'order', label: '序号', width: '50', noFilter: true },
-        { prop: 'name', label: '单位属性名称', width: '180' },
-        { prop: 'optionalMajors', label: '该单位可选专业', handleValue: value => value && value.join('、') }],
+        { prop: 'order', label: '序号', width: '50' },
+        { prop: 'name', label: '单位属性名称', width: '180', filterConfig: value => ({ '$regex': value }) },
+        { prop: 'optionalMajors', label: '该单位可选专业', filterConfig: value => ({ '$regex': value }), handleValue: value => value && value.join('、') }],
       schema: [
         { fieldType: 'input', placeholder: '单位属性', label: '单位属性', vModel: 'name', required: true },
         { fieldType: 'input', width: '100%', placeholder: '可选专业', label: '可选专业', vModel: 'optionalMajors' },

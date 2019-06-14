@@ -1,7 +1,7 @@
 
 <template>
   <div class="form-and-table">
-    <div ref="search" class="search">
+    <div ref="search" class="search" :style="{'justify-content':!filterSchema.length && 'flex-end'}">
       <!-- <div>
         <el-input v-model="where[filterName]" size="mini" placeholder="请输入内容" clearable @input="handleSearch">
           <el-select slot="prepend" v-model="filterName" closed style="width:120px" placeholder="请选择">
@@ -70,7 +70,7 @@ import minformSchema from './formSchema/mini'
 import { saveItem, deleteItem, queryListAndTotal, updateItem } from '@/api/baseApi'
 import { cloneDeep, type } from './units'
 export default {
-  name: 'TableAndForm',
+  name: 'FormAndTable',
   components: {
     tableSchema,
     formSchema,
@@ -109,6 +109,10 @@ export default {
       default: () => {}
     },
     defaultWhere: {
+      type: Object,
+      default: () => {}
+    },
+    defaultOption: {
       type: Object,
       default: () => {}
     }
@@ -156,10 +160,11 @@ export default {
         this.where = newValue.reduce((prev, curr) => {
           const value = curr.vModel
           if (curr[value]) {
-            prev[value] = curr.filterConfig(curr[value])
+            prev[value] = type.isFunction(curr.filterConfig) && curr.filterConfig(curr[value]) || curr[value]
           }
           return prev
         }, {})
+        this.options.skip = 1
         this.handleSearch()
       },
       deep: true
@@ -168,7 +173,16 @@ export default {
   created() {
     this.filterName = this.searchColumns[0].prop
     this.fetchTableList()
+    this.handleFilter()
     this.$EventBus.$on('finished', () => {
+      this.handleFilter()
+    })
+  },
+  mounted() {
+
+  },
+  methods: {
+    handleFilter() {
       const columns = this.columns.filter(item => !!item.filterConfig)
       this.filterSchema = columns.map(item => {
         if (type.isObject(item.filterConfig)) return item.filterConfig
@@ -178,12 +192,7 @@ export default {
         return obj
       })
       this.$EventBus.$off('finished')
-    })
-  },
-  mounted() {
-
-  },
-  methods: {
+    },
     handleSearch() {
       window.clearTimeout(this.timer)
       this.timer = window.setTimeout(() => {
@@ -203,10 +212,12 @@ export default {
       // } else {
       //   delete where[this.filterName]
       // }
+
       queryListAndTotal(this.url, { option: {
         // sort: { updatedTime: -1 },
         skip: num,
-        limit
+        limit,
+        ...this.defaultOption
       }, where: { ...this.where, ...this.defaultWhere }}).then(({ list, total }) => {
         this.tableList = list
         this.total = total

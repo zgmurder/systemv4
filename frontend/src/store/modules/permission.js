@@ -56,7 +56,7 @@ const actions = {
   generateRoutes({ commit, state }, roleName) {
     state.mapModules = mapModules.filter(item => item.roles ? item.roles.includes(roleName) : true)
     const name = getModuleName() || state.mapModules[0].value
-    console.log(roleName)
+    console.log(roleName, name)
 
     commit('SET_MODULENAME', name)
     return new Promise(resolve => {

@@ -13,10 +13,10 @@ export default {
   data() {
     return {
       columns: [
-        { prop: 'order', label: '序号', width: '50', noFilter: true },
-        { prop: 'name', label: '军衔名称' },
-        { prop: 'rankLevel1', label: '一级分类' },
-        { prop: 'rankLevel2', label: '二级分类' }
+        { prop: 'order', label: '序号', width: '50' },
+        { prop: 'name', label: '军衔名称', filterConfig: value => ({ '$regex': value }) },
+        { prop: 'rankLevel1', label: '一级分类', filterConfig: value => ({ '$regex': value }) },
+        { prop: 'rankLevel2', label: '二级分类', filterConfig: value => ({ '$regex': value }) }
         // { prop: 'levelCode', label: '等级码' }
       ],
       schema: [

@@ -19,7 +19,7 @@ export const mapModules = [
   {
     roles: ['Administrator'],
     name: '大纲标准',
-    value: 'standard'
+    value: 'trainOutline'
   },
   {
     roles: ['Administrator'],
@@ -312,11 +312,7 @@ export const myPersonProperty = ((obj) => {
 })(PersonProperty)
 
 // 大纲启用状态
-export const StandardState = {
-  Initial: '未启用',
-  Using: '已启用',
-  Stopped: '已停用'
-}
+export const StandardState = ['未启用', '已启用', '已停用']
 
 // 训练考核方式
 export const AssessMethod = {

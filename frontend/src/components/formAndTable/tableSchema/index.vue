@@ -11,12 +11,19 @@
         v-bind="column"
       >
         <template slot-scope="scope">
-          <component :is="column.component" v-if="column.component" :prop="[scope.row,column,$attrs.data]" />
+          <component :is="column.component" v-if="column.component" :data="[scope.row,column,$attrs.data]" />
           <span
             v-else-if="column.handleValue"
             v-bind="column"
-            @click="column.click && column.click(scope)"
+            :style="typeof column.style === 'function' ? column.style(scope.row[column.prop], scope.row):column.style"
+            @click="column.click && handleColumnClick(scope,column.click)"
           >{{ column.handleValue(scope.row[column.prop], scope.row) }}</span>
+          <span
+            v-else-if="typeof column.style === 'function'"
+            v-bind="column"
+            :style="column.style(scope.row[column.prop], scope.row)"
+            @click="column.click && column.click(scope)"
+          >{{ scope.row[column.prop] }}</span>
           <span
             v-else
             v-bind="column"
@@ -79,6 +86,16 @@ export default {
   computed: {
     width() {
       return this.$scopedSlots.moreHandle() ? 180 : 140
+    }
+  },
+  methods: {
+    handleColumnClick(scope, cb) {
+      return new Promise(resolve => {
+        this.$emit('editItem', scope.row, scope.$index)
+        resolve()
+      }).then(() => {
+        cb(scope)
+      })
     }
   }
 }
