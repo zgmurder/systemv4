@@ -27,12 +27,12 @@ public class PlaceRequirementServiceImpl extends MongoRepositoryWrapper implemen
 
   @Override
   public String getServiceName() {
-    return "standard-PersonRequirement-eb-service";
+    return "standard-PlaceRequirement-eb-service";
   }
 
   @Override
   public String getServiceAddress() {
-    return "service.standard.PersonRequirement";
+    return "service.standard.PlaceRequirement";
   }
 
   @Override
@@ -42,7 +42,7 @@ public class PlaceRequirementServiceImpl extends MongoRepositoryWrapper implemen
 
   @Override
   public String getCollectionName() {
-    return "PersonRequirement";
+    return "PlaceRequirement";
   }
 
   @Override
