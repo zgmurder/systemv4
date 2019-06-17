@@ -160,6 +160,7 @@ public class MotorRequirementServiceImpl extends MongoRepositoryWrapper implemen
     if (forAdd) {
       failed = BaseUtil.isEmpty(requirement.getStandardId()) ||
           BaseUtil.isEmpty(requirement.getOrgCategory()) ||
+          BaseUtil.isEmpty(requirement.getMotorType()) ||
           requirement.getQuota() <= 0;
     } else {
 

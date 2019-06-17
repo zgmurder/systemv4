@@ -19,9 +19,9 @@ public class MotorRequirementConverter {
             obj.setId((String)member.getValue());
           }
           break;
-        case "majorType":
+        case "motorType":
           if (member.getValue() instanceof String) {
-            obj.setMajorType((String)member.getValue());
+            obj.setMotorType((String)member.getValue());
           }
           break;
         case "orgCategory":
@@ -56,8 +56,8 @@ public class MotorRequirementConverter {
     if (obj.getId() != null) {
       json.put("id", obj.getId());
     }
-    if (obj.getMajorType() != null) {
-      json.put("majorType", obj.getMajorType());
+    if (obj.getMotorType() != null) {
+      json.put("motorType", obj.getMotorType());
     }
     if (obj.getOrgCategory() != null) {
       json.put("orgCategory", obj.getOrgCategory());

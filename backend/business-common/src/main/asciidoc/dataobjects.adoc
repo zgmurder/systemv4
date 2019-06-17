@@ -205,7 +205,7 @@
 |===
 ^|Name | Type ^| Description
 |[[id]]`@id`|`String`|-
-|[[majorType]]`@majorType`|`String`|-
+|[[motorType]]`@motorType`|`String`|-
 |[[orgCategory]]`@orgCategory`|`String`|-
 |[[quota]]`@quota`|`Number (int)`|-
 |[[standardId]]`@standardId`|`String`|-

@@ -13,7 +13,7 @@ public class MotorRequirement {
   private String id;
   private String standardId;
   private String orgCategory;     // 单位分类
-  private String majorType;       // 专业类型
+  private String motorType;       // 专业类型
   private int quota;              // 数量配额: 训练小时数要求或行车里程数
   private String unitType;        // 计量单位
 
@@ -58,12 +58,12 @@ public class MotorRequirement {
     return this;
   }
 
-  public String getMajorType() {
-    return majorType;
+  public String getMotorType() {
+    return motorType;
   }
 
-  public MotorRequirement setMajorType(String majorType) {
-    this.majorType = majorType;
+  public MotorRequirement setMotorType(String motorType) {
+    this.motorType = motorType;
     return this;
   }
 
