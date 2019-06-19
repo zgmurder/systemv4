@@ -99,8 +99,35 @@
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
+|[[ageFrom]]`@ageFrom`|`Number (int)`|-
+|[[ageTo]]`@ageTo`|`Number (int)`|-
+|[[count]]`@count`|`Number (Double)`|-
+|[[score]]`@score`|`Number (Double)`|-
+|===
+
+[[Condition]]
+== Condition
+
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
 |[[courseNum]]`@courseNum`|`Number (int)`|-
-|[[exerciseSocre]]`@exerciseSocre`|`Number (int)`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
+|[[scoreReq]]`@scoreReq`|`Number (int)`|-
+|[[tacticsScore]]`@tacticsScore`|`Number (int)`|-
+|===
+
+[[Condition]]
+== Condition
+
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[matchRate]]`@matchRate`|`Number (Double)`|-
 |[[scoreCriteria]]`@scoreCriteria`|`String`|-
 |[[scoreReq]]`@scoreReq`|`Number (int)`|-
 |===
@@ -355,6 +382,25 @@
 |[[unit]]`@unit`|`String`|-
 |===
 
+[[MultipleTargetScoreRule]]
+== MultipleTargetScoreRule
+
+++++
+ 多对象综合训练成绩评定标准
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[conditions]]`@conditions`|`Array of link:dataobjects.html#Condition[Condition]`|-
+|[[id]]`@id`|`String`|-
+|[[score]]`@score`|`Number (int)`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|===
+
 [[OptionalSportCourse]]
 == OptionalSportCourse
 
@@ -421,6 +467,25 @@
 |[[troopCategory]]`@troopCategory`|`String`|-
 |===
 
+[[OrgMultipleCourseScoreRule]]
+== OrgMultipleCourseScoreRule
+
+++++
+ 单位多课目训练成绩评定规则
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[conditions]]`@conditions`|`Array of link:dataobjects.html#Condition[Condition]`|-
+|[[id]]`@id`|`String`|-
+|[[score]]`@score`|`Number (int)`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|===
+
 [[OrgProperty]]
 == OrgProperty
 
@@ -454,6 +519,46 @@
 |[[id]]`@id`|`String`|-
 |[[orgCategory]]`@orgCategory`|`String`|-
 |[[scoreReq]]`@scoreReq`|`Number (int)`|-
+|[[standardId]]`@standardId`|`String`|-
+|===
+
+[[OrgSingleCourseScoreRule]]
+== OrgSingleCourseScoreRule
+
+++++
+ 单位单课目训练成绩评定规则
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[conditions]]`@conditions`|`Array of link:dataobjects.html#Condition[Condition]`|-
+|[[id]]`@id`|`String`|-
+|[[score]]`@score`|`Number (int)`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|===
+
+[[OrgSportScoreStandard]]
+== OrgSportScoreStandard
+
+++++
+ 单位体育成绩评定标准
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[conditions]]`@conditions`|`Array of link:dataobjects.html#Condition[Condition]`|-
+|[[id]]`@id`|`String`|-
+|[[masterScore]]`@masterScore`|`Number (int)`|-
+|[[newRecruit]]`@newRecruit`|`Boolean`|-
+|[[score]]`@score`|`Number (int)`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
 |[[standardId]]`@standardId`|`String`|-
 |===
 
@@ -496,6 +601,25 @@
 |[[updatedTime]]`@updatedTime`|`Number (Long)`|-
 |===
 
+[[PersonAnnualScoreRule]]
+== PersonAnnualScoreRule
+
+++++
+ 个人年度训练成绩评定标准
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[conditions]]`@conditions`|`Array of link:dataobjects.html#Condition[Condition]`|-
+|[[id]]`@id`|`String`|-
+|[[score]]`@score`|`Number (int)`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|===
+
 [[PersonRequirement]]
 == PersonRequirement
 
@@ -533,6 +657,27 @@
 |[[scoreReq]]`@scoreReq`|`Number (int)`|-
 |[[standardId]]`@standardId`|`String`|-
 |[[startYear]]`@startYear`|`Number (int)`|-
+|===
+
+[[PersonSportScoreStandard]]
+== PersonSportScoreStandard
+
+++++
+ 个人军事体育训练成绩评定标准
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[evaluatedScore]]`@evaluatedScore`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[physicalLevel]]`@physicalLevel`|`String`|-
+|[[scoreCondtion]]`@scoreCondtion`|`Number (int)`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[totalEnabled]]`@totalEnabled`|`Boolean`|-
 |===
 
 [[PlaceRequirement]]
@@ -592,6 +737,18 @@
 |[[orgSequence]]`@orgSequence`|`Number (int)`|-
 |===
 
+[[Range]]
+== Range
+
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[from]]`@from`|`Number (int)`|-
+|[[to]]`@to`|`Number (int)`|-
+|===
+
 [[RequiredSportCourse]]
 == RequiredSportCourse
 
@@ -636,6 +793,18 @@
 |[[sequence]]`@sequence`|`Number (int)`|-
 |[[standardId]]`@standardId`|`String`|-
 |[[weight]]`@weight`|`Number (int)`|-
+|===
+
+[[ScorePair]]
+== ScorePair
+
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[count]]`@count`|`Number (Double)`|-
+|[[score]]`@score`|`Number (Double)`|-
 |===
 
 [[Soldier]]
@@ -740,6 +909,38 @@
 |[[id]]`@id`|`String`|-
 |[[name]]`@name`|`String`|-
 |[[order]]`@order`|`Number (int)`|-
+|===
+
+[[SportScoreStandard]]
+== SportScoreStandard
+
+++++
+ 个人军事体育训练成绩评定标准
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[civilServant]]`@civilServant`|`Boolean`|-
+|[[courseId]]`@courseId`|`String`|-
+|[[gender]]`@gender`|`String`|-
+|[[groups]]`@groups`|`Array of link:dataobjects.html#ScorePair[ScorePair]`|-
+|[[heightFactorCountStep]]`@heightFactorCountStep`|`Number (Double)`|-
+|[[heightFactorStep]]`@heightFactorStep`|`Number (Double)`|-
+|[[heightFrom]]`@heightFrom`|`Number (int)`|-
+|[[heightTo]]`@heightTo`|`Number (int)`|-
+|[[highScoreCountStep]]`@highScoreCountStep`|`Number (Double)`|-
+|[[highScoreScoreStep]]`@highScoreScoreStep`|`Number (Double)`|-
+|[[highland]]`@highland`|`Boolean`|-
+|[[id]]`@id`|`String`|-
+|[[individualEnabled]]`@individualEnabled`|`Boolean`|-
+|[[individuals]]`@individuals`|`Array of link:dataobjects.html#Condition[Condition]`|-
+|[[physicalLevels]]`@physicalLevels`|`Array of String`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[troopCategories]]`@troopCategories`|`Array of String`|-
 |===
 
 [[SportTime]]
@@ -984,6 +1185,46 @@
 |[[name]]`@name`|`String`|-
 |[[order]]`@order`|`Number (int)`|-
 |[[scoreReq]]`@scoreReq`|`Number (int)`|-
+|===
+
+[[TroopAnnualScoreRule]]
+== TroopAnnualScoreRule
+
+++++
+ 部队年度训练成绩评定标准
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[conditions]]`@conditions`|`Array of link:dataobjects.html#Condition[Condition]`|-
+|[[id]]`@id`|`String`|-
+|[[score]]`@score`|`Number (int)`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[withTactics]]`@withTactics`|`Boolean`|-
+|===
+
+[[UnitForceAnnualScoreRule]]
+== UnitForceAnnualScoreRule
+
+++++
+ 分队年度训练成绩评定标准
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[conditions]]`@conditions`|`Array of link:dataobjects.html#Condition[Condition]`|-
+|[[id]]`@id`|`String`|-
+|[[score]]`@score`|`Number (int)`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[withTactics]]`@withTactics`|`Boolean`|-
 |===
 
 [[WeatherType]]

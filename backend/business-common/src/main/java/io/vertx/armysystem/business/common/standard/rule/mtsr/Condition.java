@@ -1,4 +1,4 @@
-package io.vertx.armysystem.business.common.standard.rule.loasr;
+package io.vertx.armysystem.business.common.standard.rule.mtsr;
 
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
@@ -6,9 +6,8 @@ import io.vertx.core.json.JsonObject;
 @DataObject(generateConverter = true)
 public class Condition {
   private String scoreCriteria;           // 成绩评定标准(多级制类型)
-  private int tacticsScore;              // 指挥所演习成绩要求(0:表示无要求)
   private int scoreReq;                   // 成绩要求
-  private int courseNum;                  // 符合成绩要求的课目数, 数组中的每个条件之间是并且的关系
+  private Double matchRate;               // 符合成绩要求的百分比, 数组中的每个条件之间是并且的关系
 
   public Condition() {
     // Empty constructor
@@ -33,15 +32,6 @@ public class Condition {
     return this;
   }
 
-  public int getTacticsScore() {
-    return tacticsScore;
-  }
-
-  public Condition setTacticsScore(int tacticsScore) {
-    this.tacticsScore = tacticsScore;
-    return this;
-  }
-
   public int getScoreReq() {
     return scoreReq;
   }
@@ -51,12 +41,12 @@ public class Condition {
     return this;
   }
 
-  public int getCourseNum() {
-    return courseNum;
+  public Double getMatchRate() {
+    return matchRate;
   }
 
-  public Condition setCourseNum(int courseNum) {
-    this.courseNum = courseNum;
+  public Condition setMatchRate(Double matchRate) {
+    this.matchRate = matchRate;
     return this;
   }
 
