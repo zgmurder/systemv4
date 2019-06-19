@@ -46,6 +46,65 @@
 |[[unitType]]`@unitType`|`String`|-
 |===
 
+[[ChildRule]]
+== ChildRule
+
+++++
+ 全局课目规则中的子项
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[dayType]]`@dayType`|`String`|-
+|[[fromHour]]`@fromHour`|`Number (int)`|-
+|[[holidays]]`@holidays`|`Array of Number (Integer)`|-
+|[[hours]]`@hours`|`Number (int)`|-
+|[[months]]`@months`|`Array of Number (Integer)`|-
+|[[priority]]`@priority`|`Number (int)`|-
+|[[section]]`@section`|`String`|-
+|[[weekSeqs]]`@weekSeqs`|`Array of Number (Integer)`|-
+|[[weekdays]]`@weekdays`|`Array of Number (Integer)`|-
+|===
+
+[[CompetitionRule]]
+== CompetitionRule
+
+++++
+ 会操课目规则
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[courseId]]`@courseId`|`String`|-
+|[[hours]]`@hours`|`Number (int)`|-
+|[[hoursEnabled]]`@hoursEnabled`|`Boolean`|-
+|[[id]]`@id`|`String`|-
+|[[orgCategories]]`@orgCategories`|`Array of String`|-
+|[[sectionId]]`@sectionId`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[times]]`@times`|`Number (int)`|-
+|===
+
+[[Condition]]
+== Condition
+
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[courseNum]]`@courseNum`|`Number (int)`|-
+|[[exerciseSocre]]`@exerciseSocre`|`Number (int)`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
+|[[scoreReq]]`@scoreReq`|`Number (int)`|-
+|===
+
 [[Course]]
 == Course
 
@@ -113,6 +172,32 @@
 |[[task]]`@task`|`String`|-
 |===
 
+[[CourseRule]]
+== CourseRule
+
+++++
+ 全局课目规则(针对非军事课目)
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[childRules]]`@childRules`|`Array of link:dataobjects.html#ChildRule[ChildRule]`|-
+|[[courseId]]`@courseId`|`String`|-
+|[[forbiddenWeathers]]`@forbiddenWeathers`|`Array of String`|-
+|[[id]]`@id`|`String`|-
+|[[orgCategories]]`@orgCategories`|`Array of String`|-
+|[[preRuleId]]`@preRuleId`|`String`|-
+|[[rateEnabled]]`@rateEnabled`|`Boolean`|-
+|[[rateUnit]]`@rateUnit`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[times]]`@times`|`Number (int)`|-
+|[[totalEnabled]]`@totalEnabled`|`Boolean`|-
+|[[totalTimes]]`@totalTimes`|`Number (int)`|-
+|===
+
 [[CourseTime]]
 == CourseTime
 
@@ -136,6 +221,26 @@
 |[[serviceReqs]]`@serviceReqs`|`Array of String`|-
 |[[standardId]]`@standardId`|`String`|-
 |[[tasks]]`@tasks`|`Array of String`|-
+|===
+
+[[DailySchedule]]
+== DailySchedule
+
+++++
+ 每日作息时间
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[afternoon]]`@afternoon`|`Number (Double)`|-
+|[[id]]`@id`|`String`|-
+|[[morning]]`@morning`|`Number (Double)`|-
+|[[night]]`@night`|`Number (Double)`|-
+|[[orgCategory]]`@orgCategory`|`String`|-
+|[[sport]]`@sport`|`Number (Double)`|-
 |===
 
 [[GroupTrainMethod]]
@@ -171,6 +276,26 @@
 |[[id]]`@id`|`String`|-
 |[[name]]`@name`|`String`|-
 |[[order]]`@order`|`Number (int)`|-
+|===
+
+[[LeaderOfficeAnnualScoreRule]]
+== LeaderOfficeAnnualScoreRule
+
+++++
+ 首长机关年度训练成绩评定标准
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[conditions]]`@conditions`|`Array of link:dataobjects.html#Condition[Condition]`|-
+|[[id]]`@id`|`String`|-
+|[[score]]`@score`|`Number (int)`|-
+|[[scoreCriteria]]`@scoreCriteria`|`String`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[withTactics]]`@withTactics`|`Boolean`|-
 |===
 
 [[MilitaryRank]]
@@ -489,6 +614,28 @@
 |[[standardId]]`@standardId`|`String`|-
 |[[toAge]]`@toAge`|`Number (int)`|-
 |[[troopCategories]]`@troopCategories`|`Array of String`|-
+|===
+
+[[RetrainRule]]
+== RetrainRule
+
+++++
+ 复训课目规则
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[courseId]]`@courseId`|`String`|-
+|[[hours]]`@hours`|`Number (int)`|-
+|[[id]]`@id`|`String`|-
+|[[orgCategories]]`@orgCategories`|`Array of String`|-
+|[[sectionId]]`@sectionId`|`String`|-
+|[[sequence]]`@sequence`|`Number (int)`|-
+|[[standardId]]`@standardId`|`String`|-
+|[[weight]]`@weight`|`Number (int)`|-
 |===
 
 [[Soldier]]

@@ -42,88 +42,99 @@ public class CourseTime {
     return id;
   }
 
-  public void setId(String id) {
+  public CourseTime setId(String id) {
     this.id = id;
+    return this;
   }
 
   public List<String> getCourseIds() {
     return courseIds;
   }
 
-  public void setCourseIds(List<String> courseIds) {
+  public CourseTime setCourseIds(List<String> courseIds) {
     this.courseIds = courseIds;
+    return this;
   }
 
   public String getStandardId() {
     return standardId;
   }
 
-  public void setStandardId(String standardId) {
+  public CourseTime setStandardId(String standardId) {
     this.standardId = standardId;
+    return this;
   }
 
   public String getSectionId() {
     return sectionId;
   }
 
-  public void setSectionId(String sectionId) {
+  public CourseTime setSectionId(String sectionId) {
     this.sectionId = sectionId;
+    return this;
   }
 
   public List<String> getOrgCategories() {
     return orgCategories;
   }
 
-  public void setOrgCategories(List<String> orgCategories) {
+  public CourseTime setOrgCategories(List<String> orgCategories) {
     this.orgCategories = orgCategories;
+    return this;
   }
 
   public List<String> getPersonProperties() {
     return personProperties;
   }
 
-  public void setPersonProperties(List<String> personProperties) {
+  public CourseTime setPersonProperties(List<String> personProperties) {
     this.personProperties = personProperties;
+    return this;
   }
 
   public List<String> getTasks() {
     return tasks;
   }
 
-  public void setTasks(List<String> tasks) {
+  public CourseTime setTasks(List<String> tasks) {
     this.tasks = tasks;
+    return this;
   }
 
   public List<String> getServiceReqs() {
     return serviceReqs;
   }
 
-  public void setServiceReqs(List<String> serviceReqs) {
+  public CourseTime setServiceReqs(List<String> serviceReqs) {
     this.serviceReqs = serviceReqs;
+    return this;
   }
 
   public String getMajor() {
     return major;
   }
 
-  public void setMajor(String major) {
+  public CourseTime setMajor(String major) {
     this.major = major;
+    return this;
   }
 
   public int getHoursInDay() {
     return hoursInDay;
   }
 
-  public void setHoursInDay(int hoursInDay) {
+  public CourseTime setHoursInDay(int hoursInDay) {
     this.hoursInDay = hoursInDay;
+    return this;
   }
 
   public int getHoursAtNight() {
     return hoursAtNight;
   }
 
-  public void setHoursAtNight(int hoursAtNight) {
+  public CourseTime setHoursAtNight(int hoursAtNight) {
     this.hoursAtNight = hoursAtNight;
+    return this;
   }
 
   @Override
