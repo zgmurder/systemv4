@@ -22,6 +22,16 @@ public final class ModelUtil {
     }
   }
 
+  public static Future<JsonObject> fillSoldier(MongoRepositoryWrapper mongo, JsonObject object) {
+    if (object == null || !object.containsKey("soldierId")) {
+      return Future.succeededFuture(object);
+    } else {
+      return mongo.findOne("Soldier",
+          new JsonObject().put("_id", object.getString("soldierId")), new JsonObject())
+          .map(option -> option.isPresent()?object.put("soldier", option.get()):object);
+    }
+  }
+
   public static Future<JsonObject> validateOrganization(JsonObject principal, JsonObject model) {
     Future<JsonObject> future = Future.future();
 

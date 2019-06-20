@@ -17,8 +17,8 @@ public class Trainer {
   private String organizationId;          // 关联单位
   private String level;                   // 教练员等级
   private Long startedAt;                 // 提升为教练员的日期
-  private List<String> availableCourses;  // 主教课目列表
-  private List<String> assistCourses;     // 备教课目列表
+  private List<String> availableCourseIds;  // 主教课目列表
+  private List<String> assistCourseIds;     // 备教课目列表
 
   private Long createdTime;
   private Long updatedTime;
@@ -82,21 +82,21 @@ public class Trainer {
     return this;
   }
 
-  public List<String> getAvailableCourses() {
-    return availableCourses;
+  public List<String> getAvailableCourseIds() {
+    return availableCourseIds;
   }
 
-  public Trainer setAvailableCourses(List<String> availableCourses) {
-    this.availableCourses = availableCourses;
+  public Trainer setAvailableCourseIds(List<String> availableCourseIds) {
+    this.availableCourseIds = availableCourseIds;
     return this;
   }
 
-  public List<String> getAssistCourses() {
-    return assistCourses;
+  public List<String> getAssistCourseIds() {
+    return assistCourseIds;
   }
 
-  public Trainer setAssistCourses(List<String> assistCourses) {
-    this.assistCourses = assistCourses;
+  public Trainer setAssistCourseIds(List<String> assistCourseIds) {
+    this.assistCourseIds = assistCourseIds;
     return this;
   }
 

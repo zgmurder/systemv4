@@ -118,7 +118,7 @@ public class CourseTimeServiceImpl extends MongoRepositoryWrapper implements Ser
     AggregateBuilder builder = new AggregateBuilder()
         .addLookupStandard()
         .addLookupSection()
-        .addLookupCourses()
+        .addLookupCourses("courseIds", "courses")
         .addQuery(qCondition.getQuery())
         .addOption(qCondition.getOption());
 

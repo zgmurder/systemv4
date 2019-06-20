@@ -14,24 +14,24 @@ public class TrainerConverter {
   public static void fromJson(Iterable<java.util.Map.Entry<String, Object>> json, Trainer obj) {
     for (java.util.Map.Entry<String, Object> member : json) {
       switch (member.getKey()) {
-        case "assistCourses":
+        case "assistCourseIds":
           if (member.getValue() instanceof JsonArray) {
             java.util.ArrayList<java.lang.String> list =  new java.util.ArrayList<>();
             ((Iterable<Object>)member.getValue()).forEach( item -> {
               if (item instanceof String)
                 list.add((String)item);
             });
-            obj.setAssistCourses(list);
+            obj.setAssistCourseIds(list);
           }
           break;
-        case "availableCourses":
+        case "availableCourseIds":
           if (member.getValue() instanceof JsonArray) {
             java.util.ArrayList<java.lang.String> list =  new java.util.ArrayList<>();
             ((Iterable<Object>)member.getValue()).forEach( item -> {
               if (item instanceof String)
                 list.add((String)item);
             });
-            obj.setAvailableCourses(list);
+            obj.setAvailableCourseIds(list);
           }
           break;
         case "createdTime":
@@ -78,15 +78,15 @@ public class TrainerConverter {
   }
 
   public static void toJson(Trainer obj, java.util.Map<String, Object> json) {
-    if (obj.getAssistCourses() != null) {
+    if (obj.getAssistCourseIds() != null) {
       JsonArray array = new JsonArray();
-      obj.getAssistCourses().forEach(item -> array.add(item));
-      json.put("assistCourses", array);
+      obj.getAssistCourseIds().forEach(item -> array.add(item));
+      json.put("assistCourseIds", array);
     }
-    if (obj.getAvailableCourses() != null) {
+    if (obj.getAvailableCourseIds() != null) {
       JsonArray array = new JsonArray();
-      obj.getAvailableCourses().forEach(item -> array.add(item));
-      json.put("availableCourses", array);
+      obj.getAvailableCourseIds().forEach(item -> array.add(item));
+      json.put("availableCourseIds", array);
     }
     if (obj.getCreatedTime() != null) {
       json.put("createdTime", obj.getCreatedTime());

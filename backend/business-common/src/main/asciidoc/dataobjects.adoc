@@ -1211,8 +1211,8 @@
 [frame="topbot"]
 |===
 ^|Name | Type ^| Description
-|[[assistCourses]]`@assistCourses`|`Array of String`|-
-|[[availableCourses]]`@availableCourses`|`Array of String`|-
+|[[assistCourseIds]]`@assistCourseIds`|`Array of String`|-
+|[[availableCourseIds]]`@availableCourseIds`|`Array of String`|-
 |[[createdTime]]`@createdTime`|`Number (Long)`|-
 |[[id]]`@id`|`String`|-
 |[[level]]`@level`|`String`|-

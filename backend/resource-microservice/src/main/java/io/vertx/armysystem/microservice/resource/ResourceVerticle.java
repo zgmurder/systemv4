@@ -1,9 +1,13 @@
 package io.vertx.armysystem.microservice.resource;
 
+import io.vertx.armysystem.business.common.CRUDService;
 import io.vertx.armysystem.business.common.ServiceBase;
+import io.vertx.armysystem.microservice.common.functional.Functional;
 import io.vertx.armysystem.microservice.resource.api.ResourceRestAPIVerticle;
 import io.vertx.armysystem.microservice.resource.impl.OrganizationServiceImpl;
 import io.vertx.armysystem.microservice.resource.impl.SoldierServiceImpl;
+import io.vertx.armysystem.microservice.resource.impl.TrainPlaceServiceImpl;
+import io.vertx.armysystem.microservice.resource.impl.TrainerServiceImpl;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.armysystem.microservice.common.BaseMicroserviceVerticle;
@@ -12,10 +16,15 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.serviceproxy.ServiceBinder;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ResourceVerticle extends BaseMicroserviceVerticle {
   private static final Logger logger = LoggerFactory.getLogger(ResourceVerticle.class);
   private OrganizationService organizationService;
   private SoldierService soldierService;
+  private List<CRUDService> services = new ArrayList<>();
 
   @Override
   public void start(Future<Void> future) throws Exception {
@@ -26,6 +35,11 @@ public class ResourceVerticle extends BaseMicroserviceVerticle {
     // create the service instance
     organizationService = new OrganizationServiceImpl(vertx, config());
     soldierService = new SoldierServiceImpl(vertx, config());
+    // create the service instance
+    CRUDService crudService = new TrainerServiceImpl(vertx, config());
+    services.add(crudService);
+    crudService = new TrainPlaceServiceImpl(vertx, config());
+    services.add(crudService);
 
     // register the service proxy on event bus
     new ServiceBinder(vertx)
@@ -34,6 +48,13 @@ public class ResourceVerticle extends BaseMicroserviceVerticle {
     new ServiceBinder(vertx)
         .setAddress(((ServiceBase)soldierService).getServiceAddress())
         .register(SoldierService.class, soldierService);
+
+    // register the service proxy on event bus
+    services.forEach(service ->
+        new ServiceBinder(vertx)
+            .setAddress(((ServiceBase)service).getServiceAddress())
+            .register(CRUDService.class, service)
+    );
 
     // publish the service and REST endpoint in the discovery infrastructure
     new MongoRepositoryWrapper(vertx, config()).checkDatabase()
@@ -47,6 +68,7 @@ public class ResourceVerticle extends BaseMicroserviceVerticle {
             ((ServiceBase)soldierService).getServiceName(),
             ((ServiceBase)soldierService).getServiceAddress(),
             SoldierService.class))
+        .compose(o -> publicServices())
         .compose(servicePublished -> deployRestVerticle())
         .setHandler(future);
   }
@@ -63,9 +85,15 @@ public class ResourceVerticle extends BaseMicroserviceVerticle {
     return initFuture;
   }
 
+  private Future<List<Void>> publicServices() {
+    return Functional.allOfFutures(services.stream()
+        .map(service -> publishEventBusService(((ServiceBase)service).getServiceName(), ((ServiceBase)service).getServiceAddress(), CRUDService.class))
+        .collect(Collectors.toList()));
+  }
+
   private Future<Void> deployRestVerticle() {
     Future<String> future = Future.future();
-    vertx.deployVerticle(new ResourceRestAPIVerticle(organizationService, soldierService),
+    vertx.deployVerticle(new ResourceRestAPIVerticle(organizationService, soldierService, services),
         new DeploymentOptions().setConfig(config()), future);
 
     logger.info("Started");

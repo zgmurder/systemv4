@@ -1,7 +1,7 @@
-package io.vertx.armysystem.microservice.standard.impl;
+package io.vertx.armysystem.microservice.resource.impl;
 
 import io.vertx.armysystem.business.common.*;
-import io.vertx.armysystem.business.common.standard.OptionalSportCourse;
+import io.vertx.armysystem.business.common.resource.TrainPlace;
 import io.vertx.armysystem.microservice.common.service.MongoRepositoryWrapper;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -13,34 +13,34 @@ import io.vertx.core.logging.LoggerFactory;
 
 import java.util.List;
 
-public class OptionalSportCourseServiceImpl extends MongoRepositoryWrapper implements ServiceBase, CRUDService {
-  private static final Logger logger = LoggerFactory.getLogger(OptionalSportCourseServiceImpl.class);
+public class TrainPlaceServiceImpl extends MongoRepositoryWrapper implements ServiceBase, CRUDService {
+  private static final String FILTER_COLUMN_NAME = "organization.parentIds";
+  private static final Logger logger = LoggerFactory.getLogger(TrainPlaceServiceImpl.class);
   private final Vertx vertx;
 
-  public OptionalSportCourseServiceImpl(Vertx vertx, JsonObject config) {
+  public TrainPlaceServiceImpl(Vertx vertx, JsonObject config) {
     super(vertx, config);
-
     this.vertx = vertx;
   }
 
   @Override
   public String getServiceName() {
-    return "standard-OptionalSportCourse-eb-service";
+    return "dictionary-TrainPlace-eb-service";
   }
 
   @Override
   public String getServiceAddress() {
-    return "service.standard.OptionalSportCourse";
+    return "service.resource.TrainPlace";
   }
 
   @Override
   public String getPermission() {
-    return "standard";
+    return "TrainPlace";
   }
 
   @Override
   public String getCollectionName() {
-    return "OptionalSportCourse";
+    return "TrainPlace";
   }
 
   @Override
@@ -48,25 +48,13 @@ public class OptionalSportCourseServiceImpl extends MongoRepositoryWrapper imple
     this.createCollection(getCollectionName())
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("courseIds", 1), new JsonObject()))
+            new JsonObject().put("organizationId", 1), new JsonObject()))
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("standardId", 1), new JsonObject()))
+            new JsonObject().put("name", 1), new JsonObject()))
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("groupId", 1), new JsonObject()))
-        .otherwise(err -> null)
-        .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("itemSeq", 1), new JsonObject()))
-        .otherwise(err -> null)
-        .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("physicalLevel", 1), new JsonObject()))
-        .otherwise(err -> null)
-        .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("troopCategory", 1), new JsonObject()))
-        .otherwise(err -> null)
-        .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("gender", 1), new JsonObject()))
+            new JsonObject().put("placeTypes", 1), new JsonObject()))
         .otherwise(err -> null)
         .setHandler(resultHandler);
 
@@ -75,8 +63,11 @@ public class OptionalSportCourseServiceImpl extends MongoRepositoryWrapper imple
 
   @Override
   public CRUDService addOne(JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
-    validateParams(item, true)
-        .compose(o -> this.insertOne(getCollectionName(), new OptionalSportCourse(o).toJson()))
+    logger.info("addOne place " + item);
+    ModelUtil.fillOrganization(this, item)
+        .compose(o -> ModelUtil.validateOrganization(principal, o))
+        .compose(o -> validateParams(o, true))
+        .compose(o -> this.insertOne(getCollectionName(), new TrainPlace(o).toJson()))
         .setHandler(resultHandler);
 
     return this;
@@ -84,8 +75,9 @@ public class OptionalSportCourseServiceImpl extends MongoRepositoryWrapper imple
 
   @Override
   public CRUDService retrieveOne(String id, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
-    this.findOne(getCollectionName(), getIdQuery(id), new JsonObject())
+    this.findOne(getCollectionName(), getCondition(id, principal).getQuery(), new JsonObject())
         .map(option -> option.orElse(null))
+        .compose(u -> ModelUtil.fillOrganization(this, u))
         .setHandler(resultHandler);
 
     return this;
@@ -102,8 +94,11 @@ public class OptionalSportCourseServiceImpl extends MongoRepositoryWrapper imple
   public CRUDService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
 
+    qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
+    logger.info("count place condition: " + qCondition);
+
     AggregateBuilder builder = new AggregateBuilder()
-        .addLookupStandard()
+        .addLookupOrganization()
         .addQuery(qCondition.getQuery())
         .addCount();
 
@@ -119,20 +114,15 @@ public class OptionalSportCourseServiceImpl extends MongoRepositoryWrapper imple
     QueryCondition qCondition = QueryCondition.parse(condition);
 
     if (qCondition.getOption().getJsonObject("sort") == null) {
-      qCondition.getOption().put("sort", new JsonObject()
-          .put("standard.version", -1)
-          .put("troopCategory", 1)
-          .put("physicalLevel", 1)
-          .put("gender", 1)
-          .put("groupId", 1)
-          .put("itemSeq", 1));
-
+      qCondition.getOption().put("sort", new JsonObject().put("organization.orgCode", 1)
+          .put("createdTime", 1));
     }
 
+    qCondition.filterByUserOrganizationV2(FILTER_COLUMN_NAME, principal);
     logger.info("query condition: " + qCondition);
+
     AggregateBuilder builder = new AggregateBuilder()
-        .addLookupStandard()
-        .addLookupCourses("courseIds", "courses")
+        .addLookupOrganization()
         .addQuery(qCondition.getQuery())
         .addOption(qCondition.getOption());
 
@@ -147,7 +137,7 @@ public class OptionalSportCourseServiceImpl extends MongoRepositoryWrapper imple
   public CRUDService updateOne(String id, JsonObject item, JsonObject principal, Handler<AsyncResult<JsonObject>> resultHandler) {
     item.remove("id");
 
-    this.update(getCollectionName(), getIdQuery(id), new OptionalSportCourse(item).toJson())
+    this.update(getCollectionName(), getCondition(id, principal).getQuery(), new TrainPlace(item).toJson())
         .setHandler(ar -> {
           if (ar.succeeded()) {
             this.retrieveOne(id, principal, resultHandler);
@@ -161,30 +151,31 @@ public class OptionalSportCourseServiceImpl extends MongoRepositoryWrapper imple
 
   @Override
   public CRUDService deleteOne(String id, JsonObject principal, Handler<AsyncResult<Void>> resultHandler) {
-    this.remove(getCollectionName(), getIdQuery(id))
+    this.remove(getCollectionName(), getCondition(id, principal).getQuery())
         .setHandler(resultHandler);
 
     return this;
   }
 
-  private JsonObject getIdQuery(String id) {
-    return new JsonObject().put("_id", id);
-  }
+  private QueryCondition getCondition(String id, JsonObject principal) {
+    JsonObject query = new JsonObject().put("_id", id);
 
+    QueryCondition condition = new QueryCondition(query, new JsonObject())
+        .filterByUserOrganizationV1(FILTER_COLUMN_NAME, principal);
+
+    return condition;
+  }
 
   private Future<JsonObject> validateParams(JsonObject item, Boolean forAdd) {
     Future<JsonObject> future = Future.future();
 
-    OptionalSportCourse sportCourse = new OptionalSportCourse(item);
-
+    TrainPlace trainPlace = new TrainPlace(item);
     Boolean failed = false;
 
     if (forAdd) {
-      failed = BaseUtil.isEmpty(sportCourse.getCourseIds()) ||
-          BaseUtil.isEmpty(sportCourse.getStandardId()) ||
-          BaseUtil.isEmpty(sportCourse.getPhysicalLevel()) ||
-          BaseUtil.isEmpty(sportCourse.getTroopCategory()) ||
-          BaseUtil.isEmpty(sportCourse.getGender());
+      failed = BaseUtil.isEmpty(trainPlace.getOrganizationId())||
+          BaseUtil.isEmpty(trainPlace.getPlaceTypes()) ||
+          BaseUtil.isEmpty(trainPlace.getName());
     } else {
 
     }
@@ -192,7 +183,7 @@ public class OptionalSportCourseServiceImpl extends MongoRepositoryWrapper imple
     if (failed) {
       future.fail("Invalid parameter");
     } else {
-      future.complete(sportCourse.toJson());
+      future.complete(trainPlace.toJson());
     }
 
     return future;

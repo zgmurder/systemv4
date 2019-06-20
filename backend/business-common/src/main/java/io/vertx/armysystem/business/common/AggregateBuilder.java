@@ -69,6 +69,21 @@ public class AggregateBuilder {
             } else {
               item.remove(key);
             }
+
+            // 进一步处理soldier里的position和rank字段
+            if (item.containsKey("soldier")) {
+              JsonObject soldier = item.getJsonObject("soldier");
+              if (soldier.containsKey("position") && soldier.getJsonArray("position").size() > 0) {
+                soldier.put("position", item.getJsonArray("position").getJsonObject(0));
+              } else {
+                soldier.remove("position");
+              }
+              if (soldier.containsKey("rank") && soldier.getJsonArray("rank").size() > 0) {
+                soldier.put("rank", soldier.getJsonArray("rank").getJsonObject(0));
+              } else {
+                soldier.remove("rank");
+              }
+            }
           });
 
           item.put("id", item.getString("_id"));
@@ -84,6 +99,31 @@ public class AggregateBuilder {
         .put("localField", "organizationId")
         .put("foreignField", "_id")
         .put("as", "organization")));
+
+    return this;
+  }
+
+  public AggregateBuilder addLookupSoldier() {
+    lookupKeys.add("soldier");
+    JsonArray subPipeline = new JsonArray();
+    subPipeline.add(new JsonObject().put("$lookup", new JsonObject()
+        .put("from", "Position")
+        .put("localField", "positionId")
+        .put("foreignField", "_id")
+        .put("as", "position")));
+
+    subPipeline.add(new JsonObject().put("$lookup", new JsonObject()
+        .put("from", "MilitaryRank")
+        .put("localField", "rankId")
+        .put("foreignField", "_id")
+        .put("as", "rank")));
+
+    pipeline.add(new JsonObject().put("$lookup", new JsonObject()
+        .put("from", "Soldier")
+        .put("localField", "soldierId")
+        .put("foreignField", "_id")
+        .put("pipeline", subPipeline)
+        .put("as", "soldier")));
 
     return this;
   }
@@ -143,12 +183,12 @@ public class AggregateBuilder {
     return this;
   }
 
-  public AggregateBuilder addLookupCourses() {
+  public AggregateBuilder addLookupCourses(String localField, String asField) {
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "Course")
-        .put("localField", "courseIds")
+        .put("localField", localField)
         .put("foreignField", "_id")
-        .put("as", "courses")));
+        .put("as", asField)));
 
     return this;
   }
