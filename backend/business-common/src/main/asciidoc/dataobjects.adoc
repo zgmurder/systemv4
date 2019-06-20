@@ -1073,6 +1073,36 @@
 |[[standardId]]`@standardId`|`String`|-
 |===
 
+[[TrainPlace]]
+== TrainPlace
+
+++++
+ 训练场地表定义
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[address]]`@address`|`String`|-
+|[[area]]`@area`|`String`|-
+|[[builtAt]]`@builtAt`|`Number (Long)`|-
+|[[builtStatus]]`@builtStatus`|`Number (int)`|-
+|[[capacity]]`@capacity`|`Number (int)`|-
+|[[createdTime]]`@createdTime`|`Number (Long)`|-
+|[[id]]`@id`|`String`|-
+|[[indoor]]`@indoor`|`Boolean`|-
+|[[internal]]`@internal`|`Boolean`|-
+|[[name]]`@name`|`String`|-
+|[[organizationId]]`@organizationId`|`String`|-
+|[[photos]]`@photos`|`Array of String`|-
+|[[placeTypes]]`@placeTypes`|`Array of String`|-
+|[[startedAt]]`@startedAt`|`Number (Long)`|-
+|[[updatedTime]]`@updatedTime`|`Number (Long)`|-
+|[[weathers]]`@weathers`|`Array of String`|-
+|===
+
 [[TrainSection]]
 == TrainSection
 
@@ -1167,6 +1197,29 @@
 ^|Name | Type ^| Description
 |[[name]]`@name`|`String`|-
 |[[optionalSubjects]]`@optionalSubjects`|`Array of String`|-
+|===
+
+[[Trainer]]
+== Trainer
+
+++++
+ 教练员表定义
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[assistCourses]]`@assistCourses`|`Array of String`|-
+|[[availableCourses]]`@availableCourses`|`Array of String`|-
+|[[createdTime]]`@createdTime`|`Number (Long)`|-
+|[[id]]`@id`|`String`|-
+|[[level]]`@level`|`String`|-
+|[[organizationId]]`@organizationId`|`String`|-
+|[[soldierId]]`@soldierId`|`String`|-
+|[[startedAt]]`@startedAt`|`Number (Long)`|-
+|[[updatedTime]]`@updatedTime`|`Number (Long)`|-
 |===
 
 [[TrainerLevel]]
