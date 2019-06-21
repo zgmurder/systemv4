@@ -93,12 +93,13 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupOrganization() {
-    lookupKeys.add("organization");
+//    lookupKeys.add("organization");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "Organization")
         .put("localField", "organizationId")
         .put("foreignField", "_id")
-        .put("as", "organization")));
+        .put("as", "organization")))
+        .add(new JsonObject().put("$unwind", "organization"));
 
     return this;
   }
@@ -129,56 +130,61 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupPosition() {
-    lookupKeys.add("position");
+//    lookupKeys.add("position");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "Position")
         .put("localField", "positionId")
         .put("foreignField", "_id")
-        .put("as", "position")));
+        .put("as", "position")))
+        .add(new JsonObject().put("$unwind", "position"));
 
     return this;
   }
 
   public AggregateBuilder addLookupRank() {
-    lookupKeys.add("rank");
+//    lookupKeys.add("rank");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "MilitaryRank")
         .put("localField", "rankId")
         .put("foreignField", "_id")
-        .put("as", "rank")));
+        .put("as", "rank")))
+        .add(new JsonObject().put("$unwind", "rank"));
 
     return this;
   }
 
   public AggregateBuilder addLookupStandard() {
-    lookupKeys.add("standard");
+//    lookupKeys.add("standard");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "TrainStandard")
         .put("localField", "standardId")
         .put("foreignField", "_id")
-        .put("as", "standard")));
+        .put("as", "standard")))
+        .add(new JsonObject().put("$unwind", "standard"));
 
     return this;
   }
 
   public AggregateBuilder addLookupSection() {
-    lookupKeys.add("section");
+//    lookupKeys.add("section");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "TrainSection")
         .put("localField", "sectionId")
         .put("foreignField", "_id")
-        .put("as", "section")));
+        .put("as", "section")))
+        .add(new JsonObject().put("$unwind", "section"));
 
     return this;
   }
 
   public AggregateBuilder addLookupCourse() {
-    lookupKeys.add("course");
+//    lookupKeys.add("course");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "Course")
         .put("localField", "courseId")
         .put("foreignField", "_id")
-        .put("as", "course")));
+        .put("as", "course")))
+        .add(new JsonObject().put("$unwind", "course"));
 
     return this;
   }
@@ -194,34 +200,37 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupTrainStep() {
-    lookupKeys.add("trainStep");
+//    lookupKeys.add("trainStep");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "TrainStep")
         .put("localField", "trainStepName")
         .put("foreignField", "name")
-        .put("as", "trainStep")));
+        .put("as", "trainStep")))
+        .add(new JsonObject().put("$unwind", "trainStep"));
 
     return this;
   }
 
   public AggregateBuilder addLookupOrgCategory() {
-    lookupKeys.add("orgCategoryObj");
+//    lookupKeys.add("orgCategoryObj");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "OrgCategory")
         .put("localField", "orgCategory")
         .put("foreignField", "name")
-        .put("as", "orgCategoryObj")));
+        .put("as", "orgCategoryObj")))
+        .add(new JsonObject().put("$unwind", "orgCategoryObj"));
 
     return this;
   }
 
   public AggregateBuilder addLookupOrdnanceType() {
-    lookupKeys.add("ordnanceTypeObj");
+//    lookupKeys.add("ordnanceTypeObj");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "OrdnanceType")
         .put("localField", "ordnanceType")
         .put("foreignField", "name")
-        .put("as", "ordnanceTypeObj")));
+        .put("as", "ordnanceTypeObj")))
+        .add(new JsonObject().put("$unwind", "ordnanceTypeObj"));
 
     return this;
   }
