@@ -109,17 +109,19 @@ public class AggregateBuilder {
             .put("localField", "soldierId")
             .put("foreignField", "_id")
             .put("as", "soldier")))
-        .add(new JsonObject().put("$unwind", "soldier"))
+        .add(new JsonObject().put("$unwind", "$soldier"))
         .add(new JsonObject().put("$lookup", new JsonObject()
             .put("from", "Position")
             .put("localField", "soldier.positionId")
             .put("foreignField", "_id")
             .put("as", "position")))
+        .add(new JsonObject().put("$unwind", "$position"))
         .add(new JsonObject().put("$lookup", new JsonObject()
             .put("from", "MilitaryRank")
             .put("localField", "soldier.rankId")
             .put("foreignField", "_id")
-            .put("as", "rank")));
+            .put("as", "rank")))
+        .add(new JsonObject().put("$unwind", "$rank"));
 
     return this;
   }
