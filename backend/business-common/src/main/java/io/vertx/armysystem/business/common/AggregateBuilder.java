@@ -93,7 +93,6 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupOrganization() {
-//    lookupKeys.add("organization");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "Organization")
         .put("localField", "organizationId")
@@ -105,32 +104,27 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupSoldier() {
-    lookupKeys.add("soldier");
-    JsonArray subPipeline = new JsonArray();
-    subPipeline.add(new JsonObject().put("$lookup", new JsonObject()
-        .put("from", "Position")
-        .put("localField", "positionId")
-        .put("foreignField", "_id")
-        .put("as", "position")));
-
-    subPipeline.add(new JsonObject().put("$lookup", new JsonObject()
-        .put("from", "MilitaryRank")
-        .put("localField", "rankId")
-        .put("foreignField", "_id")
-        .put("as", "rank")));
-
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
-        .put("from", "Soldier")
-        .put("localField", "soldierId")
-        .put("foreignField", "_id")
-        .put("pipeline", subPipeline)
-        .put("as", "soldier")));
+            .put("from", "Soldier")
+            .put("localField", "soldierId")
+            .put("foreignField", "_id")
+            .put("as", "soldier")))
+        .add(new JsonObject().put("$unwind", "soldier"))
+        .add(new JsonObject().put("$lookup", new JsonObject()
+            .put("from", "Position")
+            .put("localField", "soldier.positionId")
+            .put("foreignField", "_id")
+            .put("as", "position")))
+        .add(new JsonObject().put("$lookup", new JsonObject()
+            .put("from", "MilitaryRank")
+            .put("localField", "soldier.rankId")
+            .put("foreignField", "_id")
+            .put("as", "rank")));
 
     return this;
   }
 
   public AggregateBuilder addLookupPosition() {
-//    lookupKeys.add("position");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "Position")
         .put("localField", "positionId")
@@ -142,7 +136,6 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupRank() {
-//    lookupKeys.add("rank");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "MilitaryRank")
         .put("localField", "rankId")
@@ -154,7 +147,6 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupStandard() {
-//    lookupKeys.add("standard");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "TrainStandard")
         .put("localField", "standardId")
@@ -166,7 +158,6 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupSection() {
-//    lookupKeys.add("section");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "TrainSection")
         .put("localField", "sectionId")
@@ -178,7 +169,6 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupCourse() {
-//    lookupKeys.add("course");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "Course")
         .put("localField", "courseId")
@@ -200,7 +190,6 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupTrainStep() {
-//    lookupKeys.add("trainStep");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "TrainStep")
         .put("localField", "trainStepName")
@@ -212,7 +201,6 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupOrgCategory() {
-//    lookupKeys.add("orgCategoryObj");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "OrgCategory")
         .put("localField", "orgCategory")
@@ -224,7 +212,6 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupOrdnanceType() {
-//    lookupKeys.add("ordnanceTypeObj");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "OrdnanceType")
         .put("localField", "ordnanceType")
