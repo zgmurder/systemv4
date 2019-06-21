@@ -181,12 +181,12 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
 
     if (forAdd) {
       failed = course.getSeq() == 0 ||
-          BaseUtil.isEmpty(course.getName()) ||
-          BaseUtil.isEmpty(course.getStandardId()) ||
-          BaseUtil.isEmpty(course.getRequire());
+          BaseUtil.isEmpty(course.getName());
 
       if (course.getCategory() == CourseCategory.Train.getValue()) {
         failed = failed || BaseUtil.isEmpty(course.getTrainStepName()) ||
+            BaseUtil.isEmpty(course.getStandardId()) ||
+            BaseUtil.isEmpty(course.getRequire()) ||
             BaseUtil.isEmpty(course.getSectionId()) ||
             BaseUtil.isEmpty(course.getTrainUnits()) ||
             BaseUtil.isEmpty(course.getOrgType()) ||
@@ -197,6 +197,8 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
 
       if (course.getCategory() == CourseCategory.Sport.getValue()) {
         failed = failed || BaseUtil.isEmpty(course.getSportCategory()) ||
+            BaseUtil.isEmpty(course.getStandardId()) ||
+            BaseUtil.isEmpty(course.getRequire()) ||
             BaseUtil.isEmpty(course.getScoreCriteria());
       }
     } else {
