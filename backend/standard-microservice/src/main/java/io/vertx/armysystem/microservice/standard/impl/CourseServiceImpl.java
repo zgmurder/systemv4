@@ -180,8 +180,7 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
     Boolean failed = false;
 
     if (forAdd) {
-      failed = course.getSeq() == 0 ||
-          BaseUtil.isEmpty(course.getName());
+      failed = BaseUtil.isEmpty(course.getName());
 
       if (course.getCategory() == CourseCategory.Train.getValue()) {
         failed = failed || BaseUtil.isEmpty(course.getTrainStepName()) ||
