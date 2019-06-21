@@ -55,7 +55,7 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
             new JsonObject().put("seq", 1), new JsonObject()))
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
-            new JsonObject().put("category", 1), new JsonObject()))
+            new JsonObject().put("courseCategory", 1), new JsonObject()))
         .otherwise(err -> null)
         .compose(o -> this.createIndexWithOptions(getCollectionName(),
             new JsonObject().put("standardId", 1), new JsonObject()))
@@ -183,7 +183,7 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
     if (forAdd) {
       failed = BaseUtil.isEmpty(course.getName());
 
-      if (course.getCategory() == CourseCategory.Train.getValue()) {
+      if (course.getCourseCategory() == CourseCategory.Train.getValue()) {
         failed = failed || BaseUtil.isEmpty(course.getTrainStepName()) ||
             BaseUtil.isEmpty(course.getStandardId()) ||
             BaseUtil.isEmpty(course.getSectionId());
@@ -195,7 +195,7 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
             // BaseUtil.isEmpty(course.getScoreCriteria());
       }
 
-      if (course.getCategory() == CourseCategory.Sport.getValue()) {
+      if (course.getCourseCategory() == CourseCategory.Sport.getValue()) {
         failed = failed || BaseUtil.isEmpty(course.getSportCategory()) ||
             BaseUtil.isEmpty(course.getStandardId()) ||
             BaseUtil.isEmpty(course.getRequire()) ||

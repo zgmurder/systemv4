@@ -19,14 +19,14 @@ public class CourseConverter {
             obj.setAscending((Boolean)member.getValue());
           }
           break;
-        case "category":
-          if (member.getValue() instanceof Number) {
-            obj.setCategory(((Number)member.getValue()).intValue());
-          }
-          break;
         case "countType":
           if (member.getValue() instanceof String) {
             obj.setCountType((String)member.getValue());
+          }
+          break;
+        case "courseCategory":
+          if (member.getValue() instanceof Number) {
+            obj.setCourseCategory(((Number)member.getValue()).intValue());
           }
           break;
         case "gunnerType":
@@ -231,10 +231,10 @@ public class CourseConverter {
     if (obj.getAscending() != null) {
       json.put("ascending", obj.getAscending());
     }
-    json.put("category", obj.getCategory());
     if (obj.getCountType() != null) {
       json.put("countType", obj.getCountType());
     }
+    json.put("courseCategory", obj.getCourseCategory());
     if (obj.getGunnerType() != null) {
       json.put("gunnerType", obj.getGunnerType());
     }

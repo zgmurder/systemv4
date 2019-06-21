@@ -425,7 +425,7 @@ class Course {
   private String id;
   private String name;    // 课目名称
   private int seq;     // 课目序号
-  private int category;   // 课目分类，参考CourseCategory
+  private int courseCategory;   // 课目分类，参考CourseCategory
   private String standardId;  // 大纲标准ID
   private String sectionId;   // 大纲分册ID
   private Boolean manual;     // 子课目是否自定义

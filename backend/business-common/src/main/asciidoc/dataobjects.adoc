@@ -145,8 +145,8 @@
 |===
 ^|Name | Type ^| Description
 |[[ascending]]`@ascending`|`Boolean`|-
-|[[category]]`@category`|`Number (int)`|-
 |[[countType]]`@countType`|`String`|-
+|[[courseCategory]]`@courseCategory`|`Number (int)`|-
 |[[gunnerType]]`@gunnerType`|`String`|-
 |[[id]]`@id`|`String`|-
 |[[majorReqs]]`@majorReqs`|`Array of String`|-
