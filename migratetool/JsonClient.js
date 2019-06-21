@@ -26,7 +26,7 @@ export class JsonClient {
         try {
             let response = await this.jsonClient.post(url, json, {headers: {'Authorization': `Bearer ${this.token}`}});
             if ((response.status === 200 || response.status === 201) && response.data) {
-                console.log(`addOne ${url} succeeded`, response.data);
+                // console.log(`addOne ${url} succeeded`, response.data);
             } else {
                 console.error(`addOne ${url} failed`, response.data);
             }

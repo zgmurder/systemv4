@@ -47,7 +47,7 @@ export default {
 	OthersCourse: require('./models/standard/OthersCourse'),
 	CourseTime: require('./models/standard/CourseTime'),
 	CourseDistribution: require('./models/standard/CourseDistribution'),
-    SportCourseTime: require('./models/standard/SportTime'),
+    SportTime: require('./models/standard/SportTime'),
 	SportAssessReq: require('./models/standard/SportAssessReq'),
 	SportCourseGroup: require('./models/standard/SportCourseGroup'),
 	TrainStageTime: require('./models/standard/TrainStageTime'),

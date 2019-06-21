@@ -22,7 +22,8 @@ export class Migrator {
         console.log('login armysystemv2 return: ', token)
 
         // await this.migrateDictionary();
-        await this.migrateStandard();
+        await this.migrateCourse();
+        // await this.migrateStandard();
     }
 
     async migrateDictionary() {
@@ -82,6 +83,47 @@ export class Migrator {
         }
     }
 
+    async migrateCourse() {
+        for (let category = 0; category < 6; category++) {
+            let query = new Client.Query(Client['Course']);
+            query.addAscending(['createdAt']);
+            query.equalTo('category', category);
+            let result = await this.backendService.queryListAll('Course', query);
+            let newList = result.list.map((item) => {
+                item.id = item.objectId;
+                if (item.standard && item.standard.objectId) {
+                    item.standardId = item.standard.objectId;
+                }
+                if (item.section && item.section.objectId) {
+                    item.sectionId = item.section.objectId;
+                }
+
+                item.category = category;
+                item.manual = item.isManual;
+                item.trainStepName = item.trainStep;
+                item.serviceReqs = item.serviceReq;
+                item.majorReqs = [];
+                if (item.majorReq) item.majorReqs.push(item.majorReq);
+                item.rankReqs = item.rankL2Reqs;
+                item.ascending = item.isAscending;
+                if (item.testContents)
+                    item.testContents = item.testContents.map(c => ({
+                        name: c.content,
+                        testReq: c.testReq
+                    }))
+                return item;
+            });
+            // console.log(`get list for Course`, newList);
+            console.log(`get list for Course with category ${category} has ${newList.length} items`);
+
+            for (let item of newList) {
+                await this.jsonClient.addOne(`/standard/course`, item);
+            }
+        }
+    }
+
+    
+
     async migrateStandard() {
         const fromModels = ['TrainStandard', 'TrainSection', 'TrainStageTime', 'Course', 'CourseDistribution', 'CourseTime',
             'SportTime', 'SportAssessReq', 'SportCourseGroup', 'BulletRequirement', 'MotorRequirement',
@@ -90,11 +132,15 @@ export class Migrator {
         const toModels = ['TrainStandard', 'TrainSection', 'TrainStageTime', 'Course', 'CourseDistribution', 'CourseTime',
             'SportTime', 'RequiredSportCourse', 'OptionalSportCourse', 'BulletRequirement', 'MotorRequirement',
             'OrgScoreRequirement', 'PersonScoreRequirement', 'PersonRequirement', 'PlaceRequirement', 'TimeRequirement'];
+        // const fromModels = ['Course'];
+
+        // const toModels = ['Course'];
 
         let index = 0;
         for (let model of fromModels) {
             let query = new Client.Query(Client[model]);
             query.addAscending(['createdAt']);
+            query.equalTo('category', 0);
             let result = await this.backendService.queryListAll(model, query);
             let newList = result.list.map((item) => {
                 item.id = item.objectId;
@@ -118,19 +164,21 @@ export class Migrator {
                     case 'TrainStageTime':
                         item.majors = item.majorReq;
                         if (item.stageTime)
-                            item.stageTimes = item.stageTime.map(stage => ({task: stage.task, months: stage.time}));
+                            item.stageTimes = item.stageTime.map(stage => ({task: stage.task, months: stage.time-0}));
                         break;
-                    case 'Course':
-                        item.manual = item.isManual;
-                        item.trainStepName = item.trainStep;
-                        item.serviceReqs = item.serviceReq;
-                        item.majorReqs = [];
-                        if (item.majorReq) item.majorReqs.push(item.majorReq);
-                        item.rankReqs = item.rankL2Reqs;
-                        item.ascending = item.isAscending;
-                        if (item.testContents)
-                        item.testContents = item.testContents.map(c => ({name: c.content, testReq: c.testReq}))
-                        break;
+                    // case 'Course':
+                    //     console.log(`${item.name} -> ${item.category} ${item.seq}`)
+                    //     item.category = item.category-0;
+                    //     item.manual = item.isManual;
+                    //     item.trainStepName = item.trainStep;
+                    //     item.serviceReqs = item.serviceReq;
+                    //     item.majorReqs = [];
+                    //     if (item.majorReq) item.majorReqs.push(item.majorReq);
+                    //     item.rankReqs = item.rankL2Reqs;
+                    //     item.ascending = item.isAscending;
+                    //     if (item.testContents)
+                    //     item.testContents = item.testContents.map(c => ({name: c.content, testReq: c.testReq}))
+                    //     break;
                     case 'CourseTime':
                         item.serviceReqs = item.serviceReq;
                         break;
@@ -143,6 +191,9 @@ export class Migrator {
                             item.unitType = item.bulletReq.unitType;
                             item.numType = item.bulletReq.numType;
                         }
+                        break;
+                    case 'MotorRequirement':
+                        item.quota = item.quota-0;
                         break;
                     case 'PersonScoreRequirement':
                         if (item.yearRange) {
@@ -170,8 +221,9 @@ export class Migrator {
             console.log(`get list for ${model} with ${newList.length} items`);
 
             for (let item of newList) {
-                await this.jsonClient.addOne(`/standard/${toModels[index++].toLocaleLowerCase()}`, item);
+                await this.jsonClient.addOne(`/standard/${toModels[index].toLocaleLowerCase()}`, item);
             }
+            index++;
         }
     }
 }
