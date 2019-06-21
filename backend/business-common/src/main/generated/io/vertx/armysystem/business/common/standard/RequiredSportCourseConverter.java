@@ -59,6 +59,11 @@ public class RequiredSportCourseConverter {
             obj.setPhysicalLevels(list);
           }
           break;
+        case "required":
+          if (member.getValue() instanceof Boolean) {
+            obj.setRequired((Boolean)member.getValue());
+          }
+          break;
         case "standardId":
           if (member.getValue() instanceof String) {
             obj.setStandardId((String)member.getValue());
@@ -110,6 +115,9 @@ public class RequiredSportCourseConverter {
       JsonArray array = new JsonArray();
       obj.getPhysicalLevels().forEach(item -> array.add(item));
       json.put("physicalLevels", array);
+    }
+    if (obj.getRequired() != null) {
+      json.put("required", obj.getRequired());
     }
     if (obj.getStandardId() != null) {
       json.put("standardId", obj.getStandardId());

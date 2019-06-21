@@ -536,9 +536,10 @@ class RequiredSportCourse {
   private List<String> physicalLevels;    // 体能训练等级列表
   private List<String> troopCategories;   // 军兵种类型列表
   private List<String> genders;           // 性别要求列表(男/女)
-  private Boolean isCivilServant;         // 是否适用于文职人员
-  private Boolean isAgeEnabled;           // 是否启用年龄条件
-  private int fromAge;                    // 年龄条件
+  private Boolean required;              // 必考/选考
+  private Boolean civilServant;          // 是否适用于文职人员
+  private Boolean ageEnabled;            // 是否启用年龄条件
+  private int fromAge;                   // 年龄条件
   private int toAge;
 }
 ```

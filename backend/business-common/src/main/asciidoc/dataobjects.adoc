@@ -789,6 +789,7 @@
 |[[genders]]`@genders`|`Array of String`|-
 |[[id]]`@id`|`String`|-
 |[[physicalLevels]]`@physicalLevels`|`Array of String`|-
+|[[required]]`@required`|`Boolean`|-
 |[[standardId]]`@standardId`|`String`|-
 |[[toAge]]`@toAge`|`Number (int)`|-
 |[[troopCategories]]`@troopCategories`|`Array of String`|-

@@ -21,7 +21,8 @@ export class Migrator {
 
         console.log('login armysystemv2 return: ', token)
 
-        await this.migrateDictionary();
+        // await this.migrateDictionary();
+        await this.migrateStandard();
     }
 
     async migrateDictionary() {
@@ -37,7 +38,7 @@ export class Migrator {
                 item.order = index+1;
                 return item;
             });
-            console.log(`get list for ${model}`, newList);
+            console.log(`get list for ${model} with ${newList.length} items`);
 
             for (let item of newList) {
                 await this.jsonClient.addOne(`/dictionary/${model.toLocaleLowerCase()}`, item);
@@ -78,6 +79,99 @@ export class Migrator {
 
         for (let item of newList) {
             await this.jsonClient.addOne(`/dictionary/militaryrank`, item);
+        }
+    }
+
+    async migrateStandard() {
+        const fromModels = ['TrainStandard', 'TrainSection', 'TrainStageTime', 'Course', 'CourseDistribution', 'CourseTime',
+            'SportTime', 'SportAssessReq', 'SportCourseGroup', 'BulletRequirement', 'MotorRequirement',
+            'OrgScoreRequirement', 'PersonScoreRequirement', 'PersonRequirement', 'PlaceRequirement', 'TimeRequirement'];
+
+        const toModels = ['TrainStandard', 'TrainSection', 'TrainStageTime', 'Course', 'CourseDistribution', 'CourseTime',
+            'SportTime', 'RequiredSportCourse', 'OptionalSportCourse', 'BulletRequirement', 'MotorRequirement',
+            'OrgScoreRequirement', 'PersonScoreRequirement', 'PersonRequirement', 'PlaceRequirement', 'TimeRequirement'];
+
+        let index = 0;
+        for (let model of fromModels) {
+            let query = new Client.Query(Client[model]);
+            query.addAscending(['createdAt']);
+            let result = await this.backendService.queryListAll(model, query);
+            let newList = result.list.map((item) => {
+                item.id = item.objectId;
+                if (item.standard && item.standard.objectId) {
+                    item.standardId = item.standard.objectId;
+                }
+                if (item.section && item.section.objectId) {
+                    item.sectionId = item.section.objectId;
+                }
+                if (item.course && item.course.objectId) {
+                    item.courseId = item.course.objectId;
+                }
+                if (item.courses) {
+                    item.courseIds = item.courses.map(c => c.objectId);
+                }
+
+                switch (model) {
+                    case 'TrainStandard':
+                        item.version = "2018";
+                        break;
+                    case 'TrainStageTime':
+                        item.majors = item.majorReq;
+                        if (item.stageTime)
+                            item.stageTimes = item.stageTime.map(stage => ({task: stage.task, months: stage.time}));
+                        break;
+                    case 'Course':
+                        item.manual = item.isManual;
+                        item.trainStepName = item.trainStep;
+                        item.serviceReqs = item.serviceReq;
+                        item.majorReqs = [];
+                        if (item.majorReq) item.majorReqs.push(item.majorReq);
+                        item.rankReqs = item.rankL2Reqs;
+                        item.ascending = item.isAscending;
+                        if (item.testContents)
+                        item.testContents = item.testContents.map(c => ({name: c.content, testReq: c.testReq}))
+                        break;
+                    case 'CourseTime':
+                        item.serviceReqs = item.serviceReq;
+                        break;
+                    case 'RequiredSportCourse':
+                        item.civilServant = item.isCivilServant;
+                        break;
+                    case 'BulletRequirement':
+                        if (item.bulletReq) {
+                            item.quota = item.bulletReq.quota;
+                            item.unitType = item.bulletReq.unitType;
+                            item.numType = item.bulletReq.numType;
+                        }
+                        break;
+                    case 'PersonScoreRequirement':
+                        if (item.yearRange) {
+                            item.startYear = item.yearRange.start;
+                            item.endYear = item.yearRange.end;
+                        }
+                        break;
+                    case 'TimeRequirement':
+                        if (item.timeReq) {
+                            item.months = item.timeReq.months;
+                            item.days = item.timeReq.days;
+                            item.hours = item.timeReq.hours;
+                            item.daysPerMonth = item.timeReq.daysPerMonth;
+                            item.daysPerWeek = item.timeReq.daysPerWeek;
+                            item.hoursPerDay = item.timeReq.hoursPerDay;
+                            item.hoursAtNight = item.timeReq.hoursAtNight;
+                            item.rateAtNight = item.timeReq.rateAtNight;
+                            item.flexibleDays = item.timeReq.flexibleDays;
+                        }
+                        break;
+                }
+
+                return item;
+            });
+            console.log(`get list for ${model} with ${newList.length} items`);
+
+            for (let item of newList) {
+                await this.jsonClient.addOne(`/standard/${toModels[index++].toLocaleLowerCase()}`, item);
+            }
         }
     }
 }
