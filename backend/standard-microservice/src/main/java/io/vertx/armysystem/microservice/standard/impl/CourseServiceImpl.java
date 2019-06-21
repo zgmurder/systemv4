@@ -136,6 +136,7 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
         .addQuery(qCondition.getQuery())
         .addOption(qCondition.getOption());
 
+        // logger.info("pipeline: " + builder.getPipeline().toString());
     this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
         .map(list -> builder.fixLookupResults(list))
         .setHandler(resultHandler);
@@ -185,13 +186,13 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
       if (course.getCategory() == CourseCategory.Train.getValue()) {
         failed = failed || BaseUtil.isEmpty(course.getTrainStepName()) ||
             BaseUtil.isEmpty(course.getStandardId()) ||
-            BaseUtil.isEmpty(course.getRequire()) ||
-            BaseUtil.isEmpty(course.getSectionId()) ||
-            BaseUtil.isEmpty(course.getTrainUnits()) ||
-            BaseUtil.isEmpty(course.getOrgType()) ||
-            BaseUtil.isEmpty(course.getOrgCategories()) ||
-            BaseUtil.isEmpty(course.getPersonProperties()) ||
-            BaseUtil.isEmpty(course.getScoreCriteria());
+            BaseUtil.isEmpty(course.getSectionId());
+            // BaseUtil.isEmpty(course.getRequire()) ||
+            // BaseUtil.isEmpty(course.getTrainUnits()) ||
+            // BaseUtil.isEmpty(course.getOrgType()) ||
+            // BaseUtil.isEmpty(course.getOrgCategories()) ||
+            // BaseUtil.isEmpty(course.getPersonProperties()) ||
+            // BaseUtil.isEmpty(course.getScoreCriteria());
       }
 
       if (course.getCategory() == CourseCategory.Sport.getValue()) {
