@@ -904,3 +904,42 @@ class SoldierArchive {
   private Long createdTime;
 }
 ```
+
+### 教练员管理
+```java
+class Trainer {
+  private String id;
+  private String soldierId;               // 关联人员, 查询返回soldier对象(必填)
+  private String organizationId;          // 关联单位, 查询返回organization对象(必填)
+  private String level;                   // 教练员等级(必填)
+  private Long startedAt;                 // 提升为教练员的日期(必填)
+  private List<String> availableCourseIds;  // 主教课目列表, 查询返回availableCourses对象列表
+  private List<String> assistCourseIds;     // 备教课目列表, 查询返回assistCourses对象列表
+
+  private Long createdTime;
+  private Long updatedTime;
+}
+```
+
+### 场地管理
+```java
+class TrainPlace {
+  private String id;
+  private String name;                // 场地名称(必填)
+  private String organizationId;      // 关联单位, 查询返回organization对象(必填)
+  private List<String> placeTypes;    // 场地类型列表(必填)
+  private Boolean indoor;             // 是否为室内场地
+  private Boolean internal;           // 是否为自建场地
+  private int builtStatus;            // 建设状态, 0:已建、1:在建、2:未建
+  private Long startedAt;             // 开建日期(选填)
+  private Long builtAt;               // 建成日期(选填)
+  private List<String> weathers;      // 适用天气
+  private String area;                // 场地规格
+  private int capacity;               // 人员容量
+  private String address;             // 场地地址
+  private List<String> photos;        // 场地图片路径
+
+  private Long createdTime;
+  private Long updatedTime;
+}
+```
