@@ -99,7 +99,7 @@ public class AggregateBuilder {
         .put("localField", "organizationId")
         .put("foreignField", "_id")
         .put("as", "organization")))
-        .add(new JsonObject().put("$unwind", "organization"));
+        .add(new JsonObject().put("$unwind", "$organization"));
 
     return this;
   }
@@ -136,7 +136,7 @@ public class AggregateBuilder {
         .put("localField", "positionId")
         .put("foreignField", "_id")
         .put("as", "position")))
-        .add(new JsonObject().put("$unwind", "position"));
+        .add(new JsonObject().put("$unwind", "$position"));
 
     return this;
   }
@@ -148,7 +148,7 @@ public class AggregateBuilder {
         .put("localField", "rankId")
         .put("foreignField", "_id")
         .put("as", "rank")))
-        .add(new JsonObject().put("$unwind", "rank"));
+        .add(new JsonObject().put("$unwind", "$rank"));
 
     return this;
   }
@@ -160,7 +160,7 @@ public class AggregateBuilder {
         .put("localField", "standardId")
         .put("foreignField", "_id")
         .put("as", "standard")))
-        .add(new JsonObject().put("$unwind", "standard"));
+        .add(new JsonObject().put("$unwind", "$standard"));
 
     return this;
   }
@@ -172,7 +172,7 @@ public class AggregateBuilder {
         .put("localField", "sectionId")
         .put("foreignField", "_id")
         .put("as", "section")))
-        .add(new JsonObject().put("$unwind", "section"));
+        .add(new JsonObject().put("$unwind", "$section"));
 
     return this;
   }
@@ -184,7 +184,7 @@ public class AggregateBuilder {
         .put("localField", "courseId")
         .put("foreignField", "_id")
         .put("as", "course")))
-        .add(new JsonObject().put("$unwind", "course"));
+        .add(new JsonObject().put("$unwind", "$course"));
 
     return this;
   }
@@ -206,7 +206,7 @@ public class AggregateBuilder {
         .put("localField", "trainStepName")
         .put("foreignField", "name")
         .put("as", "trainStep")))
-        .add(new JsonObject().put("$unwind", "trainStep"));
+        .add(new JsonObject().put("$unwind", "$trainStep"));
 
     return this;
   }
@@ -218,7 +218,7 @@ public class AggregateBuilder {
         .put("localField", "orgCategory")
         .put("foreignField", "name")
         .put("as", "orgCategoryObj")))
-        .add(new JsonObject().put("$unwind", "orgCategoryObj"));
+        .add(new JsonObject().put("$unwind", "$orgCategoryObj"));
 
     return this;
   }
@@ -230,7 +230,7 @@ public class AggregateBuilder {
         .put("localField", "ordnanceType")
         .put("foreignField", "name")
         .put("as", "ordnanceTypeObj")))
-        .add(new JsonObject().put("$unwind", "ordnanceTypeObj"));
+        .add(new JsonObject().put("$unwind", "$ordnanceTypeObj"));
 
     return this;
   }
