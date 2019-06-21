@@ -164,6 +164,9 @@ public class MongoRepositoryWrapper {
   public Future<List<JsonObject>> aggregateQuery(String collection, final JsonArray pipeline, JsonObject options) {
     List<JsonObject> results = new ArrayList<>();
     Future<List<JsonObject>> future = Future.future();
+    options.put("batchSize", 200)
+        .put("maxTime", 5000)
+        .put("maxAwaitTime", 5000);
     client.aggregateWithOptions(collection, pipeline, new AggregateOptions(options))
         .handler(object -> results.add(object))
         .endHandler(v -> future.complete(results))
