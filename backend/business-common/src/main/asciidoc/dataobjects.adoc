@@ -601,6 +601,27 @@
 |[[updatedTime]]`@updatedTime`|`Number (Long)`|-
 |===
 
+[[PBFStandard]]
+== PBFStandard
+
+++++
+ 体脂合格标准
+++++
+'''
+
+[cols=">25%,25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[ageFrom]]`@ageFrom`|`Number (int)`|-
+|[[ageTo]]`@ageTo`|`Number (int)`|-
+|[[gender]]`@gender`|`String`|-
+|[[id]]`@id`|`String`|-
+|[[pbfFrom]]`@pbfFrom`|`Number (Double)`|-
+|[[pbfTo]]`@pbfTo`|`Number (Double)`|-
+|[[standardId]]`@standardId`|`String`|-
+|===
+
 [[PersonAnnualScoreRule]]
 == PersonAnnualScoreRule
 
