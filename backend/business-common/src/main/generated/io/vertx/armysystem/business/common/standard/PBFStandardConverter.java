@@ -1,13 +1,11 @@
 package io.vertx.armysystem.business.common.standard;
 
+import io.vertx.armysystem.business.common.standard.rule.PBFStandard;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.JsonArray;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 
 /**
- * Converter for {@link io.vertx.armysystem.business.common.standard.PBFStandard}.
- * NOTE: This class has been automatically generated from the {@link io.vertx.armysystem.business.common.standard.PBFStandard} original class using Vert.x codegen.
+ * Converter for {@link PBFStandard}.
+ * NOTE: This class has been automatically generated from the {@link PBFStandard} original class using Vert.x codegen.
  */
 public class PBFStandardConverter {
 
