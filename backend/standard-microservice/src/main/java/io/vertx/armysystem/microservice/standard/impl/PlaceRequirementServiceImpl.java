@@ -159,8 +159,7 @@ public class PlaceRequirementServiceImpl extends MongoRepositoryWrapper implemen
 
     if (forAdd) {
       failed = BaseUtil.isEmpty(requirement.getStandardId()) ||
-          BaseUtil.isEmpty(requirement.getOrgCategory()) ||
-          BaseUtil.isEmpty(requirement.getRequiredPlaces());
+          BaseUtil.isEmpty(requirement.getOrgCategory());
     } else {
 
     }
