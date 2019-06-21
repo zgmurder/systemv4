@@ -10,6 +10,10 @@
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
 
+        <el-tooltip content="数据大屏" effect="dark" placement="bottom">
+          <div class="right-menu-item"><a href="/screen" target="_blank"><svg-icon icon-class="international" /></a></div>
+        </el-tooltip>
+
         <error-log class="errLog-container right-menu-item hover-effect" />
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
@@ -26,7 +30,7 @@
         <div class="avatar-wrapper">
           <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
           <i class="el-icon-caret-bottom" /> -->
-          <el-tooltip :content="name" effect="dark" placement="bottom">
+          <el-tooltip :content="user.username" effect="dark" placement="bottom">
             <span style="font-size:14px">{{ handleName }}</span>
           <!-- <size-select class="international right-menu-item"/> -->
           </el-tooltip>
@@ -78,12 +82,11 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'name',
-      'avatar',
+      'user',
       'device'
     ]),
     handleName() {
-      const name = this.name || ''
+      const name = this.user.username || ''
       return name.length > 5 ? `...${name.slice(name.length - 5)}` : name
     }
   },
@@ -91,8 +94,8 @@ export default {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
-    async logout() {
-      await this.$store.dispatch('user/logout')
+    logout() {
+      this.$store.dispatch('user/logout')
       // window.location.reload()
 
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)

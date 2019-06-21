@@ -11,6 +11,26 @@ const port = 9527 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
+  // pages: {
+  //   index: {
+  //     // 页面的入口文件
+  //     entry: 'src/main.js',
+  //     // 页面的模板文件
+  //     template: 'public/index.html',
+  //     // build 生成的文件名称  例： dist/index.html
+  //     filename: 'index.html'
+  //   },
+  //   subpage: {
+  //     // 页面的入口文件
+  //     entry: 'src/main2.js',
+  //     // 页面的模板文件
+  //     template: 'public/subpage.html',
+  //     // build 生成的文件名称  例： dist/index.html
+  //     filename: 'subpage.html'
+  //   }
+  //   // template 默认会去找 public/subpage.html 页面，如果找不到会使用 public/index.html 文件
+  //   // 输出文件会默认的推断为 subpage.html
+  // },
   /**
    * You will need to set publicPath if you plan to deploy your site under a sub path,
    * for example GitHub Pages. If you plan to deploy your site to https://foo.github.io/bar/,
@@ -29,18 +49,18 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
+    },
+    proxy: {
+      // change xxx-api/login => mock/login
+      // detail: https://cli.vuejs.org/config/#devserver-proxy
+      [process.env.VUE_APP_BASE_API]: {
+        target: `http://192.168.10.65:8080/api/`,
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_API]: ''
+        }
+      }
     }
-    // proxy: {
-    //   // change xxx-api/login => mock/login
-    //   // detail: https://cli.vuejs.org/config/#devserver-proxy
-    //   [process.env.VUE_APP_BASE_API]: {
-    //     target: `http://192.168.10.65:8080/api/`,
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       ['^' + process.env.VUE_APP_BASE_API]: ''
-    //     }
-    //   }
-    // }
     // after: require('./mock/mock-server.js')
   },
   configureWebpack: {
