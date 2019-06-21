@@ -7,46 +7,51 @@ import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
-  name: '',
-  avatar: '',
-  introduction: '',
-  roles: [],
-
-  roleName: '',
-  organization: null,
-  permissions: [],
+  organization: undefined,
+  user: undefined,
   moduleName: 'train'
+  // name: '',
+  // avatar: '',
+  // introduction: '',
+  // roles: [],
 
+  // roleName: '',
+  // permissions: [],
 }
 
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_INTRODUCTION: (state, introduction) => {
-    state.introduction = introduction
-  },
-  SET_NAME: (state, name) => {
-    state.name = name
-  },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
-  },
-  SET_ROLES: (state, roles) => {
-    state.roles = roles
+  SET_USER: (state, user) => {
+    state.user = user
   },
   SET_ORGANIZATION: (state, organization) => {
     state.organization = organization
   },
-  SET_PERMISSIONS: (state, permissions) => {
-    state.permissions = permissions
-  },
-  SET_ROLENAME: (state, roleName) => {
-    state.roleName = roleName
-  },
   SET_MODULENAME: (state, moduleName) => {
     state.moduleName = moduleName
   }
+  // SET_PERMISSIONS: (state, permissions) => {
+  //   state.permissions = permissions
+  // },
+  // SET_ROLENAME: (state, roleName) => {
+  //   state.roleName = roleName
+  // },
+  // SET_NAME: (state, name) => {
+  //   state.name = name
+  // }
+  // SET_INTRODUCTION: (state, introduction) => {
+  //   state.introduction = introduction
+  // },
+
+  // SET_AVATAR: (state, avatar) => {
+  //   state.avatar = avatar
+  // },
+  // SET_ROLES: (state, roles) => {
+  //   state.roles = roles
+  // }
+
 }
 
 const actions = {
@@ -54,12 +59,14 @@ const actions = {
   async login({ commit }, userInfo) {
     const { password } = userInfo
     const username = userInfo.username.trim()
-    const { user, token } = await login({ username, password })
+    const { user: { organization, ...user }, token } = await login({ username, password })
+    let org = organization
     setToken(token)
+    if (!org) org = await getRootOrg()
+    setUser(JSON.stringify({ ...user, organization: org }))
     commit('SET_TOKEN', token)
-    // user.organization = await getOrg(user.organizationId)
-    setUser(JSON.stringify(user))
-    return { user, token }
+    commit('SET_ORGANIZATION', org)
+    return { user, org, token }
   },
 
   async saveToVuex({ commit }, user) {
@@ -87,11 +94,14 @@ const actions = {
   },
   // 登出
   logout() {
-    this.dispatch('user/saveToVuex', {}).then(() => {
-      removeUser()
-      removeToken()
-      window.location.reload()
-    })
+    removeUser()
+    removeToken()
+    window.location.reload()
+    // this.dispatch('user/saveToVuex', {}).then(() => {
+    //   removeUser()
+    //   removeToken()
+    //   // window.location.reload()
+    // })
   },
 
   // remove token
