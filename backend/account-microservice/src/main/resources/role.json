@@ -23,6 +23,12 @@
       "schemaName": "Soldier",
       "actions": ["Read", "Create", "Update", "Delete"]
     }, {
+      "schemaName": "Trainer",
+      "actions": ["Read", "Create", "Update", "Delete"]
+    }, {
+      "schemaName": "TrainPlace",
+      "actions": ["Read", "Create", "Update", "Delete"]
+    }, {
       "schemaName": "*",
       "actions": ["Read"]
     }]
@@ -33,6 +39,18 @@
     "buildIn": true,
     "permissions": [{
       "schemaName": "User",
+      "actions": ["Read", "Create", "Update"]
+    }, {
+      "schemaName": "Organization",
+      "actions": ["Read", "Create", "Update"]
+    }, {
+      "schemaName": "Soldier",
+      "actions": ["Read", "Create", "Update", "Delete"]
+    }, {
+      "schemaName": "Trainer",
+      "actions": ["Read", "Create", "Update", "Delete"]
+    }, {
+      "schemaName": "TrainPlace",
       "actions": ["Read", "Create", "Update", "Delete"]
     }, {
       "schemaName": "*",

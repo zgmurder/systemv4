@@ -22,9 +22,9 @@ export class Migrator {
 
         console.log('login armysystemv2 return: ', token)
 
-        // await this.migrateDictionary();
+        await this.migrateDictionary();
         await this.migrateCourse();
-        // await this.migrateStandard();
+        await this.migrateStandard();
     }
 
     async migrateDictionary() {
