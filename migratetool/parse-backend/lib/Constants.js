@@ -80,7 +80,8 @@ export const OrgSequence = {
     Company: 6,             // 连/中队
     Platoon: 7,             // 排
     Squad: 8,               // 班
-    Soldier: 9              // 单兵
+    Team: 9,                // 小队
+    Soldier: 10              // 单兵
 };
 
 export const OrgLevelOptions = {
@@ -100,6 +101,8 @@ export const OrgSequenceMap = {
     '中队': [OrgSequence.Company],
     '排': [OrgSequence.Platoon],
     '班': [OrgSequence.Squad],
+    '小队': [OrgSequence.Team],
+    '单兵': [OrgSequence.Soldier]
 }
 
 export const OrgSequences = [{

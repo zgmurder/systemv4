@@ -1,6 +1,7 @@
 import { BackendService } from './parse-backend/lib/BackendService';
 import Client from "./parse-backend/lib/Client";
 import JsonClient from "./JsonClient";
+import {OrgSequenceMap} from './parse-backend/lib/Constants';
 
 export class Migrator {
     constructor(baseUrl, config) {
@@ -98,7 +99,7 @@ export class Migrator {
                     item.sectionId = item.section.objectId;
                 }
 
-                item.category = category;
+                item.courseCategory = category;
                 item.manual = item.isManual;
                 item.trainStepName = item.trainStep;
                 item.serviceReqs = item.serviceReq;
@@ -110,7 +111,10 @@ export class Migrator {
                     item.testContents = item.testContents.map(c => ({
                         name: c.content,
                         testReq: c.testReq
-                    }))
+                    }));
+                if (item.trainUnits) {
+                    item.trainUnits = item.trainUnits.map(c => OrgSequenceMap[c]).filter(c => c);
+                }
                 return item;
             });
             // console.log(`get list for Course`, newList);
