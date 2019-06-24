@@ -113,7 +113,10 @@ export class Migrator {
                         testReq: c.testReq
                     }));
                 if (item.trainUnits) {
-                    item.trainUnits = item.trainUnits.map(c => OrgSequenceMap[c]).filter(c => c);
+                    item.trainUnits = item.trainUnits.map(c => OrgSequenceMap[c])
+                        .reduce((prev, curr) => {
+                            return prev.concat(curr);
+                        }, []);
                 }
                 return item;
             });
