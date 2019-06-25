@@ -63,7 +63,7 @@ export class Migrator {
             item.order = item.sortCode;
             return item;
         });
-        console.log(`get list for Position`, newList);
+        // console.log(`get list for Position`, newList);
 
         for (let item of newList) {
             await this.jsonClient.addOne(`/dictionary/position`, item);
@@ -77,7 +77,7 @@ export class Migrator {
             item.order = item.levelCode;
             return item;
         });
-        console.log(`get list for MilitaryRank`, newList);
+        // console.log(`get list for MilitaryRank`, newList);
 
         for (let item of newList) {
             await this.jsonClient.addOne(`/dictionary/militaryrank`, item);
@@ -132,22 +132,18 @@ export class Migrator {
     
 
     async migrateStandard() {
-        const fromModels = ['TrainStandard', 'TrainSection', 'TrainStageTime', 'Course', 'CourseDistribution', 'CourseTime',
+        const fromModels = ['TrainStandard', 'TrainSection', 'TrainStageTime', 'CourseDistribution', 'CourseTime',
             'SportTime', 'SportAssessReq', 'SportCourseGroup', 'BulletRequirement', 'MotorRequirement',
             'OrgScoreRequirement', 'PersonScoreRequirement', 'PersonRequirement', 'PlaceRequirement', 'TimeRequirement'];
 
-        const toModels = ['TrainStandard', 'TrainSection', 'TrainStageTime', 'Course', 'CourseDistribution', 'CourseTime',
+        const toModels = ['TrainStandard', 'TrainSection', 'TrainStageTime', 'CourseDistribution', 'CourseTime',
             'SportTime', 'RequiredSportCourse', 'OptionalSportCourse', 'BulletRequirement', 'MotorRequirement',
             'OrgScoreRequirement', 'PersonScoreRequirement', 'PersonRequirement', 'PlaceRequirement', 'TimeRequirement'];
-        // const fromModels = ['Course'];
-
-        // const toModels = ['Course'];
-
+      
         let index = 0;
         for (let model of fromModels) {
             let query = new Client.Query(Client[model]);
             query.addAscending(['createdAt']);
-            query.equalTo('category', 0);
             let result = await this.backendService.queryListAll(model, query);
             let newList = result.list.map((item) => {
                 item.id = item.objectId;
