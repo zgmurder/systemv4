@@ -120,23 +120,42 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
   public CRUDService retrieveManyByCondition(JsonObject condition, JsonObject principal, Handler<AsyncResult<List<JsonObject>>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
 
-    if (qCondition.getOption().getJsonObject("sort") == null) {
-      qCondition.getOption().put("sort", new JsonObject()
-          .put("standard.version", -1)
-          .put("section.code", 1)
-          .put("trainStep.priority", 1)
-          .put("seq", 1));
+    int courseCategory = CourseCategory.Train.getValue();
+    if (qCondition.getQuery().containsKey("courseCategory")) {
+      courseCategory = qCondition.getQuery().getInteger("courseCategory");
+    }
+
+    if (!qCondition.getOption().containsKey("sort")) {
+      if (courseCategory == CourseCategory.Train.getValue()) {
+        qCondition.getOption().put("sort", new JsonObject()
+            .put("standard.version", -1)
+            .put("section.code", 1)
+            .put("trainStep.priority", 1)
+            .put("seq", 1));
+      } else if (courseCategory == CourseCategory.Sport.getValue()) {
+        qCondition.getOption().put("sort", new JsonObject()
+            .put("standard.version", -1)
+            .put("seq", 1));
+      } else {
+        qCondition.getOption().put("sort", new JsonObject()
+            .put("seq", 1));
+      }
+
     }
 
     logger.info("query condition: " + qCondition);
-    AggregateBuilder builder = new AggregateBuilder()
-        .addLookupStandard()
-        .addLookupSection()
-        .addLookupTrainStep()
-        .addQuery(qCondition.getQuery())
+    AggregateBuilder builder = new AggregateBuilder();
+    if (courseCategory == CourseCategory.Train.getValue()) {
+      builder.addLookupStandard()
+          .addLookupSection()
+          .addLookupTrainStep();
+    } else if (courseCategory == CourseCategory.Sport.getValue()) {
+      builder.addLookupStandard();
+    }
+
+    builder.addQuery(qCondition.getQuery())
         .addOption(qCondition.getOption());
 
-        // logger.info("pipeline: " + builder.getPipeline().toString());
     this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
         .map(list -> builder.fixLookupResults(list))
         .setHandler(resultHandler);

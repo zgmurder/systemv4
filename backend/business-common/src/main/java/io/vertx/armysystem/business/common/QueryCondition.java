@@ -46,6 +46,12 @@ public class QueryCondition {
     JsonObject option = body.getJsonObject("option");
     if (query == null) query = new JsonObject();
     if (option == null) option = new JsonObject();
+    if (!option.containsKey("limit")) {
+      option.put("limit", 20);
+    }
+    if (!option.containsKey("skip")) {
+      option.put("skip", 0);
+    }
 
     return new QueryCondition(organizationId, query, option).convertId();
   }
