@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 // import { getUser } from '@/utils/auth'
-export function queryList(url, { where = {}, option = {}} = {}, { isTotal = false, isFirst = false } = {}) {
+export function queryList(url, { where = {}, option = { limit: 200 }} = {}, { isTotal = false, isFirst = false } = {}) {
   url = isTotal ? url + 's/count' : url + 's'
   option = isFirst ? { ...option, limit: 1 } : option
   return request({
@@ -9,7 +9,6 @@ export function queryList(url, { where = {}, option = {}} = {}, { isTotal = fals
     data: { where, option }
   })
 }
-
 export function queryListAndTotal() {
   return Promise.all([
     queryList(...arguments),

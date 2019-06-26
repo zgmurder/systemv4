@@ -78,10 +78,11 @@ export default {
   uniq(arr) {
     return [...new Set(arr)]
   },
-  parseTime(time, cFormat) {
+  parseTime(time, cFormat = '{y}-{m}-{d}') {
     if (arguments.length === 0) {
       return null
     }
+
     const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
     let date
     if (typeof time === 'object') {

@@ -27,7 +27,7 @@
         @change="handleChange($event,field,index)"
         @select="handleChange($event,field,index)"
       >
-
+        <i v-if="field.fieldType === 'upload'" class="el-icon-upload" />
         <template v-if="field.fieldType === 'select'">
           <el-option
             v-for="(item,i) in field.options||[]"
@@ -202,6 +202,14 @@ export default {
     width: 100% !important;
     display: flex;
     justify-content: flex-end;
+  }
+  /deep/ .el-transfer-panel {
+    width: 38%;
+  }
+  /deep/ .el-form-item__label {
+    white-space: nowrap;
+    text-overflow:ellipsis;
+    overflow: hidden;
   }
 }
 </style>

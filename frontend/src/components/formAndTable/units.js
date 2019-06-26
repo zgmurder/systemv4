@@ -40,5 +40,6 @@ export const type = {
   isUndefined: obj => checkType('Undefined')(obj),
   isFunction: obj => checkType('Function')(obj),
   isNull: obj => checkType('Null')(obj),
-  isSymbol: obj => checkType('Symbol')(obj)
+  isSymbol: obj => checkType('Symbol')(obj),
+  isEmpty
 }
