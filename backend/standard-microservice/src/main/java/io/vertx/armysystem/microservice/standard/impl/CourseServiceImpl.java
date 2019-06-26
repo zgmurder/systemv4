@@ -105,8 +105,8 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
 
 //    this.count(getCollectionName(), qCondition.getQuery()).setHandler(resultHandler);
     AggregateBuilder builder = new AggregateBuilder()
-        .addLookupStandard()
-        .addLookupSection()
+//        .addLookupStandard()
+//        .addLookupSection()
         .addQuery(qCondition.getQuery())
         .addCount();
 
@@ -153,7 +153,6 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
     } else if (courseCategory == CourseCategory.Sport.getValue()) {
       builder.addLookupStandard();
     }
-
     builder.addQuery(qCondition.getQuery())
         .addOption(qCondition.getOption());
 
