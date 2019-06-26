@@ -15,6 +15,7 @@
     </div>
 
     <tableSchema
+      v-loading="loading"
       :data="tableList"
       v-bind="$attrs"
       :columns="columns"
@@ -129,7 +130,8 @@ export default {
       },
       where: {},
       filterName: '',
-      filterSchema: []
+      filterSchema: [],
+      loading: false
     }
   },
   computed: {
@@ -159,7 +161,7 @@ export default {
       handler(newValue, oldValue) {
         this.where = newValue.reduce((prev, curr) => {
           const value = curr.vModel
-          if (curr[value]) {
+          if (!type.isEmpty(curr[value])) {
             prev[value] = type.isFunction(curr.filterConfig) && curr.filterConfig(curr[value]) || curr[value]
           }
           return prev
@@ -186,12 +188,12 @@ export default {
       const columns = this.columns.filter(item => !!item.filterConfig)
       this.filterSchema = columns.map(item => {
         if (type.isObject(item.filterConfig)) return item.filterConfig
-        const found = this.schema.find(subItem => subItem.vModel === item.prop)
-        const obj = { ...found, filterConfig: item.filterConfig }
-        this.$set(obj, obj.vModel, undefined)
+        const found = this.schema.find(subItem => subItem.vModel === item.prop || subItem.vModel === item.prop + 'Id')
+        const obj = { ...found, filterConfig: item.filterConfig, required: false, multiple: false, fieldType: type.isEmpty(found.options) ? 'input' : found.fieldType }
+        this.$set(obj, obj.vModel, item.defaultValue ? obj[obj.vModel] : undefined)
         return obj
       })
-      this.$EventBus.$off('finished')
+      // this.$EventBus.$off('finished')
     },
     handleSearch() {
       window.clearTimeout(this.timer)
@@ -201,6 +203,7 @@ export default {
     },
     fetchTableList() {
       // eslint-disable-next-line no-unused-vars
+      this.loading = true
       const { limit, skip } = this.options
       const num = (skip - 1) * limit
       // const where = cloneDeep(this.where)
@@ -221,6 +224,7 @@ export default {
       }, where: { ...this.where, ...this.defaultWhere }}).then(({ list, total }) => {
         this.tableList = list
         this.total = total
+        this.loading = false
       })
       // this.handler.queryList(this.className, { ...this.options, skip }).then(({ list, total }) => {
       //   this.tableList = list

@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
-    <formAndTableAndTree :nodepart="true" url="/account/user" has-tree :before-click-add="beforeClickAdd" :columns="columns" :schema="schema" :no-handle="noHandle" @cell-mouse-enter="()=>false" />
+    <formAndTableAndTree :nodepart="true" url="/account/user" has-tree :before-click-add="beforeClickAdd" :columns="columns" :schema="schema" @cell-mouse-enter="()=>false" />
+    <!-- :no-handle="noHandle" -->
   </div>
 </template>
 
@@ -16,28 +17,28 @@ export default {
     return {
       option: {},
       columns: [
-        { prop: 'username', label: '用户名', noHandle: true },
+        { prop: 'username', label: '用户名' },
         { prop: 'roleName', label: '角色', handleValue: this.handleRole },
         { prop: 'organization', label: '单位', handleValue: org => org && org.displayName }
         // { prop: 'organization', label: '支持功能' }
       ],
-      noHandle: row => {
-        if (row.username === this.$store.getters.username) {
-          return true
-        }
-        const found = this.roleList.find(item => item.roleName === row.roleName)
-        const permissions = found.permissions.reduce((prev, curr) => {
-          const arr = curr.actions.map(item => `${curr.schemaName}:${item}`)
-          return prev.concat(arr)
-        }, [])
-        const ownPermissions = this.$store.getters.permissions || []
-        const is = permissions.every(item => {
-          const str = item.replace(/[\w\W]*:/g, '*:')
-          // || ownPermissions.includes(item.replace(/\d?=:/))
-          return ownPermissions.includes(item) || ownPermissions.includes(str)
-        })
-        return !is
-      },
+      // noHandle: row => {
+      //   if (row.username === this.$store.getters.username) {
+      //     return true
+      //   }
+      //   const found = this.roleList.find(item => item.roleName === row.roleName)
+      //   const permissions = found.permissions.reduce((prev, curr) => {
+      //     const arr = curr.actions.map(item => `${curr.schemaName}:${item}`)
+      //     return prev.concat(arr)
+      //   }, [])
+      //   const ownPermissions = this.$store.getters.permissions || []
+      //   const is = permissions.every(item => {
+      //     const str = item.replace(/[\w\W]*:/g, '*:')
+      //     // || ownPermissions.includes(item.replace(/\d?=:/))
+      //     return ownPermissions.includes(item) || ownPermissions.includes(str)
+      //   })
+      //   return !is
+      // },
       schema: [
         {
           fieldType: 'autocomplete',
@@ -156,6 +157,7 @@ export default {
     },
     handleRole(roleName) {
       const found = this.roleList.find(item => item.roleName === roleName)
+      if (!found) return
       return found.displayName + '（' + found.permissions.reduce((prev, curr) => {
         return `${prev}${curr.schemaName}：${curr.actions.join('、')}；`
       }, '') + '）'
