@@ -103,15 +103,16 @@ public class CourseServiceImpl extends MongoRepositoryWrapper implements Service
   public CRUDService count(JsonObject condition, JsonObject principal, Handler<AsyncResult<Long>> resultHandler) {
     QueryCondition qCondition = QueryCondition.parse(condition);
 
-    AggregateBuilder builder = new AggregateBuilder()
-        .addLookupStandard()
-        .addLookupSection()
-        .addQuery(qCondition.getQuery())
-        .addCount();
-
-    this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
-        .map(list -> builder.getCount(list))
-        .setHandler(resultHandler);
+    this.count(getCollectionName(), qCondition.getQuery()).setHandler(resultHandler);
+//    AggregateBuilder builder = new AggregateBuilder()
+//        .addLookupStandard()
+//        .addLookupSection()
+//        .addQuery(qCondition.getQuery())
+//        .addCount();
+//
+//    this.aggregateQuery(getCollectionName(), builder.getPipeline(), new JsonObject())
+//        .map(list -> builder.getCount(list))
+//        .setHandler(resultHandler);
 
     return this;
   }
