@@ -90,6 +90,7 @@ public class CourseTimeServiceImpl extends MongoRepositoryWrapper implements Ser
     AggregateBuilder builder = new AggregateBuilder()
 //        .addLookupStandard()
 //        .addLookupSection()
+        .addLookupCourses("courseIds", "courses")
         .addQuery(qCondition.getQuery())
         .addCount();
 
@@ -110,7 +111,7 @@ public class CourseTimeServiceImpl extends MongoRepositoryWrapper implements Ser
           .put("section.code", 1)
           .put("tasks", 1)
           .put("trainStep.priority", 1)
-          .put("courses.seq", 1));
+          .put("createdTime", 1));
     }
 
     logger.info("query condition: " + qCondition);
