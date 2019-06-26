@@ -63,28 +63,28 @@ public class AggregateBuilder {
   public List<JsonObject> fixLookupResults(List<JsonObject> results) {
     return results.stream()
         .map(item -> {
-          lookupKeys.forEach(key -> {
-            if (item.containsKey(key) && item.getJsonArray(key).size() > 0) {
-              item.put(key, item.getJsonArray(key).getJsonObject(0));
-            } else {
-              item.remove(key);
-            }
-
-            // 进一步处理soldier里的position和rank字段
-            if (item.containsKey("soldier")) {
-              JsonObject soldier = item.getJsonObject("soldier");
-              if (soldier.containsKey("position") && soldier.getJsonArray("position").size() > 0) {
-                soldier.put("position", item.getJsonArray("position").getJsonObject(0));
-              } else {
-                soldier.remove("position");
-              }
-              if (soldier.containsKey("rank") && soldier.getJsonArray("rank").size() > 0) {
-                soldier.put("rank", soldier.getJsonArray("rank").getJsonObject(0));
-              } else {
-                soldier.remove("rank");
-              }
-            }
-          });
+//          lookupKeys.forEach(key -> {
+//            if (item.containsKey(key) && item.getJsonArray(key).size() > 0) {
+//              item.put(key, item.getJsonArray(key).getJsonObject(0));
+//            } else {
+//              item.remove(key);
+//            }
+//
+//            // 进一步处理soldier里的position和rank字段
+//            if (item.containsKey("soldier")) {
+//              JsonObject soldier = item.getJsonObject("soldier");
+//              if (soldier.containsKey("position") && soldier.getJsonArray("position").size() > 0) {
+//                soldier.put("position", item.getJsonArray("position").getJsonObject(0));
+//              } else {
+//                soldier.remove("position");
+//              }
+//              if (soldier.containsKey("rank") && soldier.getJsonArray("rank").size() > 0) {
+//                soldier.put("rank", soldier.getJsonArray("rank").getJsonObject(0));
+//              } else {
+//                soldier.remove("rank");
+//              }
+//            }
+//          });
 
           item.put("id", item.getString("_id"));
           item.remove("_id");
@@ -93,6 +93,7 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupOrganization() {
+    lookupKeys.add("$organization");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "Organization")
         .put("localField", "organizationId")
@@ -127,6 +128,7 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupPosition() {
+    lookupKeys.add("$position");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "Position")
         .put("localField", "positionId")
@@ -138,6 +140,7 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupRank() {
+    lookupKeys.add("$rank");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "MilitaryRank")
         .put("localField", "rankId")
@@ -149,6 +152,7 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupStandard() {
+    lookupKeys.add("$standard");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "TrainStandard")
         .put("localField", "standardId")
@@ -160,6 +164,7 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupSection() {
+    lookupKeys.add("$section");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "TrainSection")
         .put("localField", "sectionId")
@@ -171,6 +176,7 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupCourse() {
+    lookupKeys.add("$course");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "Course")
         .put("localField", "courseId")
@@ -192,6 +198,7 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupTrainStep() {
+    lookupKeys.add("$trainStep");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "TrainStep")
         .put("localField", "trainStepName")
@@ -203,6 +210,7 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupOrgCategory() {
+    lookupKeys.add("$orgCategoryObj");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "OrgCategory")
         .put("localField", "orgCategory")
@@ -214,6 +222,7 @@ public class AggregateBuilder {
   }
 
   public AggregateBuilder addLookupOrdnanceType() {
+    lookupKeys.add("$ordnanceTypeObj");
     pipeline.add(new JsonObject().put("$lookup", new JsonObject()
         .put("from", "OrdnanceType")
         .put("localField", "ordnanceType")

@@ -91,8 +91,8 @@ public class CourseDistributionServiceImpl extends MongoRepositoryWrapper implem
     QueryCondition qCondition = QueryCondition.parse(condition);
 
     AggregateBuilder builder = new AggregateBuilder()
-        .addLookupStandard()
-        .addLookupSection()
+//        .addLookupStandard()
+//        .addLookupSection()
         .addLookupCourse()
         .addQuery(qCondition.getQuery())
         .addCount();

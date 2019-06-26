@@ -1,0 +1,13 @@
+{
+  "http.address": "0.0.0.0",
+  "http.port": 8100,
+  "api.name": "file",
+  "connection_string": "mongodb://armysystemv2:topzen123@localhost:27017/armysystemv2",
+  "db_name" : "armysystemv2",
+
+  "keyStore": {
+    "type": "jceks",  // default
+    "path": "keystore.jceks",
+    "password": "secret"
+  }
+}

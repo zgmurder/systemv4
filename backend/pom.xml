@@ -33,6 +33,7 @@
         <module>dictionary-microservice</module>
         <module>standard-microservice</module>
         <module>resource-microservice</module>
+        <module>file-microservice</module>
     </modules>
 
     <dependencyManagement>

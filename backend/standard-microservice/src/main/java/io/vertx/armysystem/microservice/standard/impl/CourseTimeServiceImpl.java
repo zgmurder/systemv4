@@ -88,9 +88,8 @@ public class CourseTimeServiceImpl extends MongoRepositoryWrapper implements Ser
     QueryCondition qCondition = QueryCondition.parse(condition);
 
     AggregateBuilder builder = new AggregateBuilder()
-        .addLookupStandard()
-        .addLookupSection()
-        .addLookupCourse()
+//        .addLookupStandard()
+//        .addLookupSection()
         .addQuery(qCondition.getQuery())
         .addCount();
 
