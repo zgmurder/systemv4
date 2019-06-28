@@ -59,7 +59,7 @@ export default {
         { fieldType: 'select', placeholder: '使用天气', label: '使用天气', vModel: 'weathers', multiple: true, options: [], required: true },
         { fieldType: 'checkbox', border: true, label: '室内场地', vModel: 'indoor', indoor: false },
         { fieldType: 'checkbox', border: true, label: '自建场地', vModel: 'internal', internal: false },
-        { fieldType: 'select', width: '66%', placeholder: '场地类型', label: '场地类型', multiple: true, vModel: 'placeTypes', placeTypes: [], options: [], required: true },
+        { fieldType: 'select', width: '66%', placeholder: '场地类型', label: '场地类型', multiple: true, vModel: 'placeTypes', placeTypes: [], options: [], required: true, filterable: true },
         { fieldType: 'radio-group', placeholder: '建设状态', label: '建设状态', options: PlaceBuiltStatus.Names, vModel: 'builtStatus', builtStatus: 0, optValue: 'index' },
         { fieldType: 'date-picker', valueFormat: 'timestamp', format: 'yyyy 年 MM 月 dd 日', placeholder: '开建日期', label: '开建日期', vModel: 'startedAt', startedAt: null },
         { fieldType: 'date-picker', valueFormat: 'timestamp', format: 'yyyy 年 MM 月 dd 日', placeholder: '建成日期', label: '建成日期', vModel: 'builtAt', builtAt: null, pickerOptions: {
@@ -71,7 +71,7 @@ export default {
         { fieldType: 'input-number', placeholder: '人员容量', label: '人员容量', vModel: 'capacity', capacity: 0 },
         { fieldType: 'input', placeholder: '场地地址', label: '场地地址', vModel: 'address', address: '' },
         { fieldType: 'divider1', width: '100%', contentPosition: 'center', content: '场地图片', color: '#409EFF' },
-        { fieldType: 'upload', width: '100%', headers: { Authorization: 'Bearer ' + this.$store.getters.token }, action: process.env['VUE_APP_BASE_API'] + 'file/smallfile', listType: 'picture-card' }
+        { fieldType: 'upload', width: '100%', headers: { Authorization: 'Bearer ' + this.$store.getters.token }, action: process.env['VUE_APP_BASE_API'] + '/file/smallfile', listType: 'picture-card' }
         // { fieldType: 'transfer', vModel: 'availableCourseIds', availableCourseIds: [], width: '50%', data: [], titles: ['主教课目', '已选'], props: { key: 'id', label: 'name' }, onChange: (obj, value) => {
         //   this.findModel('assistCourseIds').data = this._courseArr.filter(item => !value.includes(item.id))
         // } },
