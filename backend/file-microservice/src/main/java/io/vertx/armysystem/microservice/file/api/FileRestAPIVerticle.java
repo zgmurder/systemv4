@@ -1,5 +1,6 @@
 package io.vertx.armysystem.microservice.file.api;
 
+import io.vertx.armysystem.business.common.ServiceBase;
 import io.vertx.armysystem.microservice.common.RestAPIVerticle;
 import io.vertx.armysystem.microservice.file.FileService;
 import io.vertx.core.Future;
@@ -31,11 +32,12 @@ public class FileRestAPIVerticle extends RestAPIVerticle {
     enableJWTAuth();
     enableCorsSupport(router);
 
-    router.post("/image/:fileName")
+    ServiceBase base = (ServiceBase)fileService;
+    router.post(PREFIX+base.getCollectionName().toLowerCase()+"/:fileName")
         .handler(context -> requireLogin(context, this::apiUploadImage));
-    router.get("/image/:id")
+    router.get(PREFIX+base.getCollectionName().toLowerCase()+"/:id")
         .handler(context -> requireLogin(context, this::apiDownloadImage));
-    router.delete("/image/:id")
+    router.delete(PREFIX+base.getCollectionName().toLowerCase()+"/:id")
         .handler(context -> requireLogin(context, this::apiDeleteImage));
 
     String host = config().getString("http.address", "0.0.0.0");
