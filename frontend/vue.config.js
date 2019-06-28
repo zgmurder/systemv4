@@ -9,6 +9,21 @@ function resolve(dir) {
 const name = defaultSettings.title || 'vue Element Admin' // page title
 const port = 9527 // dev port
 
+/** 获取本机ip**/
+function getIPAdress() {
+  var interfaces = require('os').networkInterfaces()
+  for (var devName in interfaces) {
+    var iface = interfaces[devName]
+    for (var i = 0; i < iface.length; i++) {
+      var alias = iface[i]
+      if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+        return alias.address
+      }
+    }
+  }
+}
+
+const IP = getIPAdress()// 主机名
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
   // pages: {
@@ -54,7 +69,7 @@ module.exports = {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        target: process.env.VUE_APP_BASE_API,
+        target: `http://${IP}:8080/api`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''

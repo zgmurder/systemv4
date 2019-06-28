@@ -14,6 +14,29 @@ if (process.env.npm_config_preview || rawArgv.includes('--preview')) {
   const port = process.env.PORT || 9526
   const app = express()
   const rootPath = path.resolve(__dirname, '..')
+  const proxyMiddleWare = require('http-proxy-middleware')
+  const getIPAdress = () => {
+    var interfaces = require('os').networkInterfaces()
+    for (var devName in interfaces) {
+      var iface = interfaces[devName]
+      for (var i = 0; i < iface.length; i++) {
+        var alias = iface[i]
+        if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+          return alias.address
+        }
+      }
+    }
+  }
+  const proxyPath = `http://${getIPAdress()}:8080/api` // 目标后端服务地址
+  const proxyOption = {
+    target: proxyPath,
+    changeOrigoin: true,
+    ws: true,
+    pathRewrite: { '^/prod-api': '' }
+  }
+
+  app.use('/prod-api', proxyMiddleWare(proxyOption))
+
   app.use(express.static(`${rootPath}/dist`))
 
   app.use(express.static(`${rootPath}/screen`))
