@@ -71,7 +71,7 @@ export default {
         { fieldType: 'input-number', placeholder: '人员容量', label: '人员容量', vModel: 'capacity', capacity: 0 },
         { fieldType: 'input', placeholder: '场地地址', label: '场地地址', vModel: 'address', address: '' },
         { fieldType: 'divider1', width: '100%', contentPosition: 'center', content: '场地图片', color: '#409EFF' },
-        { fieldType: 'upload', width: '100%', action: 'https://jsonplaceholder.typicode.com/posts/', listType: 'picture-card' }
+        { fieldType: 'upload', width: '100%', headers: { Authorization: 'Bearer ' + this.$store.getters.token }, action: process.env['VUE_APP_BASE_API'] + 'file/smallfile', listType: 'picture-card' }
         // { fieldType: 'transfer', vModel: 'availableCourseIds', availableCourseIds: [], width: '50%', data: [], titles: ['主教课目', '已选'], props: { key: 'id', label: 'name' }, onChange: (obj, value) => {
         //   this.findModel('assistCourseIds').data = this._courseArr.filter(item => !value.includes(item.id))
         // } },
@@ -91,6 +91,8 @@ export default {
   //   <i class="el-icon-plus"></i>
   // </el-upload>
   created() {
+    console.log(process.env.VUE_APP_BASE_API)
+
     // eslint-disable-next-line no-unused-vars
     // const { orgCategory, orgSequence, id } = this.$store.getters.organization
     // if (orgSequence < 6) {

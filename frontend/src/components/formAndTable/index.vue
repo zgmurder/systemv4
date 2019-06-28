@@ -129,7 +129,7 @@ export default {
         limit: 10
       },
       where: {},
-      filterName: '',
+      // filterName: '',
       filterSchema: [],
       loading: false
     }
@@ -141,16 +141,18 @@ export default {
 
   },
   watch: {
-    'filterName': {
-      handler(newValue, oldValue) {
-        if (oldValue) {
-          this.$delete(this.where, oldValue)
-          // this.options.contains[oldValue] = ''
-          this.fetchTableList()
-        }
-      },
-      immediate: false
-    },
+    // 'filterName': {
+    //   handler(newValue, oldValue) {
+    //     if (oldValue) {
+    //       this.$delete(this.where, oldValue)
+    //       // this.options.contains[oldValue] = ''
+    //       console.log(222)
+
+    //       this.fetchTableList()
+    //     }
+    //   },
+    //   immediate: false
+    // },
     'defaultWhere': {
       handler(newValue, oldValue) {
         this.fetchTableList()
@@ -173,8 +175,8 @@ export default {
     }
   },
   created() {
-    this.filterName = this.searchColumns[0].prop
-    this.fetchTableList()
+    // this.filterName = this.searchColumns[0].prop
+    // this.fetchTableList()
     this.handleFilter()
     this.$EventBus.$on('finished', () => {
       this.handleFilter()
@@ -196,6 +198,7 @@ export default {
       // this.$EventBus.$off('finished')
     },
     handleSearch() {
+      this.loading = true
       window.clearTimeout(this.timer)
       this.timer = window.setTimeout(() => {
         this.fetchTableList()
