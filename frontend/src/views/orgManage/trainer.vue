@@ -83,7 +83,6 @@ export default {
       })
       this.findModel('level').options = trainerlevels
     })
-    console.log(process.env.VUE_APP_BASE_API)
   },
   methods: {
     findModel(vModel) {

@@ -60,7 +60,7 @@ export default {
     return {
       columns: [
         { prop: 'section', label: '分册', width: '200', handleValue: value => value && value.name, style: { color: '#67C23A' }, filterConfig: true },
-        { prop: 'name', label: '课目名称', style: { color: '#F56C6C' }, filterConfig: value => ({ '$regex': value }) },
+        { prop: 'name', label: '课目名称', handleValue: (value, row) => `${row.seq}、${row.name}`, style: { color: '#F56C6C' }, filterConfig: value => ({ '$regex': value }) },
         // {prop: 'seq', label: '序号'},
         // { prop: "orgType", label: "单位类型" },
         { prop: 'orgCategories', label: '单位分类', width: '200', handleValue: value => value && value.join('、'), filterConfig: value => ({ '$regex': value }) },
